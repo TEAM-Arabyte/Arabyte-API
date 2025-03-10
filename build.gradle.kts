@@ -4,10 +4,18 @@ plugins {
     id("org.springframework.boot") version "3.4.2"
     id("io.spring.dependency-management") version "1.1.7"
     kotlin("plugin.jpa") version "1.9.25"
+    kotlin("kapt") version "1.7.20"
+}
+
+allOpen {
+    annotations(
+        "jakarta.persistence.Entity",
+        "jakarta.persistence.MappedSuperclass",
+        "jakarta.persistence.Embeddable"
+    )
 }
 
 group = "com.arabyte"
-version = "0.0.1-SNAPSHOT"
 
 java {
     toolchain {
@@ -26,11 +34,15 @@ dependencies {
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
     implementation("org.jetbrains.kotlin:kotlin-reflect")
     implementation("org.liquibase:liquibase-core")
+
     developmentOnly("org.springframework.boot:spring-boot-devtools")
+
     runtimeOnly("org.postgresql:postgresql")
+
     testImplementation("org.springframework.boot:spring-boot-starter-test")
     testImplementation("org.jetbrains.kotlin:kotlin-test-junit5")
     testImplementation("org.springframework.security:spring-security-test")
+
     testRuntimeOnly("org.junit.platform:junit-platform-launcher")
 }
 
