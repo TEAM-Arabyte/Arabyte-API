@@ -4,3 +4,22 @@ spring:
     url: jdbc:postgresql://localhost:6789/arabyte-database
     username: myuser
     password: mypassword
+  security:
+    oauth2:
+      client:
+        registration:
+          kakao:
+            client-id: 7e638b59742ba8c811732dfbd84648fd
+            client-secret:
+            redirect-uri: http://localhost:8080/api/auth/kakao/callback
+            authorization-grant-type: authorization_code
+            client-authentication-method: post
+            scope:
+              - profile_nickname
+              - account_email
+              - name
+              - gender
+              - age_range
+              - birthday
+              - birthyear
+              - phone_number
