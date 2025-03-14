@@ -1,11 +1,7 @@
 package com.arabyte.arabyteapi.user
 
 import com.arabyte.arabyteapi.common.entity.BaseEntity
-import com.arabyte.arabyteapi.common.enums.JobCategory
-import jakarta.persistence.ElementCollection
 import jakarta.persistence.Entity
-import jakarta.persistence.EnumType
-import jakarta.persistence.Enumerated
 
 @Entity
 class User(
@@ -24,7 +20,7 @@ class User(
     var experienceMonths: Int = 0,
 
     // 아르바이트 관심분야
-    @ElementCollection
-    @Enumerated(EnumType.STRING)
-    var jobInterests: MutableList<JobCategory> = mutableListOf()
+    // @ElementCollection
+    // @Enumerated(EnumType.STRING)
+    // var jobInterests: MutableList<JobCategory> = mutableListOf()
 ) : BaseEntity()

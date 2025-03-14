@@ -3,4 +3,3 @@ spring:
     active: local
   liquibase:
     change-log: classpath:db/changelog-master.yaml
-    enabled: false
