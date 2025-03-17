@@ -2,26 +2,42 @@ package com.arabyte.arabyteapi.auth.controller
 
 import com.arabyte.arabyteapi.auth.dto.KakaoUserResponse
 import com.arabyte.arabyteapi.auth.service.KakaoAuthService
+import com.arabyte.arabyteapi.auth.util.JwtUtil
 import org.springframework.http.ResponseEntity
-import org.springframework.web.bind.annotation.GetMapping
-import org.springframework.web.bind.annotation.RequestMapping
-import org.springframework.web.bind.annotation.RequestParam
-import org.springframework.web.bind.annotation.RestController
+import org.springframework.web.bind.annotation.*
 
 @RestController
 @RequestMapping("/api/auth/kakao")
 class KakaoAuthController(
-    private val kakaoAuthService: KakaoAuthService
+    private val kakaoAuthService: KakaoAuthService,
+    private val jwtUtil: JwtUtil,
 ) {
     @GetMapping("/callback")
-    fun kakaoLogin(@RequestParam("code") code: String): ResponseEntity<String> {
+    fun kakaoLogin(@RequestParam("code") code: String): ResponseEntity<Any> {
         val accessToken = kakaoAuthService.getAccessToken(code)
-        return ResponseEntity.ok("Access Token: $accessToken")
+        val kakaoUser = kakaoAuthService.getUserInfo(accessToken)
+
+        // 로그인 또는 회원가입 진행
+        val response = kakaoAuthService.loginOrRegister(kakaoUser)
+
+        return ResponseEntity.ok(response)
     }
 
-    @GetMapping("/user")
-    fun getUserInfo(@RequestParam("accessToken") accessToken: String): ResponseEntity<KakaoUserResponse> {
-        val userInfo = kakaoAuthService.getUserInfo(accessToken)
-        return ResponseEntity.ok(userInfo)
+    @PostMapping("/login")
+    fun loginOrRegister(@RequestBody kakaoUser: KakaoUserResponse): ResponseEntity<Map<String, Any>> {
+        val response = kakaoAuthService.loginOrRegister(kakaoUser)
+        return ResponseEntity.ok(response)
+    }
+
+    @PostMapping("/refresh")
+    fun refreshAccessToken(@RequestParam refreshToken: String): ResponseEntity<Any> {
+        val userId = jwtUtil.extractUserId(refreshToken)
+
+        return if (userId != null && jwtUtil.validateToken(refreshToken)) {
+            val newAccessToken = jwtUtil.generateAccessToken(userId)
+            ResponseEntity.ok(mapOf("accessToken" to newAccessToken))
+        } else {
+            ResponseEntity.status(401).body(mapOf("error" to "Invalid Refresh Token"))
+        }
     }
 }

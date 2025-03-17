@@ -1,19 +1,24 @@
-package com.arabyte.arabyteapi.user
+package com.arabyte.arabyteapi.user.entitiy
 
 import com.arabyte.arabyteapi.common.entity.BaseEntity
 import jakarta.persistence.Entity
+import jakarta.persistence.Table
 
 @Entity
+@Table(name = "`user`")
 class User(
     var kakaoId: Long,
     var username: String,
     var nickname: String,
-    var location: String,
+    var profileImageUrl: String,
+
     val ageRange: String,
     val gender: String,
-
     var email: String,
-    var phoneNumber: String,
+    var phoneNumber: String?,
+
+    // 거주지역
+    var location: String,
 
     // 아르바이트 경력 (년/개월)
     var experienceYears: Int = 0,
