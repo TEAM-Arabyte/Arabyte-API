@@ -10,7 +10,7 @@ import org.springframework.security.web.SecurityFilterChain
 
 @EnableWebSecurity
 @Configuration
-class SecurityConfig(
+class SecurityConfiguration(
     private val jwtAuthenticationFilter: JwtAuthenticationFilter
 ) {
     @Bean
