@@ -15,11 +15,16 @@ spring:
             authorization-grant-type: authorization_code
             client-authentication-method: post
             scope:
-              - profile_nickname
-              - account_email
               - name
+              - profile_nickname
+              - profile_image
+              - account_email
               - gender
               - age_range
               - birthday
               - birthyear
               - phone_number
+    jwt:
+      secret-key: "ArabyteSecretKeyForJwtTokenGeneration"
+      access-token-expiration-ms: 30000 # 만료시간 1시간
+      refresh-token-expiration-ms: 1209600000 # 만료시간 2주
