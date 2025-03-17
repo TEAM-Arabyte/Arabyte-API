@@ -3,13 +3,15 @@ package com.arabyte.arabyteapi.auth.util
 import io.jsonwebtoken.Jwts
 import io.jsonwebtoken.SignatureAlgorithm
 import io.jsonwebtoken.security.Keys
+import jakarta.servlet.http.HttpServletRequest
 import org.springframework.beans.factory.annotation.Value
+import org.springframework.http.HttpHeaders
 import org.springframework.stereotype.Component
 import java.util.*
 import javax.crypto.SecretKey
 
 @Component
-class JwtUtil(
+class JwtProvider(
     @Value("\${spring.security.jwt.secret-key}")
     secret: String,
 
@@ -40,28 +42,33 @@ class JwtUtil(
             .compact()
     }
 
-    fun extractUserId(token: String): String? {
-        return try {
-            val claims = Jwts.parserBuilder()
-                .setSigningKey(secretKey)
-                .build()
-                .parseClaimsJws(token)
-                .body
-            claims.subject
-        } catch (e: Exception) {
-            null
-        }
+    fun resolveToken(request: HttpServletRequest): String? {
+        val rawToken = request.cookies?.find { it.name == HttpHeaders.AUTHORIZATION }?.value
+            ?: request.getHeader(HttpHeaders.AUTHORIZATION)
+            ?: return null
+
+        return rawToken.replace("Bearer ", "")
     }
 
-    fun validateToken(token: String): Boolean {
+    fun isValidToken(token: String): Boolean {
         return try {
+            val now = Date()
             val claims = Jwts.parserBuilder()
                 .setSigningKey(secretKey)
                 .build()
                 .parseClaimsJws(token)
-            !claims.body.expiration.before(Date())
+            return claims.body.expiration.after(now)
         } catch (e: Exception) {
             false
         }
+    }
+
+    fun getUserId(token: String): String {
+        return Jwts.parserBuilder()
+            .setSigningKey(secretKey)
+            .build()
+            .parseClaimsJws(token)
+            .body
+            .subject
     }
 }
