@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  objectQuotingStrategy="QUOTE_ONLY_RESERVED_WORDS"
+  xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+  xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                      http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.29.xsd">
+  <changeSet author="ji-inpark" id="1741857452715-1">
+    <createTable tableName="user">
+      <column autoIncrement="true" name="id" type="BIGINT">
+        <constraints nullable="false" primaryKey="true" primaryKeyName="pk_user"/>
+      </column>
+      <column name="created_at" type="DATETIME"/>
+      <column name="updated_at" type="DATETIME"/>
+      <column name="kakao_id" type="BIGINT">
+        <constraints nullable="false"/>
+      </column>
+      <column name="username" type="VARCHAR(255)"/>
+      <column name="nickname" type="VARCHAR(255)"/>
+      <column name="location" type="VARCHAR(255)"/>
+      <column name="age_range" type="VARCHAR(255)"/>
+      <column name="gender" type="VARCHAR(255)"/>
+      <column name="email" type="VARCHAR(255)"/>
+      <column name="phone_number" type="VARCHAR(255)"/>
+      <column name="experience_years" type="INT">
+        <constraints nullable="false"/>
+      </column>
+      <column name="experience_months" type="INT">
+        <constraints nullable="false"/>
+      </column>
+    </createTable>
+  </changeSet>
+
+</databaseChangeLog>
