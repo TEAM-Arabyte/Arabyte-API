@@ -1,4 +1,4 @@
-package com.arabyte.arabyteapi.config
+package com.arabyte.arabyteapi
 
 import com.arabyte.arabyteapi.auth.util.JwtAuthenticationFilter
 import org.springframework.context.annotation.Bean

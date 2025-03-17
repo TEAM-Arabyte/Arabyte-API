@@ -1,4 +1,4 @@
-package com.arabyte.arabyteapi.config
+package com.arabyte.arabyteapi
 
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
