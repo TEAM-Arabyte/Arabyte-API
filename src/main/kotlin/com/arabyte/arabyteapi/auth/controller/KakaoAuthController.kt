@@ -1,43 +1,63 @@
 package com.arabyte.arabyteapi.auth.controller
 
 import com.arabyte.arabyteapi.auth.dto.KakaoUserResponse
+import com.arabyte.arabyteapi.auth.dto.RefreshAccessTokenRequestBody
+import com.arabyte.arabyteapi.auth.dto.RefreshAccessTokenResponse
+import com.arabyte.arabyteapi.auth.dto.TokenWithUserResponse
 import com.arabyte.arabyteapi.auth.service.KakaoAuthService
-import com.arabyte.arabyteapi.auth.util.JwtUtil
-import org.springframework.http.ResponseEntity
+import com.arabyte.arabyteapi.auth.util.JwtProvider
+import com.arabyte.arabyteapi.common.exception.InvalidTokenException
 import org.springframework.web.bind.annotation.*
 
 @RestController
 @RequestMapping("/api/auth/kakao")
 class KakaoAuthController(
     private val kakaoAuthService: KakaoAuthService,
-    private val jwtUtil: JwtUtil,
+    private val jwtProvider: JwtProvider,
 ) {
     @GetMapping("/callback")
-    fun kakaoLogin(@RequestParam("code") code: String): ResponseEntity<Any> {
-        val accessToken = kakaoAuthService.getAccessToken(code)
-        val kakaoUser = kakaoAuthService.getUserInfo(accessToken)
+    fun kakaoLogin(
+        @RequestParam("code") code: String
+    ): TokenWithUserResponse {
+        val kakaoAccessToken = kakaoAuthService.getKakaoAccessToken(code)
+        val kakaoUser = kakaoAuthService.getKakaoUserInfo(kakaoAccessToken)
 
-        // 로그인 또는 회원가입 진행
-        val response = kakaoAuthService.loginOrRegister(kakaoUser)
+        val user = kakaoAuthService.loginOrRegister(kakaoUser)
+        val accessToken = jwtProvider.generateAccessToken(user.id.toString())
+        val refreshToken = jwtProvider.generateRefreshToken(user.id.toString())
 
-        return ResponseEntity.ok(response)
+        return TokenWithUserResponse(
+            accessToken,
+            refreshToken,
+            user
+        )
     }
 
     @PostMapping("/login")
-    fun loginOrRegister(@RequestBody kakaoUser: KakaoUserResponse): ResponseEntity<Map<String, Any>> {
-        val response = kakaoAuthService.loginOrRegister(kakaoUser)
-        return ResponseEntity.ok(response)
+    fun loginOrRegister(
+        @RequestBody kakaoUser: KakaoUserResponse
+    ): TokenWithUserResponse {
+        val user = kakaoAuthService.loginOrRegister(kakaoUser)
+        val accessToken = jwtProvider.generateAccessToken(user.id.toString())
+        val refreshToken = jwtProvider.generateRefreshToken(user.id.toString())
+
+        return TokenWithUserResponse(
+            accessToken,
+            refreshToken,
+            user
+        )
     }
 
     @PostMapping("/refresh")
-    fun refreshAccessToken(@RequestParam refreshToken: String): ResponseEntity<Any> {
-        val userId = jwtUtil.extractUserId(refreshToken)
-
-        return if (userId != null && jwtUtil.validateToken(refreshToken)) {
-            val newAccessToken = jwtUtil.generateAccessToken(userId)
-            ResponseEntity.ok(mapOf("accessToken" to newAccessToken))
-        } else {
-            ResponseEntity.status(401).body(mapOf("error" to "Invalid Refresh Token"))
+    fun refreshAccessToken(
+        @RequestBody body: RefreshAccessTokenRequestBody
+    ): RefreshAccessTokenResponse {
+        if (!jwtProvider.isValidToken(body.refreshToken)) {
+            throw InvalidTokenException()
         }
+
+        val userId = jwtProvider.getUserId(body.refreshToken)
+        val accessToken = jwtProvider.generateAccessToken(userId)
+        return RefreshAccessTokenResponse(accessToken)
     }
 }
