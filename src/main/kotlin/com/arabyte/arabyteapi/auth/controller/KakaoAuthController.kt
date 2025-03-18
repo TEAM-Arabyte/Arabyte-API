@@ -10,7 +10,7 @@ import com.arabyte.arabyteapi.common.exception.InvalidTokenException
 import org.springframework.web.bind.annotation.*
 
 @RestController
-@RequestMapping("/api/auth/kakao")
+@RequestMapping("/auth/kakao")
 class KakaoAuthController(
     private val kakaoAuthService: KakaoAuthService,
     private val jwtProvider: JwtProvider,
