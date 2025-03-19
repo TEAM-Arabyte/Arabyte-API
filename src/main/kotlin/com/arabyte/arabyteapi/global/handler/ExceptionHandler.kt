@@ -5,7 +5,7 @@ import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.ExceptionHandler
 import org.springframework.web.bind.annotation.RestControllerAdvice
 
-@RestControllerAdvice
+@RestControllerAdvice(basePackages = ["com.arabyte.arabyteapi.global"])
 class ExceptionHandler {
     @ExceptionHandler(CustomException::class)
     fun customExceptionHandler(e: CustomException): ResponseEntity<String> {

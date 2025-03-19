@@ -6,7 +6,10 @@ import com.arabyte.arabyteapi.domain.auth.dto.RefreshAccessTokenResponse
 import com.arabyte.arabyteapi.domain.auth.dto.TokenWithUserResponse
 import com.arabyte.arabyteapi.domain.auth.service.KakaoAuthService
 import com.arabyte.arabyteapi.domain.auth.util.JwtProvider
+import com.arabyte.arabyteapi.global.annotation.SwaggerCustomException
+import com.arabyte.arabyteapi.global.enum.CustomExceptionGroup
 import com.arabyte.arabyteapi.global.exception.InvalidTokenException
+import io.swagger.v3.oas.annotations.Operation
 import org.springframework.web.bind.annotation.*
 
 @RestController
@@ -15,7 +18,9 @@ class KakaoAuthController(
     private val kakaoAuthService: KakaoAuthService,
     private val jwtProvider: JwtProvider,
 ) {
+    @Operation(summary = "카카오 콜백 처리", description = "카카오 oauth callback을 처리하는 API 입니다.")
     @GetMapping("/callback")
+    @SwaggerCustomException(CustomExceptionGroup.KAKAO_LOGIN)
     fun kakaoLogin(
         @RequestParam("code") code: String
     ): TokenWithUserResponse {
@@ -33,7 +38,9 @@ class KakaoAuthController(
         )
     }
 
+    @Operation(summary = "카카오 로그인 or 회원가입", description = "카카오 로그인 또는 회원가입을 처리합니다.")
     @PostMapping("/login")
+    @SwaggerCustomException(CustomExceptionGroup.LOGIN_OR_REGISTER)
     fun loginOrRegister(
         @RequestBody kakaoUser: KakaoUserResponse
     ): TokenWithUserResponse {
@@ -48,7 +55,9 @@ class KakaoAuthController(
         )
     }
 
+    @Operation(summary = "액세스 토큰 갱신", description = "refresh token을 이용하여 access token을 갱신합니다.")
     @PostMapping("/refresh")
+    @SwaggerCustomException(CustomExceptionGroup.REFRESH_ACCESS_TOKEN)
     fun refreshAccessToken(
         @RequestBody body: RefreshAccessTokenRequestBody
     ): RefreshAccessTokenResponse {
