@@ -3,8 +3,8 @@ package com.arabyte.arabyteapi.auth.service
 import com.arabyte.arabyteapi.auth.api.KakaoAuthApi
 import com.arabyte.arabyteapi.auth.api.KakaoUserApi
 import com.arabyte.arabyteapi.auth.dto.KakaoUserResponse
-import com.arabyte.arabyteapi.auth.exception.GetKakaoAccessTokenFailureException
-import com.arabyte.arabyteapi.auth.exception.GetKakaoUserInfoFailureException
+import com.arabyte.arabyteapi.common.exception.CustomError
+import com.arabyte.arabyteapi.common.exception.CustomException
 import com.arabyte.arabyteapi.user.entitiy.User
 import com.arabyte.arabyteapi.user.service.UserService
 import jakarta.transaction.Transactional
@@ -30,13 +30,14 @@ class KakaoAuthService(
             code
         ).execute()
 
-        return response.body()?.accessToken ?: throw GetKakaoAccessTokenFailureException()
+        return response.body()?.accessToken
+            ?: throw CustomException(CustomError.GET_KAKAO_ACCESS_TOKEN_FAILED)
     }
 
     fun getKakaoUserInfo(accessToken: String): KakaoUserResponse {
         val response = kakaoUserApi.getUserInfo("Bearer $accessToken").execute()
 
-        return response.body() ?: throw GetKakaoUserInfoFailureException()
+        return response.body() ?: throw CustomException(CustomError.GET_KAKAO_USER_INFO_FAILED)
     }
 
     @Transactional
