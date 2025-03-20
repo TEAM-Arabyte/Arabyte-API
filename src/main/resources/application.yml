@@ -26,3 +26,8 @@ spring:
       secret-key: ${JWT_SECRET_KEY}
       access-token-expiration-ms: 30000 # 만료시간 1시간
       refresh-token-expiration-ms: 1209600000 # 만료시간 2주
+
+springdoc:
+  swagger-ui:
+    tags-sorter: alpha
+    operations-sorter: method

@@ -36,6 +36,7 @@ dependencies {
     implementation("org.liquibase:liquibase-core")
     implementation("com.squareup.retrofit2:retrofit:2.9.0")
     implementation("com.squareup.retrofit2:converter-jackson:2.9.0")
+    implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:2.7.0")
 
     developmentOnly("org.springframework.boot:spring-boot-devtools")
 
