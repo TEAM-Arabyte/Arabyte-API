@@ -1,4 +1,4 @@
-package com.arabyte.arabyteapi.domain.user.entitiy
+package com.arabyte.arabyteapi.domain.user.entity
 
 import com.arabyte.arabyteapi.global.entity.BaseEntity
 import jakarta.persistence.Entity

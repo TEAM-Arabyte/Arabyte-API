@@ -1,6 +1,6 @@
 package com.arabyte.arabyteapi.domain.user.service
 
-import com.arabyte.arabyteapi.domain.user.entitiy.User
+import com.arabyte.arabyteapi.domain.user.entity.User
 import com.arabyte.arabyteapi.domain.user.repository.UserRepository
 import org.springframework.stereotype.Service
 
