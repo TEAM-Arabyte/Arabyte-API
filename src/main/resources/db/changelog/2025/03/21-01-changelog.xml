@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                      http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.29.xsd"
+        objectQuotingStrategy="QUOTE_ONLY_RESERVED_WORDS">
+    <changeSet id="1742540967285-1" author="djlim00">
+        <addColumn tableName="article">
+            <column name="is_anonymous" type="BOOLEAN"/>
+        </addColumn>
+    </changeSet>
+    <changeSet id="1742540967285-2" author="djlim00">
+        <addNotNullConstraint columnName="is_anonymous" tableName="article"/>
+    </changeSet>
+    <changeSet id="1742540967285-3" author="djlim00">
+        <dropTable cascadeConstraints="true" tableName="user_job_interests"/>
+    </changeSet>
+    <changeSet id="1742540967285-4" author="djlim00">
+        <dropColumn columnName="read_count" tableName="article"/>
+    </changeSet>
+
+</databaseChangeLog>

@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                      http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.29.xsd"
+        objectQuotingStrategy="QUOTE_ONLY_RESERVED_WORDS">
+    <changeSet id="1742862522203-4" author="djlim00">
+        <dropTable cascadeConstraints="true" tableName="article_kind"/>
+    </changeSet>
+    <changeSet id="1742862522203-1" author="djlim00">
+        <dropColumn columnName="article_kind_id" tableName="article"/>
+    </changeSet>
+    <changeSet id="1742862522203-2" author="djlim00">
+        <addColumn tableName="article">
+            <column name="article_kind_id" type="SMALLINT"/>
+        </addColumn>
+    </changeSet>
+    <changeSet id="1742862522203-3" author="djlim00">
+        <dropNotNullConstraint columnDataType="smallint" columnName="article_kind_id" tableName="article"/>
+    </changeSet>
+
+</databaseChangeLog>

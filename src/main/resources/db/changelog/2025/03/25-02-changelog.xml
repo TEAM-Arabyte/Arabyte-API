@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                      http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.29.xsd"
+        objectQuotingStrategy="QUOTE_ONLY_RESERVED_WORDS">
+    <changeSet id="1742879826923-3" author="djlim00">
+        <addColumn tableName="comment">
+            <column name="is_anonymous" type="BOOLEAN"/>
+            <column name="parent_id" type="BIGINT"/>
+        </addColumn>
+    </changeSet>
+    <changeSet id="1742879826923-4" author="djlim00">
+        <addNotNullConstraint columnName="is_anonymous" tableName="comment"/>
+    </changeSet>
+    <changeSet id="1742879826923-6" author="djlim00">
+        <addForeignKeyConstraint baseColumnNames="article_id" baseTableName="comment"
+                                 constraintName="FK_COMMENT_ON_ARTICLE" referencedColumnNames="id"
+                                 referencedTableName="article"/>
+    </changeSet>
+    <changeSet id="1742879826923-7" author="djlim00">
+        <addForeignKeyConstraint baseColumnNames="parent_id" baseTableName="comment"
+                                 constraintName="FK_COMMENT_ON_PARENT" referencedColumnNames="id"
+                                 referencedTableName="comment"/>
+    </changeSet>
+    <changeSet id="1742879826923-8" author="djlim00">
+        <addForeignKeyConstraint baseColumnNames="user_id" baseTableName="comment" constraintName="FK_COMMENT_ON_USER"
+                                 referencedColumnNames="id" referencedTableName="user"/>
+    </changeSet>
+    <changeSet id="1742879826923-9" author="djlim00">
+        <dropColumn columnName="comment_id" tableName="comment"/>
+
+        <dropColumn columnName="like_count" tableName="comment"/>
+    </changeSet>
+    <changeSet id="1742879826923-1" author="djlim00">
+        <dropNotNullConstraint columnDataType="bigint" columnName="article_id" tableName="comment"/>
+    </changeSet>
+    <changeSet id="1742879826923-2" author="djlim00">
+        <dropNotNullConstraint columnDataType="bigint" columnName="user_id" tableName="comment"/>
+    </changeSet>
+
+</databaseChangeLog>
