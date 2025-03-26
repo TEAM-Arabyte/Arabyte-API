@@ -2,6 +2,7 @@ package com.arabyte.arabyteapi.domain.article.dto.comment
 
 data class CommentResponse(
     val commentId: Long,
+    val userId: Long,
     val text: String,
     val nickname: String,
     val createdAt: String,

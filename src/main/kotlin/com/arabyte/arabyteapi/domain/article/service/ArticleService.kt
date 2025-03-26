@@ -88,7 +88,8 @@ class ArticleService(
                 nickname = if (comment.isAnonymous) "익명" else comment.user.nickname,
                 createdAt = comment.createdAt?.format(DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm")) ?: "날짜없음",
                 isAnonymous = comment.isAnonymous,
-                parentId = comment.parent?.id
+                parentId = comment.parent?.id,
+                userId = comment.user.id,
             )
         }
 
