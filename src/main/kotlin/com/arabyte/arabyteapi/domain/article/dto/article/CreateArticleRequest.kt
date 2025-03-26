@@ -1,4 +1,4 @@
-package com.arabyte.arabyteapi.domain.article.dto
+package com.arabyte.arabyteapi.domain.article.dto.article
 
 import com.arabyte.arabyteapi.domain.article.enums.ArticleKind
 
