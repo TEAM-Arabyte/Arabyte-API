@@ -29,6 +29,9 @@ class KakaoAuthService(
             redirectUri,
             code
         ).execute()
+        println("HTTP Status: ${response.code()}")
+        println("Body: ${response.body()}")
+        println("Error Body: ${response.errorBody()?.string()}")
 
         return response.body()?.accessToken
             ?: throw CustomException(CustomError.GET_KAKAO_ACCESS_TOKEN_FAILED)
@@ -36,6 +39,10 @@ class KakaoAuthService(
 
     fun getKakaoUserInfo(accessToken: String): KakaoUserResponse {
         val response = kakaoUserApi.getUserInfo("Bearer $accessToken").execute()
+
+        println("응답 바디 원문: ${response.raw()}")
+        println("응답 바디 JSON: ${response.body()}")
+        println("에러 바디: ${response.errorBody()?.string()}")
 
         return response.body() ?: throw CustomException(CustomError.GET_KAKAO_USER_INFO_FAILED)
     }
