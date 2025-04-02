@@ -94,6 +94,7 @@ class ArticleService(
         }
 
         return ArticleResponse(
+            articleId = article.id,
             nickname = if (article.isAnonymous) "익명" else user.nickname,
             createdAt = article.createdAt?.format(DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm")) ?: "날짜없음",
             title = article.title,
@@ -101,7 +102,7 @@ class ArticleService(
             likeCount = article.likeCount,
             commentCount = commentList.size,
             comments = commentResponses,
-            imageUrls = article.images.map { it.url }
+            imageUrls = article.images.map { it.url },
         )
     }
 

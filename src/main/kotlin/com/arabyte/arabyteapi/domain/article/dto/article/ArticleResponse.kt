@@ -3,6 +3,7 @@ package com.arabyte.arabyteapi.domain.article.dto.article
 import com.arabyte.arabyteapi.domain.article.dto.comment.CommentResponse
 
 data class ArticleResponse(
+    val articleId: Long,
     val nickname: String,
     val createdAt: String,
     val title: String,

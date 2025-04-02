@@ -17,7 +17,7 @@ class CommentController(
 ) {
 
     @Operation(summary = "댓글 생성", description = "새로운 댓글을 생성하는 API 입니다.")
-    @PostMapping
+    @PostMapping("/{articleId}")
     fun createComment(
         @RequestBody request: CreateCommentRequest
     ): ResponseEntity<CreateCommentResponse> {
