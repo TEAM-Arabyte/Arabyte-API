@@ -37,8 +37,8 @@ class ArticleController(
         return ResponseEntity.ok(articlePreviewList)
     }
 
-    @GetMapping("/{articleId}")
     @Operation(summary = "게시글 상세 조회", description = "게시물과 해당 댓글들을 함께 반환합니다.")
+    @GetMapping("/{articleId}")
     fun getArticleDetail(
         @PathVariable articleId: Long
     ): ResponseEntity<ArticleResponse> {
