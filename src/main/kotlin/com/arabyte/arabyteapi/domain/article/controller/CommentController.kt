@@ -4,13 +4,12 @@ import com.arabyte.arabyteapi.domain.article.dto.comment.CreateCommentRequest
 import com.arabyte.arabyteapi.domain.article.dto.comment.CreateCommentResponse
 import com.arabyte.arabyteapi.domain.article.service.CommentService
 import io.swagger.v3.oas.annotations.Operation
-import org.springframework.http.ResponseEntity
-import org.springframework.stereotype.Controller
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
+import org.springframework.web.bind.annotation.RestController
 
-@Controller
+@RestController
 @RequestMapping("/comments")
 class CommentController(
     private val commentService: CommentService
@@ -20,8 +19,7 @@ class CommentController(
     @PostMapping("/{articleId}")
     fun createComment(
         @RequestBody request: CreateCommentRequest
-    ): ResponseEntity<CreateCommentResponse> {
-        val response = commentService.createComment(request)
-        return ResponseEntity.ok(response)
+    ): CreateCommentResponse {
+        return commentService.createComment(request)
     }
 }
