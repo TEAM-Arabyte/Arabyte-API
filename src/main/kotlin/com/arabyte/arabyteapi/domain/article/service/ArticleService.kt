@@ -26,17 +26,18 @@ class ArticleService(
 ) {
     @Transactional
     fun createArticle(request: CreateArticleRequest): CreateArticleResponse {
-        val article = Article(
-            title = request.title,
-            text = request.text,
-            likeCount = 0,
-            isAnonymous = request.isAnonymous,
-            userId = request.userId,
-            articleKindId = request.articleKind,
+        val article = articleRepository.save(
+            Article(
+                title = request.title,
+                text = request.text,
+                likeCount = 0,
+                isAnonymous = request.isAnonymous,
+                userId = request.userId,
+                articleKindId = request.articleKind,
+            )
         )
 
-        val saved = articleRepository.save(article)
-        return CreateArticleResponse(saved.id, saved.title)
+        return CreateArticleResponse(article.id, article.title)
     }
 
     fun getArticlePreviews(articleKind: ArticleKind?, pageable: Pageable): Page<ArticlePreviewResponse> {
