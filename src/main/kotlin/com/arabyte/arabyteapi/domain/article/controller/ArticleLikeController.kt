@@ -4,13 +4,12 @@ import com.arabyte.arabyteapi.domain.article.dto.article.ArticleLikeRequest
 import com.arabyte.arabyteapi.domain.article.dto.article.ArticleLikeResponse
 import com.arabyte.arabyteapi.domain.article.service.ArticleLikeService
 import io.swagger.v3.oas.annotations.Operation
-import org.springframework.http.ResponseEntity
-import org.springframework.stereotype.Controller
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
+import org.springframework.web.bind.annotation.RestController
 
-@Controller
+@RestController
 @RequestMapping("/articles/like")
 class ArticleLikeController(
     private val articleLikeService: ArticleLikeService
@@ -19,8 +18,7 @@ class ArticleLikeController(
     @PostMapping
     fun toggleLike(
         @RequestBody request: ArticleLikeRequest
-    ): ResponseEntity<ArticleLikeResponse> {
-        val response = articleLikeService.toggleLike(request)
-        return ResponseEntity.ok(response)
+    ): ArticleLikeResponse {
+        return articleLikeService.toggleLike(request)
     }
 }
