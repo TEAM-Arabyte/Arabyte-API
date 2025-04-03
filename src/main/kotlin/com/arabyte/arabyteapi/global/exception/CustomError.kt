@@ -15,7 +15,7 @@ enum class CustomError(val status: HttpStatus, val message: String) {
     ARTICLE_NOT_FOUND(NOT_FOUND, "해당 게시글이 존재하지 않습니다."),
 
     // comment
-    COMMENT_NOT_FOUND(NOT_FOUND, "부모 댓글이 존재하지 않습니다."),
+    PARENT_COMMENT_NOT_FOUND(NOT_FOUND, "부모 댓글이 존재하지 않습니다."),
 
     // user
     USER_NOT_FOUND(NOT_FOUND, "사용자를 찾을 수 없습니다."),

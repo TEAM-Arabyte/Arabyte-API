@@ -22,7 +22,7 @@ class CommentService(
         val user = userService.getUserOrThrow(request.userId)
 
         val parent = request.parentId?.let {
-            commentRepository.findById(it).orElseThrow { CustomException(CustomError.COMMENT_NOT_FOUND) }
+            commentRepository.findById(it).orElseThrow { CustomException(CustomError.PARENT_COMMENT_NOT_FOUND) }
         }
 
         val comment = Comment(
