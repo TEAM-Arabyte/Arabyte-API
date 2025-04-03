@@ -18,7 +18,7 @@ class UserService(
         return userRepository.save(newUser)
     }
 
-    fun getUserOrThrow(userId: Long): User {
+    fun getUser(userId: Long): User {
         return userRepository.findById(userId)
             .orElseThrow { CustomException(CustomError.USER_NOT_FOUND) }
     }
