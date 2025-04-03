@@ -5,6 +5,8 @@ import com.arabyte.arabyteapi.domain.article.dto.article.ArticleLikeResponse
 import com.arabyte.arabyteapi.domain.article.entity.ArticleLike
 import com.arabyte.arabyteapi.domain.article.repository.ArticleLikeRepository
 import com.arabyte.arabyteapi.domain.article.repository.ArticleRepository
+import com.arabyte.arabyteapi.global.exception.CustomError
+import com.arabyte.arabyteapi.global.exception.CustomException
 import jakarta.transaction.Transactional
 import org.springframework.stereotype.Service
 
@@ -16,7 +18,7 @@ class ArticleLikeService(
     @Transactional
     fun toggleLike(request: ArticleLikeRequest): ArticleLikeResponse {
         val article = articleRepository.findById(request.articleId)
-            .orElseThrow { IllegalArgumentException("게시물을 찾을 수 없습니다.") }
+            .orElseThrow { CustomException(CustomError.ARTICLE_NOT_FOUND) }
 
         val existing = articleLikeRepository.findByArticleIdAndUserId(article.id, request.userId)
 

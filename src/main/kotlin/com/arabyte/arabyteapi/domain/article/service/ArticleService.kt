@@ -6,7 +6,8 @@ import com.arabyte.arabyteapi.domain.article.entity.Article
 import com.arabyte.arabyteapi.domain.article.enums.ArticleKind
 import com.arabyte.arabyteapi.domain.article.repository.ArticleRepository
 import com.arabyte.arabyteapi.domain.article.repository.CommentRepository
-import com.arabyte.arabyteapi.domain.user.repository.UserRepository
+import com.arabyte.arabyteapi.global.exception.CustomError
+import com.arabyte.arabyteapi.global.exception.CustomException
 import jakarta.transaction.Transactional
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.Pageable
@@ -19,7 +20,7 @@ import java.time.format.DateTimeFormatter
 @Service
 class ArticleService(
     private val articleRepository: ArticleRepository,
-    private val userRepository: UserRepository,
+    private val userService: UserService,
     private val commentRepository: CommentRepository
 ) {
     @Transactional
@@ -54,6 +55,7 @@ class ArticleService(
                 likeCount = article.likeCount,
                 commentCount = commentCount,
                 uploadAt = uploadAt,
+                // TODO
                 thumbnailImage = "이미지",
                 articleKind = article.articleKindId
             )
@@ -74,10 +76,9 @@ class ArticleService(
 
     fun getArticleDetail(articleId: Long): ArticleResponse {
         val article = articleRepository.findByIdOrNull(articleId)
-            ?: throw IllegalArgumentException("해당 게시글이 존재하지 않습니다.")
+            ?: throw CustomException(CustomError.ARTICLE_NOT_FOUND)
 
-        val user = userRepository.findByIdOrNull(article.userId)
-            ?: throw IllegalArgumentException("작성자 정보가 없습니다.")
+        val user = userService.getUserOrThrow(article.userId)
 
         val commentList = commentRepository.findAllByArticleId(articleId)
         val commentResponses = commentList.map { comment ->
@@ -108,7 +109,7 @@ class ArticleService(
 
     fun updateArticle(articleId: Long, request: UpdateArticleRequest) {
         val article = articleRepository.findById(articleId)
-            .orElseThrow { IllegalArgumentException("해당 게시글이 존재하지 않습니다.") }
+            .orElseThrow { CustomException(CustomError.ARTICLE_NOT_FOUND) }
 
         article.title = request.title
         article.text = request.text
@@ -119,8 +120,13 @@ class ArticleService(
 
     fun deleteArticle(articleId: Long) {
         val article = articleRepository.findById(articleId)
-            .orElseThrow { IllegalArgumentException("해당 게시글이 존재하지 않습니다.") }
+            .orElseThrow { CustomException(CustomError.ARTICLE_NOT_FOUND) }
 
         articleRepository.delete(article)
+    }
+
+    fun getArticleOrThrow(articleId: Long): Article {
+        return articleRepository.findById(articleId)
+            .orElseThrow { CustomException(CustomError.ARTICLE_NOT_FOUND) }
     }
 }
