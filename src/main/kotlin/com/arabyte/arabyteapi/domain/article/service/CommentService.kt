@@ -4,6 +4,7 @@ import com.arabyte.arabyteapi.domain.article.dto.comment.CreateCommentRequest
 import com.arabyte.arabyteapi.domain.article.dto.comment.CreateCommentResponse
 import com.arabyte.arabyteapi.domain.article.entity.Comment
 import com.arabyte.arabyteapi.domain.article.repository.CommentRepository
+import com.arabyte.arabyteapi.domain.user.service.UserService
 import com.arabyte.arabyteapi.global.exception.CustomError
 import com.arabyte.arabyteapi.global.exception.CustomException
 import jakarta.transaction.Transactional

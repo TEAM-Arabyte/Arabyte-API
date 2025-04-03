@@ -6,6 +6,7 @@ import com.arabyte.arabyteapi.domain.article.entity.Article
 import com.arabyte.arabyteapi.domain.article.enums.ArticleKind
 import com.arabyte.arabyteapi.domain.article.repository.ArticleRepository
 import com.arabyte.arabyteapi.domain.article.repository.CommentRepository
+import com.arabyte.arabyteapi.domain.user.service.UserService
 import com.arabyte.arabyteapi.global.exception.CustomError
 import com.arabyte.arabyteapi.global.exception.CustomException
 import jakarta.transaction.Transactional
