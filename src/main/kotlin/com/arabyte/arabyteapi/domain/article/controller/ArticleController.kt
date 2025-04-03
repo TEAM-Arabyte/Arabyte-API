@@ -8,11 +8,9 @@ import org.springframework.data.domain.Page
 import org.springframework.data.domain.Pageable
 import org.springframework.data.domain.Sort
 import org.springframework.data.web.PageableDefault
-import org.springframework.http.ResponseEntity
-import org.springframework.stereotype.Controller
 import org.springframework.web.bind.annotation.*
 
-@Controller
+@RestController
 @RequestMapping("/articles")
 class ArticleController(
     private val articleService: ArticleService
@@ -22,9 +20,8 @@ class ArticleController(
     @PostMapping
     fun createArticle(
         @RequestBody request: CreateArticleRequest
-    ): ResponseEntity<CreateArticleResponse> {
-        val response = articleService.createArticle(request)
-        return ResponseEntity.ok(response)
+    ): CreateArticleResponse {
+        return articleService.createArticle(request)
     }
 
     @Operation(summary = "게시물 목록 조회", description = "전체게시판, 자유게시판, 정보게시판의 게시물 개요를 조회하는 API입니다.")
@@ -32,18 +29,16 @@ class ArticleController(
     fun getArticles(
         @RequestParam(required = false) articleKind: ArticleKind?,
         @PageableDefault(size = 10, sort = ["createdAt"], direction = Sort.Direction.DESC) pageable: Pageable
-    ): ResponseEntity<Page<ArticlePreviewResponse>> {
-        val articlePreviewList = articleService.getArticlePreviews(articleKind, pageable)
-        return ResponseEntity.ok(articlePreviewList)
+    ): Page<ArticlePreviewResponse> {
+        return articleService.getArticlePreviews(articleKind, pageable)
     }
 
     @Operation(summary = "게시글 상세 조회", description = "게시물과 해당 댓글들을 함께 반환합니다.")
     @GetMapping("/{articleId}")
     fun getArticleDetail(
         @PathVariable articleId: Long
-    ): ResponseEntity<ArticleResponse> {
-        val response = articleService.getArticleDetail(articleId)
-        return ResponseEntity.ok(response)
+    ): ArticleResponse {
+        return articleService.getArticleDetail(articleId)
     }
 
     @Operation(summary = "게시물 수정", description = "게시물을 수정하는 API입니다.")
@@ -51,17 +46,17 @@ class ArticleController(
     fun updateArticle(
         @PathVariable articleId: Long,
         @RequestBody request: UpdateArticleRequest
-    ): ResponseEntity<Map<String, String>> {
+    ): Map<String, String> {
         articleService.updateArticle(articleId, request)
-        return ResponseEntity.ok(mapOf("message" to "${articleId}번 게시물이 수정되었습니다."))
+        return mapOf("message" to "${articleId}번 게시물이 수정되었습니다.")
     }
 
     @Operation(summary = "게시물 삭제", description = "게시물을 삭제하는 API입니다.")
     @DeleteMapping("/{articleId}")
     fun deleteArticle(
         @PathVariable articleId: Long,
-    ): ResponseEntity<Map<String, String>> {
+    ): Map<String, String> {
         articleService.deleteArticle(articleId)
-        return ResponseEntity.ok(mapOf("message" to "${articleId}번 게시물이 삭제되었습니다."))
+        return mapOf("message" to "${articleId}번 게시물이 삭제되었습니다.")
     }
 }
