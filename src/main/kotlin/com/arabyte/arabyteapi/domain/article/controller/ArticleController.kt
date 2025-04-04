@@ -46,17 +46,15 @@ class ArticleController(
     fun updateArticle(
         @PathVariable articleId: Long,
         @RequestBody request: UpdateArticleRequest
-    ): Map<String, String> {
-        articleService.updateArticle(articleId, request)
-        return mapOf("message" to "${articleId}번 게시물이 수정되었습니다.")
+    ): UpdateArticleResponse {
+        return articleService.updateArticle(articleId, request)
     }
 
     @Operation(summary = "게시물 삭제", description = "게시물을 삭제하는 API입니다.")
     @DeleteMapping("/{articleId}")
     fun deleteArticle(
         @PathVariable articleId: Long,
-    ): Map<String, String> {
-        articleService.deleteArticle(articleId)
-        return mapOf("message" to "${articleId}번 게시물이 삭제되었습니다.")
+    ): DeleteArticleResponse {
+        return articleService.deleteArticle(articleId)
     }
 }

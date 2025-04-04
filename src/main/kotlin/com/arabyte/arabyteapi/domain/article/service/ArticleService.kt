@@ -108,7 +108,7 @@ class ArticleService(
         )
     }
 
-    fun updateArticle(articleId: Long, request: UpdateArticleRequest) {
+    fun updateArticle(articleId: Long, request: UpdateArticleRequest): UpdateArticleResponse {
         val article = articleRepository.findById(articleId)
             .orElseThrow { CustomException(CustomError.ARTICLE_NOT_FOUND) }
 
@@ -117,13 +117,23 @@ class ArticleService(
         article.isAnonymous = request.isAnonymous
 
         articleRepository.save(article)
+
+        return UpdateArticleResponse(
+            articleId = article.id,
+            message = "${article.id}번 게시물이 수정되었습니다"
+        )
     }
 
-    fun deleteArticle(articleId: Long) {
+    fun deleteArticle(articleId: Long): DeleteArticleResponse {
         val article = articleRepository.findById(articleId)
             .orElseThrow { CustomException(CustomError.ARTICLE_NOT_FOUND) }
 
         articleRepository.delete(article)
+
+        return DeleteArticleResponse(
+            articleId = article.id,
+            message = "${article.id}번 게시물이 삭제되었습니다."
+        )
     }
 
     fun getArticle(articleId: Long): Article {
