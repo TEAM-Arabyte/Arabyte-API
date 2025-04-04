@@ -18,7 +18,7 @@ class CommentService(
 ) {
     @Transactional
     fun createComment(request: CreateCommentRequest): CreateCommentResponse {
-        val article = articleService.getArticleOrThrow(request.articleId)
+        val article = articleService.getArticle(request.articleId)
         val user = userService.getUser(request.userId)
 
         val parent = request.parentId?.let {
