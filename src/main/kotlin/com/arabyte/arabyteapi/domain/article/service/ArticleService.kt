@@ -12,7 +12,6 @@ import com.arabyte.arabyteapi.global.exception.CustomException
 import jakarta.transaction.Transactional
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.Pageable
-import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Service
 import java.time.Duration
 import java.time.LocalDateTime
@@ -41,7 +40,7 @@ class ArticleService(
     }
 
     fun getArticlePreviews(articleKind: ArticleKind?, pageable: Pageable): Page<ArticlePreviewResponse> {
-        val articles: Page<Article> = if (articleKind != null) {
+        val articles = if (articleKind != null) {
             articleRepository.findAllByArticleKindId(articleKind, pageable)
         } else {
             articleRepository.findAll(pageable)
@@ -64,7 +63,7 @@ class ArticleService(
         }
     }
 
-    fun getPreviewUploadTime(createAt: LocalDateTime?): String {
+    private fun getPreviewUploadTime(createAt: LocalDateTime?): String {
         val now = LocalDateTime.now();
         val duration = Duration.between(createAt, now)
 
@@ -77,10 +76,10 @@ class ArticleService(
     }
 
     fun getArticleDetail(articleId: Long): ArticleResponse {
-        val article = articleRepository.findByIdOrNull(articleId)
-            ?: throw CustomException(CustomError.ARTICLE_NOT_FOUND)
+        val article = articleRepository.findById(articleId)
+            .orElseThrow { CustomException(CustomError.ARTICLE_NOT_FOUND) }
 
-        val user = userService.getUserOrThrow(article.userId)
+        val user = userService.getUser(article.userId)
 
         val commentList = commentRepository.findAllByArticleId(articleId)
         val commentResponses = commentList.map { comment ->
@@ -127,7 +126,7 @@ class ArticleService(
         articleRepository.delete(article)
     }
 
-    fun getArticleOrThrow(articleId: Long): Article {
+    fun getArticle(articleId: Long): Article {
         return articleRepository.findById(articleId)
             .orElseThrow { CustomException(CustomError.ARTICLE_NOT_FOUND) }
     }
