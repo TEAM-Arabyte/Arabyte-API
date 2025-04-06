@@ -13,8 +13,11 @@ enum class CustomError(val status: HttpStatus, val message: String) {
 
     // article
     ARTICLE_NOT_FOUND(NOT_FOUND, "해당 게시글이 존재하지 않습니다."),
+    ARTICLE_FORBIDDEN(FORBIDDEN, "해당 게시물에 대한 권한이 없습니다."),
 
     // comment
+    COMMENT_NOT_FOUND(NOT_FOUND, "해당 댓글이 존재하지 않습니다."),
+    COMMENT_FORBIDDEN(FORBIDDEN, "해당 댓글에 대한 권한이 없습니다."),
     PARENT_COMMENT_NOT_FOUND(NOT_FOUND, "부모 댓글이 존재하지 않습니다."),
 
     // user

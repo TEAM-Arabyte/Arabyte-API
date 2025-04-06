@@ -18,9 +18,9 @@ class Comment(
     @JoinColumn(name = "parent_id")
     val parent: Comment? = null,
 
-    val text: String,
+    var text: String,
 
-    val isAnonymous: Boolean = false
+    var isAnonymous: Boolean = false
 ) : BaseEntity() {
 
     @OneToMany(mappedBy = "parent", cascade = [CascadeType.ALL], orphanRemoval = true)

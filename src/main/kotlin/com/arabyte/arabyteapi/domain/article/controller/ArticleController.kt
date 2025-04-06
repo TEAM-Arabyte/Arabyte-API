@@ -3,6 +3,8 @@ package com.arabyte.arabyteapi.domain.article.controller
 import com.arabyte.arabyteapi.domain.article.dto.article.*
 import com.arabyte.arabyteapi.domain.article.enums.ArticleKind
 import com.arabyte.arabyteapi.domain.article.service.ArticleService
+import com.arabyte.arabyteapi.global.annotation.SwaggerCustomException
+import com.arabyte.arabyteapi.global.enum.CustomExceptionGroup
 import io.swagger.v3.oas.annotations.Operation
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.Pageable
@@ -18,6 +20,7 @@ class ArticleController(
 
     @Operation(summary = "게시물 생성", description = "새로운 게시글을 생성하는 API 입니다.")
     @PostMapping
+    @SwaggerCustomException(CustomExceptionGroup.ARTICLE_CREATE)
     fun createArticle(
         @RequestBody request: CreateArticleRequest
     ): CreateArticleResponse {
@@ -26,6 +29,7 @@ class ArticleController(
 
     @Operation(summary = "게시물 목록 조회", description = "전체게시판, 자유게시판, 정보게시판의 게시물 개요를 조회하는 API입니다.")
     @GetMapping
+    @SwaggerCustomException(CustomExceptionGroup.ARTICLE_LIST)
     fun getArticles(
         @RequestParam(required = false) articleKind: ArticleKind?,
         @PageableDefault(size = 10, sort = ["createdAt"], direction = Sort.Direction.DESC) pageable: Pageable
@@ -35,6 +39,7 @@ class ArticleController(
 
     @Operation(summary = "게시글 상세 조회", description = "게시물과 해당 댓글들을 함께 반환합니다.")
     @GetMapping("/{articleId}")
+    @SwaggerCustomException(CustomExceptionGroup.ARTICLE_DETAIL)
     fun getArticleDetail(
         @PathVariable articleId: Long
     ): ArticleResponse {
@@ -43,6 +48,7 @@ class ArticleController(
 
     @Operation(summary = "게시물 수정", description = "게시물을 수정하는 API입니다.")
     @PutMapping("/{articleId}")
+    @SwaggerCustomException(CustomExceptionGroup.ARTICLE_UPDATE)
     fun updateArticle(
         @PathVariable articleId: Long,
         @RequestBody request: UpdateArticleRequest
@@ -52,6 +58,7 @@ class ArticleController(
 
     @Operation(summary = "게시물 삭제", description = "게시물을 삭제하는 API입니다.")
     @DeleteMapping("/{articleId}")
+    @SwaggerCustomException(CustomExceptionGroup.ARTICLE_DELETE)
     fun deleteArticle(
         @PathVariable articleId: Long,
     ): DeleteArticleResponse {

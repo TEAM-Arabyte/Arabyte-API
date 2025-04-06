@@ -1,7 +1,6 @@
 package com.arabyte.arabyteapi.domain.article.service
 
-import com.arabyte.arabyteapi.domain.article.dto.comment.CreateCommentRequest
-import com.arabyte.arabyteapi.domain.article.dto.comment.CreateCommentResponse
+import com.arabyte.arabyteapi.domain.article.dto.comment.*
 import com.arabyte.arabyteapi.domain.article.entity.Comment
 import com.arabyte.arabyteapi.domain.article.repository.CommentRepository
 import com.arabyte.arabyteapi.domain.user.service.UserService
@@ -37,6 +36,33 @@ class CommentService(
         return CreateCommentResponse(
             commentId = saved.id,
             message = "댓글이 성공적으로 등록되었습니다."
+        )
+    }
+
+    fun updateComment(commentId: Long, request: UpdateCommentRequest): UpdateCommentResponse {
+        val comment = commentRepository.findById(commentId)
+            .orElseThrow { CustomException(CustomError.COMMENT_NOT_FOUND) }
+
+        comment.text = request.text
+        comment.isAnonymous = request.isAnonymous
+
+        commentRepository.save(comment)
+
+        return UpdateCommentResponse(
+            commentId = commentId,
+            message = "${commentId}번 댓글이 수정되었습니다."
+        )
+    }
+
+    fun deleteComment(commentId: Long): DeleteCommentResponse {
+        val comment = commentRepository.findById(commentId)
+            .orElseThrow { CustomException(CustomError.COMMENT_NOT_FOUND) }
+
+        commentRepository.delete(comment)
+
+        return DeleteCommentResponse(
+            commentId = comment.id,
+            message = "${commentId}번 댓글이 삭제되었습니다."
         )
     }
 }
