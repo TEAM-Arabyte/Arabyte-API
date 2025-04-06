@@ -13,6 +13,6 @@ interface KakaoAuthApi {
         @Field("grant_type") grantType: String,
         @Field("client_id") clientId: String,
         @Field("redirect_uri") redirectUri: String,
-        @Field("code") code: String
+        @Field("code") code: String,
     ): Call<KakaoTokenResponse>
 }

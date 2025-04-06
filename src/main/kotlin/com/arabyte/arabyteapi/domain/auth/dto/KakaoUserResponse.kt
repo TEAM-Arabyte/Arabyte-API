@@ -18,7 +18,8 @@ data class KakaoUserResponse(
     ) {
         data class KakaoProfile(
             @JsonProperty("nickname") val nickname: String,
-            @JsonProperty("profile_image_url") val profileImageUrl: String
+            @JsonProperty("profile_image_url") val profileImageUrl: String,
+            @JsonProperty("thumbnail_image_url") val thumbnailImageUrl: String
         )
     }
 }

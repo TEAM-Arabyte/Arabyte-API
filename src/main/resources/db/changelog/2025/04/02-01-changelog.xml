@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                      http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.29.xsd"
+        objectQuotingStrategy="QUOTE_ONLY_RESERVED_WORDS">
+    <changeSet id="1743570814103-1" author="djlim00">
+        <createTable tableName="article">
+            <column autoIncrement="true" name="id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="pk_article"/>
+            </column>
+            <column name="created_at" type="DATETIME"/>
+            <column name="updated_at" type="DATETIME"/>
+            <column name="title" type="VARCHAR(255)"/>
+            <column name="text" type="VARCHAR(255)"/>
+            <column name="like_count" type="INT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="is_anonymous" type="BOOLEAN">
+                <constraints nullable="false"/>
+            </column>
+            <column name="user_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="article_kind_id" type="SMALLINT"/>
+        </createTable>
+    </changeSet>
+    <changeSet id="1743570814103-2" author="djlim00">
+        <createTable tableName="article_image">
+            <column autoIncrement="true" name="id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="pk_articleimage"/>
+            </column>
+            <column name="created_at" type="DATETIME"/>
+            <column name="updated_at" type="DATETIME"/>
+            <column name="url" type="VARCHAR(255)"/>
+            <column name="article_id" type="BIGINT"/>
+        </createTable>
+    </changeSet>
+    <changeSet id="1743570814103-3" author="djlim00">
+        <createTable tableName="article_like">
+            <column autoIncrement="true" name="id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="pk_article_like"/>
+            </column>
+            <column name="created_at" type="DATETIME"/>
+            <column name="updated_at" type="DATETIME"/>
+            <column name="article_id" type="BIGINT"/>
+            <column name="user_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet id="1743570814103-4" author="djlim00">
+        <createTable tableName="comment">
+            <column autoIncrement="true" name="id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="pk_comment"/>
+            </column>
+            <column name="created_at" type="DATETIME"/>
+            <column name="updated_at" type="DATETIME"/>
+            <column name="article_id" type="BIGINT"/>
+            <column name="user_id" type="BIGINT"/>
+            <column name="parent_id" type="BIGINT"/>
+            <column name="text" type="VARCHAR(255)"/>
+            <column name="is_anonymous" type="BOOLEAN">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet id="1743570814103-5" author="djlim00">
+        <createTable tableName="review">
+            <column autoIncrement="true" name="id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="pk_review"/>
+            </column>
+            <column name="created_at" type="DATETIME"/>
+            <column name="updated_at" type="DATETIME"/>
+            <column name="text" type="VARCHAR(255)"/>
+            <column name="rating" type="INT">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet id="1743570814103-6" author="djlim00">
+        <addColumn tableName="user">
+            <column name="profile_image_url" type="VARCHAR(255)"/>
+        </addColumn>
+    </changeSet>
+    <changeSet id="1743570814103-7" author="djlim00">
+        <addUniqueConstraint columnNames="article_id" constraintName="uc_249eaeff19ea217cbb025a16c"
+                             tableName="article_like"/>
+    </changeSet>
+    <changeSet id="1743570814103-8" author="djlim00">
+        <addForeignKeyConstraint baseColumnNames="article_id" baseTableName="article_image"
+                                 constraintName="FK_ARTICLEIMAGE_ON_ARTICLE" referencedColumnNames="id"
+                                 referencedTableName="article"/>
+    </changeSet>
+    <changeSet id="1743570814103-9" author="djlim00">
+        <addForeignKeyConstraint baseColumnNames="article_id" baseTableName="article_like"
+                                 constraintName="FK_ARTICLE_LIKE_ON_ARTICLE" referencedColumnNames="id"
+                                 referencedTableName="article"/>
+    </changeSet>
+    <changeSet id="1743570814103-10" author="djlim00">
+        <addForeignKeyConstraint baseColumnNames="article_id" baseTableName="comment"
+                                 constraintName="FK_COMMENT_ON_ARTICLE" referencedColumnNames="id"
+                                 referencedTableName="article"/>
+    </changeSet>
+    <changeSet id="1743570814103-11" author="djlim00">
+        <addForeignKeyConstraint baseColumnNames="parent_id" baseTableName="comment"
+                                 constraintName="FK_COMMENT_ON_PARENT" referencedColumnNames="id"
+                                 referencedTableName="comment"/>
+    </changeSet>
+    <changeSet id="1743570814103-12" author="djlim00">
+        <addForeignKeyConstraint baseColumnNames="user_id" baseTableName="comment" constraintName="FK_COMMENT_ON_USER"
+                                 referencedColumnNames="id" referencedTableName="user"/>
+    </changeSet>
+
+</databaseChangeLog>

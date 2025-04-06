@@ -3,7 +3,7 @@ package com.arabyte.arabyteapi.domain.auth.service
 import com.arabyte.arabyteapi.domain.auth.api.KakaoAuthApi
 import com.arabyte.arabyteapi.domain.auth.api.KakaoUserApi
 import com.arabyte.arabyteapi.domain.auth.dto.KakaoUserResponse
-import com.arabyte.arabyteapi.domain.user.entitiy.User
+import com.arabyte.arabyteapi.domain.user.entity.User
 import com.arabyte.arabyteapi.domain.user.service.UserService
 import com.arabyte.arabyteapi.global.exception.CustomError
 import com.arabyte.arabyteapi.global.exception.CustomException
@@ -36,7 +36,6 @@ class KakaoAuthService(
 
     fun getKakaoUserInfo(accessToken: String): KakaoUserResponse {
         val response = kakaoUserApi.getUserInfo("Bearer $accessToken").execute()
-
         return response.body() ?: throw CustomException(CustomError.GET_KAKAO_USER_INFO_FAILED)
     }
 

@@ -21,4 +21,60 @@ enum class CustomExceptionGroup(
             INVALID_TOKEN
         )
     ),
+
+    // article
+    ARTICLE_CREATE(listOf(USER_NOT_FOUND)),
+    ARTICLE_LIST(listOf()),
+
+    ARTICLE_DETAIL(
+        listOf(
+            ARTICLE_NOT_FOUND,
+            USER_NOT_FOUND
+        )
+    ),
+
+    ARTICLE_UPDATE(
+        listOf(
+            ARTICLE_NOT_FOUND,
+            ARTICLE_FORBIDDEN
+        )
+    ),
+
+    ARTICLE_DELETE(
+        listOf(
+            ARTICLE_NOT_FOUND,
+            ARTICLE_FORBIDDEN
+        )
+    ),
+
+    // comment
+    COMMENT_CREATE(
+        listOf(
+            ARTICLE_NOT_FOUND,
+            USER_NOT_FOUND,
+            PARENT_COMMENT_NOT_FOUND
+        )
+    ),
+
+    COMMENT_UPDATE(
+        listOf(
+            COMMENT_NOT_FOUND,
+            COMMENT_FORBIDDEN
+        )
+    ),
+
+    COMMENT_DELETE(
+        listOf(
+            COMMENT_NOT_FOUND,
+            COMMENT_FORBIDDEN
+        )
+    ),
+
+    // articleLike
+    ARTICLE_LIKE(
+        listOf(
+            ARTICLE_NOT_FOUND
+        )
+    ),
+
 }
