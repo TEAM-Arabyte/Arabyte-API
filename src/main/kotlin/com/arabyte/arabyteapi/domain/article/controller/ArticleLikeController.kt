@@ -4,7 +4,7 @@ import com.arabyte.arabyteapi.domain.article.dto.article.ArticleLikeRequest
 import com.arabyte.arabyteapi.domain.article.dto.article.ArticleLikeResponse
 import com.arabyte.arabyteapi.domain.article.service.ArticleLikeService
 import com.arabyte.arabyteapi.global.annotation.SwaggerCustomException
-import com.arabyte.arabyteapi.global.enum.CustomExceptionGroup
+import com.arabyte.arabyteapi.global.enums.CustomExceptionGroup
 import io.swagger.v3.oas.annotations.Operation
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody

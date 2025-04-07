@@ -5,7 +5,7 @@ import com.arabyte.arabyteapi.domain.auth.api.KakaoUserApi
 import com.arabyte.arabyteapi.domain.auth.dto.KakaoUserResponse
 import com.arabyte.arabyteapi.domain.user.entity.User
 import com.arabyte.arabyteapi.domain.user.service.UserService
-import com.arabyte.arabyteapi.global.exception.CustomError
+import com.arabyte.arabyteapi.global.enums.CustomError
 import com.arabyte.arabyteapi.global.exception.CustomException
 import jakarta.transaction.Transactional
 import org.springframework.beans.factory.annotation.Value

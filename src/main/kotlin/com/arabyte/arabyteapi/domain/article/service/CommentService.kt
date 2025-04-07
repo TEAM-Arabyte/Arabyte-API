@@ -4,7 +4,7 @@ import com.arabyte.arabyteapi.domain.article.dto.comment.*
 import com.arabyte.arabyteapi.domain.article.entity.Comment
 import com.arabyte.arabyteapi.domain.article.repository.CommentRepository
 import com.arabyte.arabyteapi.domain.user.service.UserService
-import com.arabyte.arabyteapi.global.exception.CustomError
+import com.arabyte.arabyteapi.global.enums.CustomError
 import com.arabyte.arabyteapi.global.exception.CustomException
 import jakarta.transaction.Transactional
 import org.springframework.stereotype.Service
@@ -21,7 +21,8 @@ class CommentService(
         val user = userService.getUser(request.userId)
 
         val parent = request.parentId?.let {
-            commentRepository.findById(it).orElseThrow { CustomException(CustomError.PARENT_COMMENT_NOT_FOUND) }
+            commentRepository.findById(it)
+                .orElseThrow { CustomException(CustomError.PARENT_COMMENT_NOT_FOUND) }
         }
 
         val comment = Comment(

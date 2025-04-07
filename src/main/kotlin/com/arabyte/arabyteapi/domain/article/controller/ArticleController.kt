@@ -4,7 +4,7 @@ import com.arabyte.arabyteapi.domain.article.dto.article.*
 import com.arabyte.arabyteapi.domain.article.enums.ArticleKind
 import com.arabyte.arabyteapi.domain.article.service.ArticleService
 import com.arabyte.arabyteapi.global.annotation.SwaggerCustomException
-import com.arabyte.arabyteapi.global.enum.CustomExceptionGroup
+import com.arabyte.arabyteapi.global.enums.CustomExceptionGroup
 import io.swagger.v3.oas.annotations.Operation
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.Pageable
@@ -32,7 +32,11 @@ class ArticleController(
     @SwaggerCustomException(CustomExceptionGroup.ARTICLE_LIST)
     fun getArticles(
         @RequestParam(required = false) articleKind: ArticleKind?,
-        @PageableDefault(size = 10, sort = ["createdAt"], direction = Sort.Direction.DESC) pageable: Pageable
+        @PageableDefault(
+            size = 10,
+            sort = ["createdAt"],
+            direction = Sort.Direction.DESC
+        ) pageable: Pageable
     ): Page<ArticlePreviewResponse> {
         return articleService.getArticlePreviews(articleKind, pageable)
     }

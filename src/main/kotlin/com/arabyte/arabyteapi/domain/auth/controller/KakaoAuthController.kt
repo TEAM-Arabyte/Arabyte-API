@@ -7,7 +7,7 @@ import com.arabyte.arabyteapi.domain.auth.dto.TokenWithUserResponse
 import com.arabyte.arabyteapi.domain.auth.service.KakaoAuthService
 import com.arabyte.arabyteapi.domain.auth.util.JwtProvider
 import com.arabyte.arabyteapi.global.annotation.SwaggerCustomException
-import com.arabyte.arabyteapi.global.enum.CustomExceptionGroup
+import com.arabyte.arabyteapi.global.enums.CustomExceptionGroup
 import com.arabyte.arabyteapi.global.exception.InvalidTokenException
 import io.swagger.v3.oas.annotations.Operation
 import org.springframework.web.bind.annotation.*

@@ -3,7 +3,7 @@ package com.arabyte.arabyteapi.domain.article.controller
 import com.arabyte.arabyteapi.domain.article.dto.comment.*
 import com.arabyte.arabyteapi.domain.article.service.CommentService
 import com.arabyte.arabyteapi.global.annotation.SwaggerCustomException
-import com.arabyte.arabyteapi.global.enum.CustomExceptionGroup
+import com.arabyte.arabyteapi.global.enums.CustomExceptionGroup
 import io.swagger.v3.oas.annotations.Operation
 import org.springframework.web.bind.annotation.*
 
@@ -29,7 +29,7 @@ class CommentController(
         @PathVariable commentId: Long,
         @RequestBody request: UpdateCommentRequest
     ): UpdateCommentResponse {
-        return commentService.updateComment(commentId, request);
+        return commentService.updateComment(commentId, request)
     }
 
     @Operation(summary = "댓글 삭제", description = "댓글을 삭제하는 API입니다.")

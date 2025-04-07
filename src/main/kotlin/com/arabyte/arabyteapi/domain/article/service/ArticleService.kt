@@ -7,7 +7,7 @@ import com.arabyte.arabyteapi.domain.article.enums.ArticleKind
 import com.arabyte.arabyteapi.domain.article.repository.ArticleRepository
 import com.arabyte.arabyteapi.domain.article.repository.CommentRepository
 import com.arabyte.arabyteapi.domain.user.service.UserService
-import com.arabyte.arabyteapi.global.exception.CustomError
+import com.arabyte.arabyteapi.global.enums.CustomError
 import com.arabyte.arabyteapi.global.exception.CustomException
 import jakarta.transaction.Transactional
 import org.springframework.data.domain.Page
@@ -39,7 +39,10 @@ class ArticleService(
         return CreateArticleResponse(article.id, article.title)
     }
 
-    fun getArticlePreviews(articleKind: ArticleKind?, pageable: Pageable): Page<ArticlePreviewResponse> {
+    fun getArticlePreviews(
+        articleKind: ArticleKind?,
+        pageable: Pageable
+    ): Page<ArticlePreviewResponse> {
         val articles = if (articleKind != null) {
             articleRepository.findAllByArticleKindId(articleKind, pageable)
         } else {
@@ -64,7 +67,7 @@ class ArticleService(
     }
 
     private fun getPreviewUploadTime(createAt: LocalDateTime?): String {
-        val now = LocalDateTime.now();
+        val now = LocalDateTime.now()
         val duration = Duration.between(createAt, now)
 
         return when {
@@ -88,7 +91,8 @@ class ArticleService(
                 text = comment.text,
                 // 이러면 모든 익명 유저의 닉네임이 "익명"이 되버림
                 nickname = if (comment.isAnonymous) "익명" else comment.user.nickname,
-                createdAt = comment.createdAt?.format(DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm")) ?: "날짜없음",
+                createdAt = comment.createdAt?.format(DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm"))
+                    ?: "날짜없음",
                 isAnonymous = comment.isAnonymous,
                 parentId = comment.parent?.id,
                 userId = comment.user.id,
@@ -98,7 +102,8 @@ class ArticleService(
         return ArticleResponse(
             articleId = article.id,
             nickname = if (article.isAnonymous) "익명" else user.nickname,
-            createdAt = article.createdAt?.format(DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm")) ?: "날짜없음",
+            createdAt = article.createdAt?.format(DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm"))
+                ?: "날짜없음",
             title = article.title,
             text = article.text,
             likeCount = article.likeCount,

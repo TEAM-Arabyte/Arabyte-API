@@ -1,7 +1,6 @@
-package com.arabyte.arabyteapi.global.enum
+package com.arabyte.arabyteapi.global.enums
 
-import com.arabyte.arabyteapi.global.exception.CustomError
-import com.arabyte.arabyteapi.global.exception.CustomError.*
+import com.arabyte.arabyteapi.global.enums.CustomError.*
 
 enum class CustomExceptionGroup(
     val value: List<CustomError>

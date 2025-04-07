@@ -1,4 +1,4 @@
-package com.arabyte.arabyteapi.global.exception
+package com.arabyte.arabyteapi.global.enums
 
 import org.springframework.http.HttpStatus
 import org.springframework.http.HttpStatus.*

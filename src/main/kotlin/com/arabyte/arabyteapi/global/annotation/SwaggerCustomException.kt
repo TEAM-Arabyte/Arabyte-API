@@ -1,6 +1,6 @@
 package com.arabyte.arabyteapi.global.annotation
 
-import com.arabyte.arabyteapi.global.enum.CustomExceptionGroup
+import com.arabyte.arabyteapi.global.enums.CustomExceptionGroup
 
 @Target(AnnotationTarget.FUNCTION)
 @Retention(AnnotationRetention.RUNTIME)

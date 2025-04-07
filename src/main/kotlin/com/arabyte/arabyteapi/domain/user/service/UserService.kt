@@ -2,7 +2,7 @@ package com.arabyte.arabyteapi.domain.user.service
 
 import com.arabyte.arabyteapi.domain.user.entity.User
 import com.arabyte.arabyteapi.domain.user.repository.UserRepository
-import com.arabyte.arabyteapi.global.exception.CustomError
+import com.arabyte.arabyteapi.global.enums.CustomError
 import com.arabyte.arabyteapi.global.exception.CustomException
 import org.springframework.stereotype.Service
 
