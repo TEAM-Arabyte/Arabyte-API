@@ -7,8 +7,9 @@ import com.arabyte.arabyteapi.domain.auth.dto.TokenWithUserResponse
 import com.arabyte.arabyteapi.domain.auth.service.KakaoAuthService
 import com.arabyte.arabyteapi.domain.auth.util.JwtProvider
 import com.arabyte.arabyteapi.global.annotation.SwaggerCustomException
+import com.arabyte.arabyteapi.global.enums.CustomError
 import com.arabyte.arabyteapi.global.enums.CustomExceptionGroup
-import com.arabyte.arabyteapi.global.exception.InvalidTokenException
+import com.arabyte.arabyteapi.global.exception.CustomException
 import io.swagger.v3.oas.annotations.Operation
 import org.springframework.web.bind.annotation.*
 
@@ -62,7 +63,7 @@ class KakaoAuthController(
         @RequestBody body: RefreshAccessTokenRequestBody
     ): RefreshAccessTokenResponse {
         if (!jwtProvider.isValidToken(body.refreshToken)) {
-            throw InvalidTokenException()
+            throw CustomException(CustomError.INVALID_TOKEN)
         }
 
         val userId = jwtProvider.getUserId(body.refreshToken)
