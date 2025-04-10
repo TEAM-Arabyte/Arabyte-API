@@ -10,8 +10,6 @@ import jakarta.persistence.FetchType
 import jakarta.persistence.JoinColumn
 import jakarta.persistence.ManyToOne
 
-// todo 필드들 확정되고 나서 구현하기
-
 @Entity
 class Review(
     val text: String,
