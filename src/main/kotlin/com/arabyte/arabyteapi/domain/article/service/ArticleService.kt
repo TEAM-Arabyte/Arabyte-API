@@ -31,7 +31,7 @@ class ArticleService(
                 text = request.text,
                 likeCount = 0,
                 isAnonymous = request.isAnonymous,
-                userId = request.userId,
+                user = userService.getUser(request.userId),
                 articleKindId = request.articleKind,
             )
         )
@@ -82,7 +82,7 @@ class ArticleService(
         val article = articleRepository.findById(articleId)
             .orElseThrow { CustomException(CustomError.ARTICLE_NOT_FOUND) }
 
-        val user = userService.getUser(article.userId)
+        val user = userService.getUser(article.user.id)
 
         val commentList = commentRepository.findAllByArticleId(articleId)
         val commentResponses = commentList.map { comment ->

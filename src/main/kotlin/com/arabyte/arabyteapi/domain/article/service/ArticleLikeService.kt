@@ -4,13 +4,15 @@ import com.arabyte.arabyteapi.domain.article.dto.article.ArticleLikeRequest
 import com.arabyte.arabyteapi.domain.article.dto.article.ArticleLikeResponse
 import com.arabyte.arabyteapi.domain.article.entity.ArticleLike
 import com.arabyte.arabyteapi.domain.article.repository.ArticleLikeRepository
+import com.arabyte.arabyteapi.domain.user.service.UserService
 import jakarta.transaction.Transactional
 import org.springframework.stereotype.Service
 
 @Service
 class ArticleLikeService(
     private val articleService: ArticleService,
-    private val articleLikeRepository: ArticleLikeRepository
+    private val articleLikeRepository: ArticleLikeRepository,
+    private val userService: UserService
 ) {
     @Transactional
     fun toggleLike(request: ArticleLikeRequest): ArticleLikeResponse {
@@ -22,7 +24,8 @@ class ArticleLikeService(
             article.likeCount -= 1
             ArticleLikeResponse(false, article.likeCount)
         } else {
-            articleLikeRepository.save(ArticleLike(article, request.userId))
+            val user = userService.getUser(request.userId)
+            articleLikeRepository.save(ArticleLike(article, user))
             article.likeCount += 1
             ArticleLikeResponse(true, article.likeCount)
         }
