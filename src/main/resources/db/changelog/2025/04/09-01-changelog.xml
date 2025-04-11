@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  objectQuotingStrategy="QUOTE_ONLY_RESERVED_WORDS"
+  xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+  xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                      http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.29.xsd">
+  <changeSet author="ji-inpark" id="1744194713714-1">
+    <createTable tableName="company">
+      <column autoIncrement="true" name="id" type="BIGINT">
+        <constraints nullable="false" primaryKey="true" primaryKeyName="pk_company"/>
+      </column>
+      <column name="created_at" type="DATETIME"/>
+      <column name="updated_at" type="DATETIME"/>
+    </createTable>
+  </changeSet>
+  <changeSet author="ji-inpark" id="1744194713714-2">
+    <createTable tableName="location">
+      <column autoIncrement="true" name="id" type="BIGINT">
+        <constraints nullable="false" primaryKey="true" primaryKeyName="pk_location"/>
+      </column>
+      <column name="created_at" type="DATETIME"/>
+      <column name="updated_at" type="DATETIME"/>
+      <column name="location_code" type="VARCHAR(255)"/>
+      <column name="sido" type="VARCHAR(255)"/>
+      <column name="gu" type="VARCHAR(255)"/>
+      <column name="dong" type="VARCHAR(255)"/>
+      <column name="li" type="VARCHAR(255)"/>
+      <column name="priority" type="INT">
+        <constraints nullable="false"/>
+      </column>
+    </createTable>
+  </changeSet>
+  <changeSet author="ji-inpark" id="1744194713714-3">
+    <addColumn tableName="review">
+      <column name="category" type="SMALLINT"/>
+      <column name="company_id" type="BIGINT"/>
+      <column name="difficulty" type="SMALLINT"/>
+      <column name="is_certified" type="BOOLEAN"/>
+      <column name="location_id" type="BIGINT"/>
+      <column name="overtime" type="SMALLINT"/>
+      <column name="salary" type="SMALLINT"/>
+      <column name="salary_date" type="SMALLINT"/>
+      <column name="user_id" type="BIGINT"/>
+      <column name="work_atmosphere" type="SMALLINT"/>
+      <column name="work_intensity" type="SMALLINT"/>
+    </addColumn>
+  </changeSet>
+  <changeSet author="ji-inpark" id="1744194713714-7">
+    <addNotNullConstraint columnName="is_certified" tableName="review"/>
+  </changeSet>
+  <changeSet author="ji-inpark" id="1744194713714-15">
+    <addForeignKeyConstraint baseColumnNames="company_id" baseTableName="review"
+      constraintName="FK_REVIEW_ON_COMPANY" referencedColumnNames="id"
+      referencedTableName="company"/>
+  </changeSet>
+  <changeSet author="ji-inpark" id="1744194713714-16">
+    <addForeignKeyConstraint baseColumnNames="location_id" baseTableName="review"
+      constraintName="FK_REVIEW_ON_LOCATION" referencedColumnNames="id"
+      referencedTableName="location"/>
+  </changeSet>
+  <changeSet author="ji-inpark" id="1744194713714-17">
+    <addForeignKeyConstraint baseColumnNames="user_id" baseTableName="review"
+      constraintName="FK_REVIEW_ON_USER" referencedColumnNames="id" referencedTableName="user"/>
+  </changeSet>
+
+</databaseChangeLog>
