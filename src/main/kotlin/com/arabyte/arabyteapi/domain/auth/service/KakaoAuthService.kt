@@ -51,6 +51,11 @@ class KakaoAuthService(
         return userService.saveUser(user)
     }
 
+    fun isNickNameDuplicate(nickname: String): Boolean {
+        return userService.isNicknameExists(nickname)
+    }
+
+
     fun updateOnboarding(request: OnboardingRequest): User {
         val user = userService.getUser(request.userId)
         user.experienceYears = request.experienceYears

@@ -53,8 +53,17 @@ class KakaoAuthController(
         return TokenWithUserResponse(accessToken, refreshToken, user)
     }
 
+    @Operation(summary = "닉네임 중복확인", description = "닉네임 중복을 여부를 반환합니다.")
+    @GetMapping("/check-duplicate")
+    fun checkNickNameDuplicate(
+        @RequestParam nickname: String
+    ): NickNameDuplicateResponse {
+        val isDuplicate = kakaoAuthService.isNickNameDuplicate(nickname);
+        return NickNameDuplicateResponse(isDuplicate)
+    }
+
     @Operation(
-        summary = "온보딩 정보 등록", description = "온보딩 화면에서 추가적으로 아르바이트 경력과 관심 직무 저장\n" +
+        summary = "온보딩 정보 등록", description = "온보딩 화면에서 추가적으로 아르바이트 경력과 관심 직무를 회원정보에 저장합니다.\n" +
                 "관심직무는 아직 카테고리가 완전히 구현되지 않아서 추후에 추가될 예정입니다."
     )
     @PostMapping("/onboarding")

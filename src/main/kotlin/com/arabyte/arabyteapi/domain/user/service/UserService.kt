@@ -29,4 +29,8 @@ class UserService(
 
         userRepository.delete(user)
     }
+
+    fun isNicknameExists(nickname: String): Boolean {
+        return userRepository.existsByNickname(nickname)
+    }
 }
