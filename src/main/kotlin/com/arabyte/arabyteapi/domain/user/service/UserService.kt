@@ -22,4 +22,11 @@ class UserService(
         return userRepository.findById(userId)
             .orElseThrow { CustomException(CustomError.USER_NOT_FOUND) }
     }
+
+    fun deleteUserById(userId: Long) {
+        val user = userRepository.findById(userId)
+            .orElseThrow { IllegalArgumentException("해당 사용자를 찾을 수 없습니다. id=$userId") }
+
+        userRepository.delete(user)
+    }
 }
