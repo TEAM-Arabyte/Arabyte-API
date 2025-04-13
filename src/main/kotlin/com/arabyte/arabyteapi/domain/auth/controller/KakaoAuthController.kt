@@ -59,7 +59,12 @@ class KakaoAuthController(
         @RequestParam nickname: String
     ): NickNameDuplicateResponse {
         val isDuplicate = kakaoAuthService.isNickNameDuplicate(nickname);
-        return NickNameDuplicateResponse(isDuplicate)
+        val message: String
+
+        if (isDuplicate) message = "닉네임이 중복됩니다."
+        else message = "닉네임이 중복되지 않습니다."
+
+        return NickNameDuplicateResponse(isDuplicate, message)
     }
 
     @Operation(
