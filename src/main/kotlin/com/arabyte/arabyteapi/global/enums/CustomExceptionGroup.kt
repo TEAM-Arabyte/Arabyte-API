@@ -17,7 +17,8 @@ enum class CustomExceptionGroup(
     ),
     REFRESH_ACCESS_TOKEN(
         listOf(
-            INVALID_TOKEN
+            INVALID_TOKEN,
+            ACCESS_TOKEN_EXPIRED
         )
     ),
 
