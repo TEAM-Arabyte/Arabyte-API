@@ -4,6 +4,7 @@ import com.arabyte.arabyteapi.domain.user.entity.User
 import com.arabyte.arabyteapi.domain.user.repository.UserRepository
 import com.arabyte.arabyteapi.global.enums.CustomError
 import com.arabyte.arabyteapi.global.exception.CustomException
+import jakarta.transaction.Transactional
 import org.springframework.stereotype.Service
 
 @Service
@@ -23,6 +24,7 @@ class UserService(
             .orElseThrow { CustomException(CustomError.USER_NOT_FOUND) }
     }
 
+    @Transactional
     fun deleteUserById(userId: Long) {
         val user = userRepository.findById(userId)
             .orElseThrow { IllegalArgumentException("해당 사용자를 찾을 수 없습니다. id=$userId") }
