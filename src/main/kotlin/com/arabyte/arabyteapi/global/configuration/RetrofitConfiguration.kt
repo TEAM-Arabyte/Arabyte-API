@@ -11,7 +11,9 @@ import retrofit2.converter.jackson.JacksonConverterFactory
 import java.util.concurrent.TimeUnit
 
 @Configuration
-class RetrofitConfiguration {
+class RetrofitConfiguration(
+    private val objectMapper: ObjectMapper
+) {
     @Bean("okHttpClient")
     fun okHttpClient(): OkHttpClient {
         return OkHttpClient()
@@ -28,7 +30,9 @@ class RetrofitConfiguration {
         return Retrofit.Builder()
             .baseUrl("https://kauth.kakao.com")
             .client(okHttpClient)
-            .addConverterFactory(JacksonConverterFactory.create(ObjectMapper()))
+            .addConverterFactory(
+                JacksonConverterFactory.create(objectMapper)
+            )
             .build()
             .create(KakaoAuthApi::class.java)
     }
@@ -38,7 +42,9 @@ class RetrofitConfiguration {
         return Retrofit.Builder()
             .baseUrl("https://kapi.kakao.com")
             .client(okHttpClient)
-            .addConverterFactory(JacksonConverterFactory.create(ObjectMapper()))
+            .addConverterFactory(
+                JacksonConverterFactory.create(objectMapper)
+            )
             .build()
             .create(KakaoUserApi::class.java)
     }
