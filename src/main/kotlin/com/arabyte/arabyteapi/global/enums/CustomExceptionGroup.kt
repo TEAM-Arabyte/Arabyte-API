@@ -12,9 +12,6 @@ enum class CustomExceptionGroup(
             GET_KAKAO_USER_INFO_FAILED
         )
     ),
-    LOGIN_OR_REGISTER(
-        listOf()
-    ),
     REFRESH_ACCESS_TOKEN(
         listOf(
             INVALID_TOKEN,
