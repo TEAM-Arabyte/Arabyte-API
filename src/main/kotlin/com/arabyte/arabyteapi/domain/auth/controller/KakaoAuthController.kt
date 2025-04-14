@@ -23,7 +23,7 @@ class KakaoAuthController(
                 "반환받은 카카오 유저 정보를 통해서 회원가입에 사용하시면 됩니다."
     )
     @PostMapping("/login")
-    @SwaggerCustomException(CustomExceptionGroup.LOGIN_OR_REGISTER)
+    @SwaggerCustomException(CustomExceptionGroup.KAKAO_LOGIN)
     fun loginWithKakaoAccessToken(
         @RequestHeader("Authorization") authorizationHeader: String
     ): ResponseEntity<Any> {
