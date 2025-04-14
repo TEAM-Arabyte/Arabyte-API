@@ -15,14 +15,11 @@ class UserController(
 ) {
 
     @DeleteMapping
-    @Operation()
+    @Operation(summary = "회원탈퇴", description = "회원탈퇴를 하고 삭제된 userId를 반환합니다.")
     fun withdrawUser(
         @RequestParam userId: Long
     ): DeleteUserResponse {
         userService.deleteUserById(userId)
-        return DeleteUserResponse(
-            userId = userId,
-            message = ""
-        )
+        return DeleteUserResponse(userId = userId)
     }
 }
