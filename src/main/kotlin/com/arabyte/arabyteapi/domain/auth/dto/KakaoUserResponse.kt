@@ -3,7 +3,6 @@ package com.arabyte.arabyteapi.domain.auth.dto
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 import com.fasterxml.jackson.annotation.JsonProperty
 
-@JsonIgnoreProperties(ignoreUnknown = true) // 최상위에도 꼭 추가
 data class KakaoUserResponse(
     @JsonProperty("id")
     val id: Long,
@@ -37,8 +36,7 @@ data class KakaoUserResponse(
         @JsonProperty("phone_number")
         val phoneNumber: String?
     )
-
-    @JsonIgnoreProperties(ignoreUnknown = true)
+    
     data class KakaoProfile(
         @JsonProperty("nickname")
         val nickname: String,
