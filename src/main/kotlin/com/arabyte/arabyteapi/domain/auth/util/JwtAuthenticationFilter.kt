@@ -19,6 +19,7 @@ class JwtAuthenticationFilter(
         response: HttpServletResponse,
         filterChain: FilterChain
     ) {
+        // TODO - config에서 처리
         val uri = request.requestURI
         if (uri.startsWith("/auth/kakao")) {
             filterChain.doFilter(request, response)
@@ -26,7 +27,7 @@ class JwtAuthenticationFilter(
         }
 
         val token = jwtProvider.resolveToken(request)
-        
+
         if (!token.isNullOrBlank() && jwtProvider.isValidToken(token)) {
             val userId = jwtProvider.getUserId(token)
             val userDetails: UserDetails =
