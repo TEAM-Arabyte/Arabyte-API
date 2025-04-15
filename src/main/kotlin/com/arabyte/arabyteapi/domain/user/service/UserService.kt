@@ -1,7 +1,9 @@
 package com.arabyte.arabyteapi.domain.user.service
 
 import com.arabyte.arabyteapi.domain.user.dto.CheckNickNameResponse
+import com.arabyte.arabyteapi.domain.user.dto.DeleteUserResponse
 import com.arabyte.arabyteapi.domain.user.dto.OnboardingRequest
+import com.arabyte.arabyteapi.domain.user.dto.OnboardingResponse
 import com.arabyte.arabyteapi.domain.user.entity.User
 import com.arabyte.arabyteapi.domain.user.entity.UserJobInterest
 import com.arabyte.arabyteapi.domain.user.repository.UserRepository
@@ -28,14 +30,18 @@ class UserService(
     }
 
     @Transactional
-    fun deleteUserById(userId: Long) {
+    fun deleteUserById(userId: Long): DeleteUserResponse {
         val user = userRepository.findById(userId)
             .orElseThrow { CustomException(CustomError.USER_NOT_FOUND) }
 
         userRepository.delete(user)
+
+        return DeleteUserResponse(
+            userId = user.id
+        )
     }
 
-    fun isNicknameExists(nickname: String): Boolean {
+    private fun isNicknameExists(nickname: String): Boolean {
         return userRepository.existsByNickname(nickname)
     }
 
@@ -49,7 +55,7 @@ class UserService(
         )
     }
 
-    fun updateOnboarding(request: OnboardingRequest): Long {
+    fun updateOnboarding(request: OnboardingRequest): OnboardingResponse {
         val user = getUserByUserId(request.userId)
         user.experienceYears = request.experienceYears
         user.experienceMonths = request.experienceMonths
@@ -62,6 +68,8 @@ class UserService(
         )
         user.jobInterests = interest
 
-        return saveUser(user).id
+        return OnboardingResponse(
+            userId = saveUser(user).id
+        )
     }
 }

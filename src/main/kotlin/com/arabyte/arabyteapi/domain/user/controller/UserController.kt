@@ -18,20 +18,15 @@ class UserController(
     fun withdrawUser(
         @RequestParam userId: Long
     ): DeleteUserResponse {
-        userService.deleteUserById(userId)
-        return DeleteUserResponse(userId = userId)
+        return userService.deleteUserById(userId)
     }
 
-    @Operation(
-        summary = "온보딩 정보 등록", description = "온보딩 화면에서 추가적으로 아르바이트 경력과 관심 직무를 회원정보에 저장합니다.\n" +
-                "관심직무는 아직 카테고리가 완전히 구현되지 않아서 추후에 추가될 예정입니다."
-    )
+    @Operation(summary = "온보딩 정보 등록", description = "온보딩 화면에서 추가적으로 아르바이트 경력과 관심 직무를 회원정보에 저장합니다.")
     @PostMapping("/onboarding")
     fun onboarding(
         @RequestBody request: OnboardingRequest
     ): OnboardingResponse {
-        val userId = userService.updateOnboarding(request)
-        return OnboardingResponse(userId)
+        return userService.updateOnboarding(request)
     }
 
     @Operation(summary = "닉네임 중복확인", description = "닉네임이 이미 존재하는지 확인합니다.")
@@ -39,6 +34,6 @@ class UserController(
     fun checkNickNameDuplicate(
         @RequestParam nickname: String
     ): CheckNickNameResponse {
-        return userService.checkNickNameDuplicate(nickname);
+        return userService.checkNickNameDuplicate(nickname)
     }
 }
