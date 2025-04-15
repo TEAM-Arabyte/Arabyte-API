@@ -8,21 +8,20 @@ import com.arabyte.arabyteapi.domain.auth.dto.RegisterResponse
 import com.arabyte.arabyteapi.domain.auth.dto.jwt.RefreshAccessTokenRequestBody
 import com.arabyte.arabyteapi.domain.auth.dto.retrofit.KakaoUserResponse
 import com.arabyte.arabyteapi.domain.auth.util.JwtProvider
+import com.arabyte.arabyteapi.domain.location.service.LocationService
 import com.arabyte.arabyteapi.domain.user.entity.User
 import com.arabyte.arabyteapi.domain.user.service.UserService
 import com.arabyte.arabyteapi.global.enums.CustomError
 import com.arabyte.arabyteapi.global.exception.CustomException
 import jakarta.transaction.Transactional
-import org.springframework.beans.factory.annotation.Value
 import org.springframework.stereotype.Service
 
 @Service
 class AuthService(
-    @Value("\${spring.security.oauth2.client.registration.kakao.client-id}")
-    private val clientId: String,
     private val userService: UserService,
     private val kakaoUserApi: KakaoUserApi,
-    private val jwtProvider: JwtProvider
+    private val jwtProvider: JwtProvider,
+    private val locationService: LocationService
 ) {
     fun getKakaoUserInfo(accessToken: String): KakaoUserResponse {
         val response = kakaoUserApi.getUserInfo("Bearer $accessToken").execute()
@@ -58,11 +57,13 @@ class AuthService(
     @Transactional
     fun registerUser(request: RegisterRequest): User {
         val user = userService.getUserByUserId(request.userId)
+        val location = locationService.findById(request.locationId)
 
         user.nickname = request.nickname
-        user.location = request.location
         user.ageRange = request.ageRange
         user.gender = request.gender
+        user.location = location
+
 
         return userService.saveUser(user)
     }

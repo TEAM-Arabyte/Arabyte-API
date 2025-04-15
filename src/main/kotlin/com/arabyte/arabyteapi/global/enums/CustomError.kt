@@ -23,4 +23,7 @@ enum class CustomError(val status: HttpStatus, val message: String) {
 
     // user
     USER_NOT_FOUND(NOT_FOUND, "사용자를 찾을 수 없습니다."),
+
+    // location
+    LOCATION_NOT_FOUND(NOT_FOUND, "위치를 찾을 수 없습니다.")
 }
