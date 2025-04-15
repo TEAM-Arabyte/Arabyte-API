@@ -2,10 +2,10 @@ package com.arabyte.arabyteapi.domain.auth.service
 
 import com.arabyte.arabyteapi.domain.auth.api.KakaoUserApi
 import com.arabyte.arabyteapi.domain.auth.dto.AuthorizeResponse
-import com.arabyte.arabyteapi.domain.auth.dto.LoginResponse
 import com.arabyte.arabyteapi.domain.auth.dto.RegisterRequest
 import com.arabyte.arabyteapi.domain.auth.dto.RegisterResponse
-import com.arabyte.arabyteapi.domain.auth.dto.jwt.RefreshAccessTokenRequestBody
+import com.arabyte.arabyteapi.domain.auth.dto.jwt.ReissueAccessTokenRequest
+import com.arabyte.arabyteapi.domain.auth.dto.jwt.ReissueAccessTokenResponse
 import com.arabyte.arabyteapi.domain.auth.dto.retrofit.KakaoUserResponse
 import com.arabyte.arabyteapi.domain.auth.util.JwtProvider
 import com.arabyte.arabyteapi.domain.location.service.LocationService
@@ -23,7 +23,7 @@ class AuthService(
     private val jwtProvider: JwtProvider,
     private val locationService: LocationService
 ) {
-    fun getKakaoUserInfo(accessToken: String): KakaoUserResponse {
+    private fun getKakaoUserInfo(accessToken: String): KakaoUserResponse {
         val response = kakaoUserApi.getUserInfo("Bearer $accessToken").execute()
         return response.body() ?: throw CustomException(CustomError.GET_KAKAO_USER_INFO_FAILED)
     }
@@ -43,19 +43,26 @@ class AuthService(
                 email = kakaoUser.kakaoAccount.email,
                 phoneNumber = kakaoUser.kakaoAccount.phoneNumber
             )
-            userService.saveUser(user)
-            return RegisterResponse(false, user.id)
+            val savedUser = userService.saveUser(user)
+
+            return AuthorizeResponse(
+                userId = savedUser.id,
+                accessToken = jwtProvider.generateAccessToken(user.id.toString()),
+                refreshToken = jwtProvider.generateRefreshToken(user.id.toString()),
+                isRegistered = false
+            )
         } else {
-            return LoginResponse(
+            return AuthorizeResponse(
                 userId = user.id,
                 accessToken = jwtProvider.generateAccessToken(user.id.toString()),
-                refreshToken = jwtProvider.generateRefreshToken(user.id.toString())
+                refreshToken = jwtProvider.generateRefreshToken(user.id.toString()),
+                isRegistered = true
             )
         }
     }
 
     @Transactional
-    fun registerUser(request: RegisterRequest): User {
+    fun registerUser(request: RegisterRequest): RegisterResponse {
         val user = userService.getUserByUserId(request.userId)
         val location = locationService.findById(request.locationId)
 
@@ -64,22 +71,25 @@ class AuthService(
         user.gender = request.gender
         user.location = location
 
+        val savedUser = userService.saveUser(user)
 
-        return userService.saveUser(user)
+        return RegisterResponse(
+            isRegistered = true,
+            userId = savedUser.id
+        )
     }
 
-    fun generateAccessToken(userId: Long): String {
-        return jwtProvider.generateAccessToken(userId.toString())
-    }
-
-    fun generateRefreshToken(userId: Long): String {
-        return jwtProvider.generateRefreshToken(userId.toString())
-    }
-
-    fun getUserIdByToken(body: RefreshAccessTokenRequestBody): String {
+    fun getUserIdByToken(body: ReissueAccessTokenRequest): String {
         if (!jwtProvider.isValidToken(body.refreshToken)) {
             throw CustomException(CustomError.INVALID_TOKEN)
         }
         return jwtProvider.getUserId(body.refreshToken)
+    }
+
+    fun reissueAccessToken(request: ReissueAccessTokenRequest): ReissueAccessTokenResponse {
+        val userId = getUserIdByToken(request)
+        val accessToken = jwtProvider.generateAccessToken(userId.toString())
+
+        return ReissueAccessTokenResponse(accessToken = accessToken)
     }
 }

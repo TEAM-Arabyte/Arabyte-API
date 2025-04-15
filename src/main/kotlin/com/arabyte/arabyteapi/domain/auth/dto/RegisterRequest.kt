@@ -9,12 +9,13 @@ data class RegisterRequest(
     @JsonProperty("nickname")
     val nickname: String,
 
-    @JsonProperty("age_range")
+    @JsonProperty("ageRange")
     val ageRange: String,
 
     @JsonProperty("gender")
     val gender: String,
 
-    @JsonProperty("location_id")
+    @JsonProperty("locationId")
     val locationId: Long
+
 )

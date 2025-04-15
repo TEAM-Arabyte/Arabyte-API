@@ -1,14 +1,8 @@
 package com.arabyte.arabyteapi.domain.auth.dto
 
-sealed class AuthorizeResponse
-
-data class LoginResponse(
+data class AuthorizeResponse(
     val userId: Long,
     val accessToken: String,
-    val refreshToken: String
-) : AuthorizeResponse()
-
-data class RegisterResponse(
+    val refreshToken: String,
     val isRegistered: Boolean = false,
-    val userId: Long
-) : AuthorizeResponse()
+)

@@ -1,5 +1,5 @@
 package com.arabyte.arabyteapi.domain.auth.dto.jwt
 
-class RefreshAccessTokenResponse(
+data class ReissueAccessTokenResponse(
     val accessToken: String
 )
