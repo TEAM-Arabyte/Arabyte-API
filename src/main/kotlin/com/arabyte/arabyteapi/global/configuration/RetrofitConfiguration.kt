@@ -1,6 +1,5 @@
 package com.arabyte.arabyteapi.global.configuration
 
-import com.arabyte.arabyteapi.domain.auth.api.KakaoAuthApi
 import com.arabyte.arabyteapi.domain.auth.api.KakaoUserApi
 import com.fasterxml.jackson.databind.ObjectMapper
 import okhttp3.OkHttpClient
@@ -23,18 +22,6 @@ class RetrofitConfiguration(
                 readTimeout(15, TimeUnit.SECONDS)
                 callTimeout(15, TimeUnit.SECONDS)
             }.build()
-    }
-
-    @Bean("kakaoAuthApi")
-    fun kakaoAuthApi(okHttpClient: OkHttpClient): KakaoAuthApi {
-        return Retrofit.Builder()
-            .baseUrl("https://kauth.kakao.com")
-            .client(okHttpClient)
-            .addConverterFactory(
-                JacksonConverterFactory.create(objectMapper)
-            )
-            .build()
-            .create(KakaoAuthApi::class.java)
     }
 
     @Bean("kakaoUserApi")
