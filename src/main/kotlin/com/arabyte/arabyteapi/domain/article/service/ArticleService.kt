@@ -25,7 +25,7 @@ class ArticleService(
 ) {
     @Transactional
     fun createArticle(request: CreateArticleRequest): CreateArticleResponse {
-        val user = userService.getUser(request.userId)
+        val user = userService.getUserByUserId(request.userId)
 
         val article = articleRepository.save(
             Article(

@@ -24,7 +24,7 @@ class ArticleLikeService(
             article.likeCount -= 1
             ArticleLikeResponse(false, article.likeCount)
         } else {
-            val user = userService.getUser(request.userId)
+            val user = userService.getUserByUserId(request.userId)
             articleLikeRepository.save(ArticleLike(article, user))
             article.likeCount += 1
             ArticleLikeResponse(true, article.likeCount)
