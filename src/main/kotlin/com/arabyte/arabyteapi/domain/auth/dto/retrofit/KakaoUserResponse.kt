@@ -1,4 +1,4 @@
-package com.arabyte.arabyteapi.domain.auth.dto
+package com.arabyte.arabyteapi.domain.auth.dto.retrofit
 
 import com.fasterxml.jackson.annotation.JsonProperty
 
@@ -11,7 +11,7 @@ data class KakaoUserResponse(
 ) {
     data class KakaoAccount(
         @JsonProperty("profile")
-        val profile: KakaoProfile,
+        val kakaoProfile: KakaoProfile,
 
         @JsonProperty("name")
         val name: String,
@@ -29,7 +29,7 @@ data class KakaoUserResponse(
         val gender: String,
 
         @JsonProperty("email")
-        val email: String?,
+        val email: String,
 
         @JsonProperty("phone_number")
         val phoneNumber: String?

@@ -1,4 +1,4 @@
-package com.arabyte.arabyteapi.domain.auth.dto
+package com.arabyte.arabyteapi.domain.auth.dto.retrofit
 
 import com.fasterxml.jackson.annotation.JsonProperty
 
