@@ -17,11 +17,11 @@ class User(
     var nickname: String,
     var profileImageUrl: String,
 
-    val ageRange: String,
-    val gender: String,
+    var ageRange: String,
+    var gender: String,
     var email: String,
     var phoneNumber: String?,
-    var location: String,
+    var location: String = "",
     var experienceYears: Int = 0,
     var experienceMonths: Int = 0,
 
@@ -30,7 +30,7 @@ class User(
 
     @OneToMany(mappedBy = "user", cascade = [CascadeType.ALL], orphanRemoval = true)
     val comments: MutableList<Comment> = mutableListOf(),
-    
+
     @OneToMany(mappedBy = "user", cascade = [CascadeType.ALL], orphanRemoval = true)
     val likes: MutableList<ArticleLike> = mutableListOf()
 ) : BaseEntity()
