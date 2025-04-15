@@ -1,6 +1,6 @@
 package com.arabyte.arabyteapi.domain.auth.api
 
-import com.arabyte.arabyteapi.domain.auth.dto.KakaoTokenResponse
+import com.arabyte.arabyteapi.domain.auth.dto.retrofit.KakaoTokenResponse
 import retrofit2.Call
 import retrofit2.http.Field
 import retrofit2.http.FormUrlEncoded
