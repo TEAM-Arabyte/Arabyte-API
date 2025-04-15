@@ -3,6 +3,7 @@ package com.arabyte.arabyteapi.domain.user.service
 import com.arabyte.arabyteapi.domain.user.dto.CheckNickNameResponse
 import com.arabyte.arabyteapi.domain.user.dto.OnboardingRequest
 import com.arabyte.arabyteapi.domain.user.entity.User
+import com.arabyte.arabyteapi.domain.user.entity.UserJobInterest
 import com.arabyte.arabyteapi.domain.user.repository.UserRepository
 import com.arabyte.arabyteapi.global.enums.CustomError
 import com.arabyte.arabyteapi.global.exception.CustomException
@@ -48,13 +49,19 @@ class UserService(
         )
     }
 
-    fun updateOnboarding(request: OnboardingRequest): User {
+    fun updateOnboarding(request: OnboardingRequest): Long {
         val user = getUserByUserId(request.userId)
         user.experienceYears = request.experienceYears
         user.experienceMonths = request.experienceMonths
 
-        // TODO - 관심 아르바이트, 아르바이트 경험 저장
+        val interest = UserJobInterest(
+            user = user,
+            category1 = request.jobInterests1,
+            category2 = request.jobInterests2,
+            category3 = request.jobInterests3
+        )
+        user.jobInterests = interest
 
-        return saveUser(user)
+        return saveUser(user).id
     }
 }

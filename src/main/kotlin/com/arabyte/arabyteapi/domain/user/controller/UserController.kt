@@ -30,8 +30,8 @@ class UserController(
     fun onboarding(
         @RequestBody request: OnboardingRequest
     ): OnboardingResponse {
-        val user = userService.updateOnboarding(request)
-        return OnboardingResponse(userId = user.id)
+        val userId = userService.updateOnboarding(request)
+        return OnboardingResponse(userId)
     }
 
     @Operation(summary = "닉네임 중복확인", description = "닉네임이 이미 존재하는지 확인합니다.")

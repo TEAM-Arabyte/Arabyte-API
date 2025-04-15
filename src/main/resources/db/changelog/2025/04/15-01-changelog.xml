@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                      http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.29.xsd"
+        objectQuotingStrategy="QUOTE_ONLY_RESERVED_WORDS">
+    <changeSet id="1744691927055-5" author="djlim00">
+        <createTable tableName="user_job_interest">
+            <column autoIncrement="true" name="id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="pk_user_job_interest"/>
+            </column>
+            <column name="created_at" type="DATETIME"/>
+            <column name="updated_at" type="DATETIME"/>
+            <column name="user_id" type="BIGINT"/>
+            <column name="category" type="SMALLINT">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet id="1744691927055-6" author="djlim00">
+        <addForeignKeyConstraint baseColumnNames="user_id" baseTableName="article_like"
+                                 constraintName="FK_ARTICLE_LIKE_ON_USER" referencedColumnNames="id"
+                                 referencedTableName="user"/>
+    </changeSet>
+    <changeSet id="1744691927055-7" author="djlim00">
+        <addForeignKeyConstraint baseColumnNames="user_id" baseTableName="article" constraintName="FK_ARTICLE_ON_USER"
+                                 referencedColumnNames="id" referencedTableName="user"/>
+    </changeSet>
+    <changeSet id="1744691927055-8" author="djlim00">
+        <addForeignKeyConstraint baseColumnNames="user_id" baseTableName="user_job_interest"
+                                 constraintName="FK_USER_JOB_INTEREST_ON_USER" referencedColumnNames="id"
+                                 referencedTableName="user"/>
+    </changeSet>
+    <changeSet id="1744691927055-1" author="djlim00">
+        <dropNotNullConstraint columnDataType="bigint" columnName="user_id" tableName="article"/>
+    </changeSet>
+    <changeSet id="1744691927055-2" author="djlim00">
+        <dropNotNullConstraint columnDataType="bigint" columnName="user_id" tableName="article_like"/>
+    </changeSet>
+
+</databaseChangeLog>

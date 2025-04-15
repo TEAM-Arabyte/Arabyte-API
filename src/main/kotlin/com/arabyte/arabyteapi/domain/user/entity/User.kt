@@ -4,10 +4,7 @@ import com.arabyte.arabyteapi.domain.article.entity.Article
 import com.arabyte.arabyteapi.domain.article.entity.ArticleLike
 import com.arabyte.arabyteapi.domain.article.entity.Comment
 import com.arabyte.arabyteapi.global.entity.BaseEntity
-import jakarta.persistence.CascadeType
-import jakarta.persistence.Entity
-import jakarta.persistence.OneToMany
-import jakarta.persistence.Table
+import jakarta.persistence.*
 
 @Entity
 @Table(name = "`user`")
@@ -32,5 +29,8 @@ class User(
     val comments: MutableList<Comment> = mutableListOf(),
 
     @OneToMany(mappedBy = "user", cascade = [CascadeType.ALL], orphanRemoval = true)
-    val likes: MutableList<ArticleLike> = mutableListOf()
+    val likes: MutableList<ArticleLike> = mutableListOf(),
+
+    @OneToOne(mappedBy = "user", cascade = [CascadeType.ALL], orphanRemoval = true)
+    var jobInterests: UserJobInterest? = null
 ) : BaseEntity()
