@@ -1,11 +1,10 @@
 package com.arabyte.arabyteapi.domain.article.service
 
 import com.arabyte.arabyteapi.domain.article.dto.*
-import com.arabyte.arabyteapi.domain.article.dto.article.*
-import com.arabyte.arabyteapi.domain.comment.dto.CommentResponse
 import com.arabyte.arabyteapi.domain.article.entity.Article
 import com.arabyte.arabyteapi.domain.article.enums.ArticleKind
 import com.arabyte.arabyteapi.domain.article.repository.ArticleRepository
+import com.arabyte.arabyteapi.domain.comment.dto.CommentResponse
 import com.arabyte.arabyteapi.domain.comment.repository.CommentRepository
 import com.arabyte.arabyteapi.domain.user.service.UserService
 import com.arabyte.arabyteapi.global.enums.CustomError
