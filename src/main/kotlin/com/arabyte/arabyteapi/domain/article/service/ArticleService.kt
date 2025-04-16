@@ -25,13 +25,15 @@ class ArticleService(
 ) {
     @Transactional
     fun createArticle(request: CreateArticleRequest): CreateArticleResponse {
+        val user = userService.getUserByUserId(request.userId)
+
         val article = articleRepository.save(
             Article(
                 title = request.title,
                 text = request.text,
                 likeCount = 0,
                 isAnonymous = request.isAnonymous,
-                userId = request.userId,
+                user = user,
                 articleKindId = request.articleKind,
             )
         )
@@ -82,7 +84,7 @@ class ArticleService(
         val article = articleRepository.findById(articleId)
             .orElseThrow { CustomException(CustomError.ARTICLE_NOT_FOUND) }
 
-        val user = userService.getUser(article.userId)
+        val user = article.user
 
         val commentList = commentRepository.findAllByArticleId(articleId)
         val commentResponses = commentList.map { comment ->

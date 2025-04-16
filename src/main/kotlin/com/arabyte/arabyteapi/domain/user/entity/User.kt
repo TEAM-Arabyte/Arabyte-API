@@ -1,8 +1,11 @@
 package com.arabyte.arabyteapi.domain.user.entity
 
+import com.arabyte.arabyteapi.domain.article.entity.Article
+import com.arabyte.arabyteapi.domain.article.entity.ArticleLike
+import com.arabyte.arabyteapi.domain.article.entity.Comment
+import com.arabyte.arabyteapi.domain.location.entity.Location
 import com.arabyte.arabyteapi.global.entity.BaseEntity
-import jakarta.persistence.Entity
-import jakarta.persistence.Table
+import jakarta.persistence.*
 
 @Entity
 @Table(name = "`user`")
@@ -12,20 +15,26 @@ class User(
     var nickname: String,
     var profileImageUrl: String,
 
-    val ageRange: String,
-    val gender: String,
+    var ageRange: String,
+    var gender: String,
     var email: String,
     var phoneNumber: String?,
+    var experienceYears: Int? = null,
+    var experienceMonths: Int? = null,
 
-    // 거주지역
-    var location: String,
+    @OneToMany(mappedBy = "user", cascade = [CascadeType.ALL], orphanRemoval = true)
+    val articles: MutableList<Article> = mutableListOf(),
 
-    // 아르바이트 경력 (년/개월)
-    var experienceYears: Int = 0,
-    var experienceMonths: Int = 0,
+    @OneToMany(mappedBy = "user", cascade = [CascadeType.ALL], orphanRemoval = true)
+    val comments: MutableList<Comment> = mutableListOf(),
 
-    // 아르바이트 관심분야
-    // @ElementCollection
-    // @Enumerated(EnumType.STRING)
-    // var jobInterests: MutableList<JobCategory> = mutableListOf()
+    @OneToMany(mappedBy = "user", cascade = [CascadeType.ALL], orphanRemoval = true)
+    val likes: MutableList<ArticleLike> = mutableListOf(),
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "location_id")
+    var location: Location? = null,
+
+    @OneToOne(mappedBy = "user", cascade = [CascadeType.ALL], orphanRemoval = true)
+    var jobInterests: UserJobInterest? = null
 ) : BaseEntity()

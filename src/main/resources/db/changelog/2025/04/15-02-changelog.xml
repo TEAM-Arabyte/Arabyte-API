@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                      http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.29.xsd"
+        objectQuotingStrategy="QUOTE_ONLY_RESERVED_WORDS">
+    <changeSet id="1744695702454-3" author="djlim00">
+        <addColumn tableName="user_job_interest">
+            <column name="category_1" type="SMALLINT"/>
+            <column name="category_2" type="SMALLINT"/>
+            <column name="category_3" type="SMALLINT"/>
+        </addColumn>
+    </changeSet>
+    <changeSet id="1744695702454-6" author="djlim00">
+        <addUniqueConstraint columnNames="user_id" constraintName="uc_user_job_interest_user"
+                             tableName="user_job_interest"/>
+    </changeSet>
+    <changeSet id="1744695702454-7" author="djlim00">
+        <dropColumn columnName="category" tableName="user_job_interest"/>
+    </changeSet>
+</databaseChangeLog>

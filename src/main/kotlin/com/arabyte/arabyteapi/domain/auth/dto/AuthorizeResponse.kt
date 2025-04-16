@@ -1,9 +1,8 @@
 package com.arabyte.arabyteapi.domain.auth.dto
 
-import com.arabyte.arabyteapi.domain.user.entity.User
-
-class TokenWithUserResponse(
+data class AuthorizeResponse(
+    val userId: Long,
     val accessToken: String,
     val refreshToken: String,
-    val user: User
+    val isRegistered: Boolean = false,
 )

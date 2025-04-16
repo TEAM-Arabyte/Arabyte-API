@@ -1,6 +1,6 @@
 package com.arabyte.arabyteapi.domain.auth.api
 
-import com.arabyte.arabyteapi.domain.auth.dto.KakaoUserResponse
+import com.arabyte.arabyteapi.domain.auth.dto.retrofit.KakaoUserResponse
 import org.springframework.http.HttpHeaders
 import retrofit2.Call
 import retrofit2.http.GET

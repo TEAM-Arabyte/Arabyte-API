@@ -1,5 +1,8 @@
 package com.arabyte.arabyteapi.domain.auth.util
 
+import com.arabyte.arabyteapi.global.enums.CustomError
+import com.arabyte.arabyteapi.global.exception.CustomException
+import io.jsonwebtoken.ExpiredJwtException
 import io.jsonwebtoken.Jwts
 import io.jsonwebtoken.SignatureAlgorithm
 import io.jsonwebtoken.security.Keys
@@ -58,8 +61,10 @@ class JwtProvider(
                 .build()
                 .parseClaimsJws(token)
             return claims.body.expiration.after(now)
+        } catch (e: ExpiredJwtException) {
+            throw CustomException(CustomError.ACCESS_TOKEN_EXPIRED)
         } catch (e: Exception) {
-            false
+            throw CustomException(CustomError.INVALID_TOKEN)
         }
     }
 

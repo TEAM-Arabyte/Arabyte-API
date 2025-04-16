@@ -1,5 +1,6 @@
 package com.arabyte.arabyteapi.domain.article.entity
 
+import com.arabyte.arabyteapi.domain.user.entity.User
 import com.arabyte.arabyteapi.global.entity.BaseEntity
 import jakarta.persistence.*
 
@@ -13,6 +14,7 @@ class ArticleLike(
     @JoinColumn(name = "article_id")
     val article: Article,
 
-    @Column(nullable = false)
-    val userId: Long
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id")
+    val user: User,
 ) : BaseEntity()
