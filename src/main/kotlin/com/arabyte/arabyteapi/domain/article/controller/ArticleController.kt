@@ -1,7 +1,6 @@
 package com.arabyte.arabyteapi.domain.article.controller
 
 import com.arabyte.arabyteapi.domain.article.dto.*
-import com.arabyte.arabyteapi.domain.article.dto.article.*
 import com.arabyte.arabyteapi.domain.article.enums.ArticleKind
 import com.arabyte.arabyteapi.domain.article.service.ArticleService
 import com.arabyte.arabyteapi.global.annotation.SwaggerCustomException
