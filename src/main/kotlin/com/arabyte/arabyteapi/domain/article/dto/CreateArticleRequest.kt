@@ -7,7 +7,6 @@ data class CreateArticleRequest(
     val text: String,
     val likeCount: Int,
     var isAnonymous: Boolean,
-    val userId: Long,
     val articleKind: ArticleKind,
     val articleImage: String?
 )
