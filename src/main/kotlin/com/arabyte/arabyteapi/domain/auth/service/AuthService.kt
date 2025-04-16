@@ -51,14 +51,14 @@ class AuthService(
                 refreshToken = jwtProvider.generateRefreshToken(user.id.toString()),
                 isRegistered = false
             )
-        } else {
-            return AuthorizeResponse(
-                userId = user.id,
-                accessToken = jwtProvider.generateAccessToken(user.id.toString()),
-                refreshToken = jwtProvider.generateRefreshToken(user.id.toString()),
-                isRegistered = true
-            )
         }
+        
+        return AuthorizeResponse(
+            userId = user.id,
+            accessToken = jwtProvider.generateAccessToken(user.id.toString()),
+            refreshToken = jwtProvider.generateRefreshToken(user.id.toString()),
+            isRegistered = true
+        )
     }
 
     @Transactional
