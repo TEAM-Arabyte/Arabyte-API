@@ -19,7 +19,15 @@ class SecurityConfiguration(
         http
             .csrf { it.disable() }
             .authorizeHttpRequests {
-                it.requestMatchers("/auth/kakao/").permitAll()
+                it.requestMatchers(
+                    "/swagger-ui/**",
+                    "/v3/api-docs/**",
+                    "/auth/kakao/**",
+                    "/auth/reissue",
+                    "/error"
+                )
+                    .permitAll()
+                it.anyRequest().authenticated()
             }
             .addFilterBefore(
                 JwtAuthenticationFilter(jwtProvider),
@@ -27,6 +35,7 @@ class SecurityConfiguration(
             )
             .formLogin { it.disable() }
             .httpBasic { it.disable() }
+            .logout { it.disable() }
 
         return http.build()
     }
