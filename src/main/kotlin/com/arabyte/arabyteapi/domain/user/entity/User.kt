@@ -19,8 +19,8 @@ class User(
     var gender: String,
     var email: String,
     var phoneNumber: String?,
-    var experienceYears: Int = 0,
-    var experienceMonths: Int = 0,
+    var experienceYears: Int? = null,
+    var experienceMonths: Int? = null,
 
     @OneToMany(mappedBy = "user", cascade = [CascadeType.ALL], orphanRemoval = true)
     val articles: MutableList<Article> = mutableListOf(),

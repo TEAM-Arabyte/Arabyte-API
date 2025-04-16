@@ -47,26 +47,28 @@ class UserService(
 
     fun checkNickNameDuplicate(nickname: String): CheckNickNameResponse {
         val isDuplicate = isNicknameExists(nickname)
-        val message = if (isDuplicate) "닉네임이 중복됩니다." else "사용 가능한 닉네임입니다."
 
         return CheckNickNameResponse(
             isDuplicate = isDuplicate,
-            massage = message
         )
     }
 
     fun updateOnboarding(request: OnboardingRequest): OnboardingResponse {
         val user = getUserByUserId(request.userId)
+
         user.experienceYears = request.experienceYears
         user.experienceMonths = request.experienceMonths
 
-        val interest = UserJobInterest(
-            user = user,
-            category1 = request.jobInterests1,
-            category2 = request.jobInterests2,
-            category3 = request.jobInterests3
-        )
-        user.jobInterests = interest
+        if (request.jobInterests.isNotEmpty()) {
+            val interests = request.jobInterests
+            val interestEntity = UserJobInterest(
+                user = user,
+                category1 = interests.getOrNull(0),
+                category2 = interests.getOrNull(1),
+                category3 = interests.getOrNull(2)
+            )
+            user.jobInterests = interestEntity
+        }
 
         return OnboardingResponse(
             userId = saveUser(user).id
