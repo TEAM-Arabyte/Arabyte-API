@@ -1,8 +1,9 @@
-package com.arabyte.arabyteapi.domain.article.service
+package com.arabyte.arabyteapi.domain.comment.service
 
-import com.arabyte.arabyteapi.domain.article.dto.comment.*
-import com.arabyte.arabyteapi.domain.article.entity.Comment
-import com.arabyte.arabyteapi.domain.article.repository.CommentRepository
+import com.arabyte.arabyteapi.domain.article.service.ArticleService
+import com.arabyte.arabyteapi.domain.comment.entity.Comment
+import com.arabyte.arabyteapi.domain.comment.repository.CommentRepository
+import com.arabyte.arabyteapi.domain.comment.dto.*
 import com.arabyte.arabyteapi.domain.user.service.UserService
 import com.arabyte.arabyteapi.global.enums.CustomError
 import com.arabyte.arabyteapi.global.exception.CustomException
