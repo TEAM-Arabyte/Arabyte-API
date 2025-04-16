@@ -1,6 +1,7 @@
 package com.arabyte.arabyteapi.domain.article.entity
 
 import com.arabyte.arabyteapi.domain.article.enums.ArticleKind
+import com.arabyte.arabyteapi.domain.comment.entity.Comment
 import com.arabyte.arabyteapi.domain.user.entity.User
 import com.arabyte.arabyteapi.global.entity.BaseEntity
 import jakarta.persistence.*
@@ -17,7 +18,7 @@ class Article(
     val user: User,
 
     @Enumerated
-    val articleKindId: ArticleKind
+    var articleKindId: ArticleKind
 ) : BaseEntity() {
 
     @OneToMany(mappedBy = "article", cascade = [CascadeType.ALL], orphanRemoval = true)

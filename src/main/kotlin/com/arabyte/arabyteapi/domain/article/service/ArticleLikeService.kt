@@ -1,7 +1,7 @@
 package com.arabyte.arabyteapi.domain.article.service
 
-import com.arabyte.arabyteapi.domain.article.dto.article.ArticleLikeRequest
-import com.arabyte.arabyteapi.domain.article.dto.article.ArticleLikeResponse
+import com.arabyte.arabyteapi.domain.article.dto.ArticleLikeRequest
+import com.arabyte.arabyteapi.domain.article.dto.ArticleLikeResponse
 import com.arabyte.arabyteapi.domain.article.entity.ArticleLike
 import com.arabyte.arabyteapi.domain.article.repository.ArticleLikeRepository
 import com.arabyte.arabyteapi.domain.user.service.UserService

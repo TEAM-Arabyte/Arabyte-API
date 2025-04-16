@@ -1,7 +1,7 @@
 package com.arabyte.arabyteapi.domain.article.controller
 
-import com.arabyte.arabyteapi.domain.article.dto.article.ArticleLikeRequest
-import com.arabyte.arabyteapi.domain.article.dto.article.ArticleLikeResponse
+import com.arabyte.arabyteapi.domain.article.dto.ArticleLikeRequest
+import com.arabyte.arabyteapi.domain.article.dto.ArticleLikeResponse
 import com.arabyte.arabyteapi.domain.article.service.ArticleLikeService
 import com.arabyte.arabyteapi.global.annotation.SwaggerCustomException
 import com.arabyte.arabyteapi.global.enums.CustomExceptionGroup

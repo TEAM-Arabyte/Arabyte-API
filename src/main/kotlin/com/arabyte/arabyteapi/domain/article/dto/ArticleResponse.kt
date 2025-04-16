@@ -1,6 +1,6 @@
-package com.arabyte.arabyteapi.domain.article.dto.article
+package com.arabyte.arabyteapi.domain.article.dto
 
-import com.arabyte.arabyteapi.domain.article.dto.comment.CommentResponse
+import com.arabyte.arabyteapi.domain.comment.dto.CommentResponse
 
 data class ArticleResponse(
     val articleId: Long,

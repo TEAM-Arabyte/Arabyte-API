@@ -1,4 +1,4 @@
-package com.arabyte.arabyteapi.domain.article.dto.comment
+package com.arabyte.arabyteapi.domain.comment.dto
 
 data class UpdateCommentRequest(
     val text: String,
