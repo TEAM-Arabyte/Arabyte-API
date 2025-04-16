@@ -1,7 +1,7 @@
-package com.arabyte.arabyteapi.domain.article.controller
+package com.arabyte.arabyteapi.domain.comment.controller
 
-import com.arabyte.arabyteapi.domain.article.dto.comment.*
-import com.arabyte.arabyteapi.domain.article.service.CommentService
+import com.arabyte.arabyteapi.domain.comment.service.CommentService
+import com.arabyte.arabyteapi.domain.comment.dto.*
 import com.arabyte.arabyteapi.global.annotation.SwaggerCustomException
 import com.arabyte.arabyteapi.global.enums.CustomExceptionGroup
 import io.swagger.v3.oas.annotations.Operation

@@ -2,7 +2,7 @@ package com.arabyte.arabyteapi.domain.user.entity
 
 import com.arabyte.arabyteapi.domain.article.entity.Article
 import com.arabyte.arabyteapi.domain.article.entity.ArticleLike
-import com.arabyte.arabyteapi.domain.article.entity.Comment
+import com.arabyte.arabyteapi.domain.comment.entity.Comment
 import com.arabyte.arabyteapi.domain.location.entity.Location
 import com.arabyte.arabyteapi.global.entity.BaseEntity
 import jakarta.persistence.*

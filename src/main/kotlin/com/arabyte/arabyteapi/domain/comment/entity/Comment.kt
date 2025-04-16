@@ -1,5 +1,6 @@
-package com.arabyte.arabyteapi.domain.article.entity
+package com.arabyte.arabyteapi.domain.comment.entity
 
+import com.arabyte.arabyteapi.domain.article.entity.Article
 import com.arabyte.arabyteapi.domain.user.entity.User
 import com.arabyte.arabyteapi.global.entity.BaseEntity
 import jakarta.persistence.*
