@@ -52,7 +52,7 @@ class AuthService(
                 isRegistered = false
             )
         }
-        
+
         return AuthorizeResponse(
             userId = user.id,
             accessToken = jwtProvider.generateAccessToken(user.id.toString()),
@@ -79,7 +79,7 @@ class AuthService(
         )
     }
 
-    fun getUserIdByToken(body: ReissueAccessTokenRequest): String {
+    private fun getUserIdByToken(body: ReissueAccessTokenRequest): String {
         if (!jwtProvider.isValidToken(body.refreshToken)) {
             throw CustomException(CustomError.INVALID_TOKEN)
         }
