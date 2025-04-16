@@ -5,6 +5,7 @@ import org.springframework.http.HttpStatus.*
 
 enum class CustomError(val status: HttpStatus, val message: String) {
     // common
+    ACCESS_TOKEN_EXPIRED(UNAUTHORIZED, "Access Token이 만료되었습니다."),
     INVALID_TOKEN(UNAUTHORIZED, "유효하지 않은 토큰입니다."),
 
     // auth
@@ -22,4 +23,7 @@ enum class CustomError(val status: HttpStatus, val message: String) {
 
     // user
     USER_NOT_FOUND(NOT_FOUND, "사용자를 찾을 수 없습니다."),
+
+    // location
+    LOCATION_NOT_FOUND(NOT_FOUND, "위치를 찾을 수 없습니다.")
 }
