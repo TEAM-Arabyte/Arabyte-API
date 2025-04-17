@@ -1,9 +1,10 @@
 package com.arabyte.arabyteapi.domain.comment.service
 
 import com.arabyte.arabyteapi.domain.article.service.ArticleService
+import com.arabyte.arabyteapi.domain.comment.dto.*
 import com.arabyte.arabyteapi.domain.comment.entity.Comment
 import com.arabyte.arabyteapi.domain.comment.repository.CommentRepository
-import com.arabyte.arabyteapi.domain.comment.dto.*
+import com.arabyte.arabyteapi.domain.user.entity.User
 import com.arabyte.arabyteapi.domain.user.service.UserService
 import com.arabyte.arabyteapi.global.enums.CustomError
 import com.arabyte.arabyteapi.global.exception.CustomException
@@ -17,9 +18,8 @@ class CommentService(
     private val userService: UserService
 ) {
     @Transactional
-    fun createComment(request: CreateCommentRequest): CreateCommentResponse {
+    fun createComment(user: User, request: CreateCommentRequest): CreateCommentResponse {
         val article = articleService.getArticle(request.articleId)
-        val user = userService.getUserByUserId(request.userId)
 
         val parent = request.parentId?.let {
             commentRepository.findById(it)
@@ -41,9 +41,17 @@ class CommentService(
         )
     }
 
-    fun updateComment(commentId: Long, request: UpdateCommentRequest): UpdateCommentResponse {
+    fun updateComment(
+        user: User,
+        commentId: Long,
+        request: UpdateCommentRequest
+    ): UpdateCommentResponse {
         val comment = commentRepository.findById(commentId)
             .orElseThrow { CustomException(CustomError.COMMENT_NOT_FOUND) }
+
+        if (comment.user.id != user.id) {
+            throw CustomException(CustomError.COMMENT_FORBIDDEN)
+        }
 
         comment.text = request.text
         comment.isAnonymous = request.isAnonymous
@@ -56,9 +64,13 @@ class CommentService(
         )
     }
 
-    fun deleteComment(commentId: Long): DeleteCommentResponse {
+    fun deleteComment(user: User, commentId: Long): DeleteCommentResponse {
         val comment = commentRepository.findById(commentId)
             .orElseThrow { CustomException(CustomError.COMMENT_NOT_FOUND) }
+
+        if (comment.user.id != user.id) {
+            throw CustomException(CustomError.COMMENT_FORBIDDEN)
+        }
 
         commentRepository.delete(comment)
 
