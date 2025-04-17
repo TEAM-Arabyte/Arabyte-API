@@ -3,10 +3,9 @@ package com.arabyte.arabyteapi.domain.auth.util
 import jakarta.servlet.FilterChain
 import jakarta.servlet.http.HttpServletRequest
 import jakarta.servlet.http.HttpServletResponse
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
 import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.security.core.userdetails.User
-import org.springframework.security.core.userdetails.UserDetails
-import org.springframework.security.web.authentication.WebAuthenticationDetailsSource
 import org.springframework.stereotype.Component
 import org.springframework.web.filter.OncePerRequestFilter
 
@@ -19,21 +18,18 @@ class JwtAuthenticationFilter(
         response: HttpServletResponse,
         filterChain: FilterChain
     ) {
-        // TODO - config에서 처리
-        val uri = request.requestURI
-        if (uri.startsWith("/auth/kakao")) {
-            filterChain.doFilter(request, response)
-            return
-        }
-
         val token = jwtProvider.resolveToken(request)
 
         if (!token.isNullOrBlank() && jwtProvider.isValidToken(token)) {
             val userId = jwtProvider.getUserId(token)
-            val userDetails: UserDetails =
-                User.withUsername(userId).password("").authorities(emptyList()).build()
-            val authentication = JwtAuthenticationToken(userDetails, token, userDetails.authorities)
-            authentication.details = WebAuthenticationDetailsSource().buildDetails(request)
+            val userDetails =
+                User.builder()
+                    .username(userId)
+                    .password("")
+                    .authorities(emptyList())
+                    .build()
+            val authentication =
+                UsernamePasswordAuthenticationToken(userDetails, "", userDetails.authorities)
 
             SecurityContextHolder.getContext().authentication = authentication
         }
