@@ -53,9 +53,7 @@ class UserService(
         )
     }
 
-    fun updateOnboarding(request: OnboardingRequest): OnboardingResponse {
-        val user = getUserByUserId(request.userId)
-
+    fun updateOnboarding(user: User, request: OnboardingRequest): OnboardingResponse {
         user.experienceYears = request.experienceYears
         user.experienceMonths = request.experienceMonths
 
