@@ -3,6 +3,8 @@ package com.arabyte.arabyteapi.domain.article.controller
 import com.arabyte.arabyteapi.domain.article.dto.*
 import com.arabyte.arabyteapi.domain.article.enums.ArticleKind
 import com.arabyte.arabyteapi.domain.article.service.ArticleService
+import com.arabyte.arabyteapi.domain.user.entity.User
+import com.arabyte.arabyteapi.global.annotation.RequestUser
 import com.arabyte.arabyteapi.global.annotation.SwaggerCustomException
 import com.arabyte.arabyteapi.global.enums.CustomExceptionGroup
 import io.swagger.v3.oas.annotations.Operation
@@ -22,9 +24,10 @@ class ArticleController(
     @PostMapping
     @SwaggerCustomException(CustomExceptionGroup.ARTICLE_CREATE)
     fun createArticle(
+        @RequestUser user: User,
         @RequestBody request: CreateArticleRequest
     ): CreateArticleResponse {
-        return articleService.createArticle(request)
+        return articleService.createArticle(user, request)
     }
 
     @Operation(summary = "게시물 목록 조회", description = "전체게시판, 자유게시판, 정보게시판의 게시물 개요를 조회하는 API입니다.")
@@ -54,18 +57,20 @@ class ArticleController(
     @PutMapping("/{articleId}")
     @SwaggerCustomException(CustomExceptionGroup.ARTICLE_UPDATE)
     fun updateArticle(
+        @RequestUser user: User,
         @PathVariable articleId: Long,
         @RequestBody request: UpdateArticleRequest
     ): UpdateArticleResponse {
-        return articleService.updateArticle(articleId, request)
+        return articleService.updateArticle(user, articleId, request)
     }
 
     @Operation(summary = "게시물 삭제", description = "게시물을 삭제하는 API입니다.")
     @DeleteMapping("/{articleId}")
     @SwaggerCustomException(CustomExceptionGroup.ARTICLE_DELETE)
     fun deleteArticle(
+        @RequestUser user: User,
         @PathVariable articleId: Long,
     ): DeleteArticleResponse {
-        return articleService.deleteArticle(articleId)
+        return articleService.deleteArticle(user, articleId)
     }
 }
