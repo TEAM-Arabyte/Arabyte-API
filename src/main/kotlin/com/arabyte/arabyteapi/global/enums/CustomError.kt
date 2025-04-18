@@ -26,4 +26,8 @@ enum class CustomError(val status: HttpStatus, val message: String) {
 
     // location
     LOCATION_NOT_FOUND(NOT_FOUND, "위치를 찾을 수 없습니다."),
+
+    // review
+    REVIEW_NOT_FOUND(NOT_FOUND, "리뷰를 찾을 수 없습니다."),
+    REVIEW_NOT_AUTHORIZED(FORBIDDEN, "리뷰에 대한 권한이 없습니다."),
 }

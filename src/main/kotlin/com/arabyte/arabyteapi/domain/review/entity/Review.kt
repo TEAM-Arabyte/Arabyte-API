@@ -12,7 +12,7 @@ import jakarta.persistence.ManyToOne
 
 @Entity
 class Review(
-    val text: String,
+    var text: String,
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "company_id")
     val company: Company,
