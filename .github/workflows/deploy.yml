@@ -1,8 +1,8 @@
 name: Deploy to Flyio
 on:
   push:
-    tags:
-      - \d+\.\d+\.\d+
+    branches:
+      - release
 jobs:
   deploy:
     name: deploy

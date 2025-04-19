@@ -64,7 +64,7 @@ class JwtProvider(
         } catch (e: ExpiredJwtException) {
             throw CustomException(CustomError.ACCESS_TOKEN_EXPIRED)
         } catch (e: Exception) {
-            throw CustomException(CustomError.INVALID_TOKEN)
+            false
         }
     }
 
