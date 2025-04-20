@@ -6,6 +6,7 @@ import com.arabyte.arabyteapi.domain.article.enums.ArticleKind
 import com.arabyte.arabyteapi.domain.article.repository.ArticleRepository
 import com.arabyte.arabyteapi.domain.comment.dto.CommentResponse
 import com.arabyte.arabyteapi.domain.comment.repository.CommentRepository
+import com.arabyte.arabyteapi.domain.user.entity.User
 import com.arabyte.arabyteapi.domain.user.service.UserService
 import com.arabyte.arabyteapi.global.enums.CustomError
 import com.arabyte.arabyteapi.global.exception.CustomException
@@ -24,9 +25,7 @@ class ArticleService(
     private val commentRepository: CommentRepository
 ) {
     @Transactional
-    fun createArticle(request: CreateArticleRequest): CreateArticleResponse {
-        val user = userService.getUserByUserId(request.userId)
-
+    fun createArticle(user: User, request: CreateArticleRequest): CreateArticleResponse {
         val article = articleRepository.save(
             Article(
                 title = request.title,
@@ -115,9 +114,17 @@ class ArticleService(
         )
     }
 
-    fun updateArticle(articleId: Long, request: UpdateArticleRequest): UpdateArticleResponse {
+    fun updateArticle(
+        user: User,
+        articleId: Long,
+        request: UpdateArticleRequest
+    ): UpdateArticleResponse {
         val article = articleRepository.findById(articleId)
             .orElseThrow { CustomException(CustomError.ARTICLE_NOT_FOUND) }
+
+        if (article.user.id != user.id) {
+            throw CustomException(CustomError.ARTICLE_FORBIDDEN)
+        }
 
         article.title = request.title
         article.text = request.text
@@ -132,9 +139,13 @@ class ArticleService(
         )
     }
 
-    fun deleteArticle(articleId: Long): DeleteArticleResponse {
+    fun deleteArticle(user: User, articleId: Long): DeleteArticleResponse {
         val article = articleRepository.findById(articleId)
             .orElseThrow { CustomException(CustomError.ARTICLE_NOT_FOUND) }
+
+        if (article.user.id != user.id) {
+            throw CustomException(CustomError.ARTICLE_FORBIDDEN)
+        }
 
         articleRepository.delete(article)
 

@@ -62,8 +62,7 @@ class AuthService(
     }
 
     @Transactional
-    fun registerUser(request: RegisterRequest): RegisterResponse {
-        val user = userService.getUserByUserId(request.userId)
+    fun registerUser(user: User, request: RegisterRequest): RegisterResponse {
         val location = locationService.findById(request.locationId)
 
         user.nickname = request.nickname
