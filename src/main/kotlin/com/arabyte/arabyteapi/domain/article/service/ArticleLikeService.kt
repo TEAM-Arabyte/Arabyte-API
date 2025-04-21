@@ -1,23 +1,19 @@
 package com.arabyte.arabyteapi.domain.article.service
 
-import com.arabyte.arabyteapi.domain.article.dto.ArticleLikeRequest
 import com.arabyte.arabyteapi.domain.article.dto.ArticleLikeResponse
+import com.arabyte.arabyteapi.domain.article.entity.Article
 import com.arabyte.arabyteapi.domain.article.entity.ArticleLike
 import com.arabyte.arabyteapi.domain.article.repository.ArticleLikeRepository
 import com.arabyte.arabyteapi.domain.user.entity.User
-import com.arabyte.arabyteapi.domain.user.service.UserService
 import jakarta.transaction.Transactional
 import org.springframework.stereotype.Service
 
 @Service
 class ArticleLikeService(
-    private val articleService: ArticleService,
     private val articleLikeRepository: ArticleLikeRepository,
-    private val userService: UserService
 ) {
     @Transactional
-    fun toggleLike(user: User, request: ArticleLikeRequest): ArticleLikeResponse {
-        val article = articleService.getArticle(request.articleId)
+    fun toggleLike(user: User, article: Article): ArticleLikeResponse {
         val existing = articleLikeRepository.findByArticleIdAndUserId(article.id, user.id)
 
         return if (existing != null) {
@@ -29,5 +25,16 @@ class ArticleLikeService(
             article.likeCount += 1
             ArticleLikeResponse(true, article.likeCount)
         }
+    }
+
+    fun findLikedArticleIds(userId: Long, articleIds: List<Long>): Set<Long> {
+        return articleLikeRepository
+            .findByUserIdAndArticleIdIn(userId, articleIds)
+            .map { it.article.id }
+            .toSet()
+    }
+
+    fun isArticleLikedByUser(userId: Long, articleId: Long): Boolean {
+        return articleLikeRepository.findByArticleIdAndUserId(articleId, userId) != null
     }
 }

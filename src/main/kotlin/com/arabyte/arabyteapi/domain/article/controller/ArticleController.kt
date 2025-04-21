@@ -34,6 +34,7 @@ class ArticleController(
     @GetMapping
     @SwaggerCustomException(CustomExceptionGroup.ARTICLE_LIST)
     fun getArticles(
+        @RequestUser user: User,
         @RequestParam(required = false) articleKind: ArticleKind?,
         @PageableDefault(
             size = 10,
@@ -41,16 +42,17 @@ class ArticleController(
             direction = Sort.Direction.DESC
         ) pageable: Pageable
     ): Page<ArticlePreviewResponse> {
-        return articleService.getArticlePreviews(articleKind, pageable)
+        return articleService.getArticlePreviews(user, articleKind, pageable)
     }
 
     @Operation(summary = "게시글 상세 조회", description = "게시물과 해당 댓글들을 함께 반환합니다.")
     @GetMapping("/{articleId}")
     @SwaggerCustomException(CustomExceptionGroup.ARTICLE_DETAIL)
     fun getArticleDetail(
+        @RequestUser user: User,
         @PathVariable articleId: Long
     ): ArticleResponse {
-        return articleService.getArticleDetail(articleId)
+        return articleService.getArticleDetail(user, articleId)
     }
 
     @Operation(summary = "게시물 수정", description = "게시물을 수정하는 API입니다.")
@@ -72,5 +74,15 @@ class ArticleController(
         @PathVariable articleId: Long,
     ): DeleteArticleResponse {
         return articleService.deleteArticle(user, articleId)
+    }
+
+    @Operation(summary = "게시물 좋아요", description = "게시물 좋아요 토글 API")
+    @PostMapping("/like")
+    @SwaggerCustomException(CustomExceptionGroup.ARTICLE_LIKE)
+    fun toggleLike(
+        @RequestUser user: User,
+        @RequestBody request: ArticleLikeRequest
+    ): ArticleLikeResponse {
+        return articleService.toggleLike(user, request)
     }
 }
