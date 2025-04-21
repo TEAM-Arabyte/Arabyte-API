@@ -7,7 +7,6 @@ import com.arabyte.arabyteapi.domain.article.repository.ArticleRepository
 import com.arabyte.arabyteapi.domain.comment.dto.CommentResponse
 import com.arabyte.arabyteapi.domain.comment.repository.CommentRepository
 import com.arabyte.arabyteapi.domain.user.entity.User
-import com.arabyte.arabyteapi.domain.user.service.UserService
 import com.arabyte.arabyteapi.global.enums.CustomError
 import com.arabyte.arabyteapi.global.exception.CustomException
 import jakarta.transaction.Transactional
@@ -21,7 +20,7 @@ import java.time.format.DateTimeFormatter
 @Service
 class ArticleService(
     private val articleRepository: ArticleRepository,
-    private val userService: UserService,
+    private val articleLikeService: ArticleLikeService,
     private val commentRepository: CommentRepository
 ) {
     @Transactional
@@ -41,6 +40,7 @@ class ArticleService(
     }
 
     fun getArticlePreviews(
+        user: User,
         articleKind: ArticleKind?,
         pageable: Pageable
     ): Page<ArticlePreviewResponse> {
@@ -49,6 +49,9 @@ class ArticleService(
         } else {
             articleRepository.findAll(pageable)
         }
+
+        val articleIds = articles.map { it.id }.toList()
+        val likedArticleIds = articleLikeService.findLikedArticleIds(user.id, articleIds)
 
         return articles.map { article ->
             val commentCount = article.comments.size
@@ -62,7 +65,8 @@ class ArticleService(
                 uploadAt = uploadAt,
                 // TODO
                 thumbnailImage = "이미지",
-                articleKind = article.articleKindId
+                articleKind = article.articleKindId,
+                isLiked = likedArticleIds.contains(article.id)
             )
         }
     }
@@ -79,11 +83,11 @@ class ArticleService(
         }
     }
 
-    fun getArticleDetail(articleId: Long): ArticleResponse {
-        val article = articleRepository.findById(articleId)
-            .orElseThrow { CustomException(CustomError.ARTICLE_NOT_FOUND) }
+    fun getArticleDetail(user: User, articleId: Long): ArticleResponse {
+        val article = getArticle(articleId)
 
-        val user = article.user
+        val articleUser = article.user
+        val isLiked = articleLikeService.isArticleLikedByUser(user.id, article.id)
 
         val commentList = commentRepository.findAllByArticleId(articleId)
         val commentResponses = commentList.map { comment ->
@@ -102,7 +106,7 @@ class ArticleService(
 
         return ArticleResponse(
             articleId = article.id,
-            nickname = if (article.isAnonymous) "익명" else user.nickname,
+            nickname = if (article.isAnonymous) "익명" else articleUser.nickname,
             createdAt = article.createdAt?.format(DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm"))
                 ?: "날짜없음",
             title = article.title,
@@ -111,6 +115,7 @@ class ArticleService(
             commentCount = commentList.size,
             comments = commentResponses,
             imageUrls = article.images.map { it.url },
+            isLiked = isLiked,
         )
     }
 
@@ -119,8 +124,7 @@ class ArticleService(
         articleId: Long,
         request: UpdateArticleRequest
     ): UpdateArticleResponse {
-        val article = articleRepository.findById(articleId)
-            .orElseThrow { CustomException(CustomError.ARTICLE_NOT_FOUND) }
+        val article = getArticle(articleId)
 
         if (article.user.id != user.id) {
             throw CustomException(CustomError.ARTICLE_FORBIDDEN)
@@ -140,8 +144,7 @@ class ArticleService(
     }
 
     fun deleteArticle(user: User, articleId: Long): DeleteArticleResponse {
-        val article = articleRepository.findById(articleId)
-            .orElseThrow { CustomException(CustomError.ARTICLE_NOT_FOUND) }
+        val article = getArticle(articleId)
 
         if (article.user.id != user.id) {
             throw CustomException(CustomError.ARTICLE_FORBIDDEN)
@@ -158,5 +161,10 @@ class ArticleService(
     fun getArticle(articleId: Long): Article {
         return articleRepository.findById(articleId)
             .orElseThrow { CustomException(CustomError.ARTICLE_NOT_FOUND) }
+    }
+
+    fun toggleLike(user: User, request: ArticleLikeRequest): ArticleLikeResponse {
+        val article = getArticle(request.articleId)
+        return articleLikeService.toggleLike(user, article)
     }
 }
