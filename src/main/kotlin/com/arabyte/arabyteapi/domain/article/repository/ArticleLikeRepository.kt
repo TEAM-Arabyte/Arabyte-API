@@ -7,4 +7,5 @@ import org.springframework.stereotype.Repository
 @Repository
 interface ArticleLikeRepository : JpaRepository<ArticleLike, Long> {
     fun findByArticleIdAndUserId(articleId: Long, userId: Long): ArticleLike?
+    fun findByUserIdAndArticleIdIn(userId: Long, articleIds: List<Long>): List<ArticleLike>
 }

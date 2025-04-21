@@ -11,5 +11,6 @@ data class ArticleResponse(
     val likeCount: Int,
     val commentCount: Int,
     val comments: List<CommentResponse>,
-    val imageUrls: List<String>
+    val imageUrls: List<String>,
+    val isLiked: Boolean
 )

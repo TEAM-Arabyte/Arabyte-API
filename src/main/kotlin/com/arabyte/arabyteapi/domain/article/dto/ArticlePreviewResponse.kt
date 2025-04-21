@@ -9,5 +9,6 @@ data class ArticlePreviewResponse(
     val commentCount: Int,
     val uploadAt: String,
     val thumbnailImage: String?,
-    val articleKind: ArticleKind
+    val articleKind: ArticleKind,
+    val isLiked: Boolean
 )
