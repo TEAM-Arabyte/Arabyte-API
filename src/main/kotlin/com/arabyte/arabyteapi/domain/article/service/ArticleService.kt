@@ -2,6 +2,7 @@ package com.arabyte.arabyteapi.domain.article.service
 
 import com.arabyte.arabyteapi.domain.article.dto.*
 import com.arabyte.arabyteapi.domain.article.entity.Article
+import com.arabyte.arabyteapi.domain.article.entity.ArticleImage
 import com.arabyte.arabyteapi.domain.article.enums.ArticleKind
 import com.arabyte.arabyteapi.domain.article.repository.ArticleRepository
 import com.arabyte.arabyteapi.domain.comment.dto.CommentResponse
@@ -36,6 +37,10 @@ class ArticleService(
             )
         )
 
+        request.articleImages?.forEach { imageUrl ->
+            article.images.add(ArticleImage(url = imageUrl, article = article))
+        }
+
         return CreateArticleResponse(article.id, article.title)
     }
 
@@ -58,15 +63,15 @@ class ArticleService(
             val uploadAt = getPreviewUploadTime(article.createdAt)
 
             ArticlePreviewResponse(
+                articleId = article.id,
                 title = article.title,
                 text = article.text,
                 likeCount = article.likeCount,
                 commentCount = commentCount,
                 uploadAt = uploadAt,
-                // TODO
-                thumbnailImage = "이미지",
+                thumbnailImage = article.images.firstOrNull()?.url,
                 articleKind = article.articleKindId,
-                isLiked = likedArticleIds.contains(article.id)
+                isLiked = likedArticleIds.contains(article.id),
             )
         }
     }
@@ -134,6 +139,11 @@ class ArticleService(
         article.text = request.text
         article.isAnonymous = request.isAnonymous
         article.articleKindId = request.articleKind
+
+        article.images.clear()
+        request.articleImages?.forEach { imageUrl ->
+            article.images.add(ArticleImage(url = imageUrl, article = article))
+        }
 
         articleRepository.save(article)
 
