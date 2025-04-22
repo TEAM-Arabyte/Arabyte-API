@@ -41,12 +41,8 @@ class UserService(
         )
     }
 
-    private fun isNicknameExists(nickname: String): Boolean {
-        return userRepository.existsByNickname(nickname)
-    }
-
-    fun checkNickNameDuplicate(nickname: String): CheckNickNameResponse {
-        val isDuplicate = isNicknameExists(nickname)
+    fun checkNickNameDuplicate(nickname: String, userId: Long): CheckNickNameResponse {
+        val isDuplicate = userRepository.existsByNicknameAndIdNot(nickname, userId)
 
         return CheckNickNameResponse(
             isDuplicate = isDuplicate,

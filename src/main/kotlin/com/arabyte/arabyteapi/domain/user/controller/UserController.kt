@@ -35,8 +35,9 @@ class UserController(
     @Operation(summary = "닉네임 중복확인", description = "닉네임이 이미 존재하는지 확인합니다.")
     @GetMapping("/nickname/check")
     fun checkNickNameDuplicate(
+        @RequestUser user: User,
         @RequestParam nickname: String
     ): CheckNickNameResponse {
-        return userService.checkNickNameDuplicate(nickname)
+        return userService.checkNickNameDuplicate(nickname, user.id)
     }
 }
