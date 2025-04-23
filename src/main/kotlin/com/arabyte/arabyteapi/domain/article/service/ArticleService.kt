@@ -12,6 +12,7 @@ import com.arabyte.arabyteapi.global.enums.CustomError
 import com.arabyte.arabyteapi.global.exception.CustomException
 import jakarta.transaction.Transactional
 import org.springframework.data.domain.Page
+import org.springframework.data.domain.PageRequest
 import org.springframework.data.domain.Pageable
 import org.springframework.stereotype.Service
 import java.time.Duration
@@ -76,7 +77,7 @@ class ArticleService(
         }
     }
 
-    private fun getPreviewUploadTime(createAt: LocalDateTime?): String {
+    fun getPreviewUploadTime(createAt: LocalDateTime?): String {
         val now = LocalDateTime.now()
         val duration = Duration.between(createAt, now)
 
@@ -89,7 +90,7 @@ class ArticleService(
     }
 
     fun getArticleDetail(user: User, articleId: Long): ArticleResponse {
-        val article = getArticle(articleId)
+        val article = getArticles(articleId)
 
         val articleUser = article.user
         val isLiked = articleLikeService.isArticleLikedByUser(user.id, article.id)
@@ -129,7 +130,7 @@ class ArticleService(
         articleId: Long,
         request: UpdateArticleRequest
     ): UpdateArticleResponse {
-        val article = getArticle(articleId)
+        val article = getArticles(articleId)
 
         if (article.user.id != user.id) {
             throw CustomException(CustomError.ARTICLE_FORBIDDEN)
@@ -154,7 +155,7 @@ class ArticleService(
     }
 
     fun deleteArticle(user: User, articleId: Long): DeleteArticleResponse {
-        val article = getArticle(articleId)
+        val article = getArticles(articleId)
 
         if (article.user.id != user.id) {
             throw CustomException(CustomError.ARTICLE_FORBIDDEN)
@@ -168,13 +169,17 @@ class ArticleService(
         )
     }
 
-    fun getArticle(articleId: Long): Article {
+    fun getArticles(articleId: Long): Article {
         return articleRepository.findById(articleId)
             .orElseThrow { CustomException(CustomError.ARTICLE_NOT_FOUND) }
     }
 
+    fun getMyArticles(user: User, page: Int, size: Int): Page<Article> {
+        return articleRepository.findAllByUserOrderByCreatedAtDesc(user, PageRequest.of(page, size))
+    }
+
     fun toggleLike(user: User, request: ArticleLikeRequest): ArticleLikeResponse {
-        val article = getArticle(request.articleId)
+        val article = getArticles(request.articleId)
         return articleLikeService.toggleLike(user, article)
     }
 }

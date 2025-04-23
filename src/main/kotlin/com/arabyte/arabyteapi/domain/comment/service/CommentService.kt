@@ -19,7 +19,7 @@ class CommentService(
 ) {
     @Transactional
     fun createComment(user: User, request: CreateCommentRequest): CreateCommentResponse {
-        val article = articleService.getArticle(request.articleId)
+        val article = articleService.getArticles(request.articleId)
 
         val parent = request.parentId?.let {
             commentRepository.findById(it)

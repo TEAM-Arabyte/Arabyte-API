@@ -7,6 +7,7 @@ enum class CustomError(val status: HttpStatus, val message: String) {
     // common
     ACCESS_TOKEN_EXPIRED(UNAUTHORIZED, "Access Token이 만료되었습니다."),
     INVALID_TOKEN(UNAUTHORIZED, "유효하지 않은 토큰입니다."),
+    INVALID_URL(NOT_FOUND, "잘못된 요청 URL입니다."),
 
     // auth
     GET_KAKAO_ACCESS_TOKEN_FAILED(NO_CONTENT, "카카오 액세스 토큰을 가져오는데 실패했습니다."),
