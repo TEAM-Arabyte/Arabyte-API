@@ -1,9 +1,6 @@
 package com.arabyte.arabyteapi.domain.user.service
 
-import com.arabyte.arabyteapi.domain.user.dto.CheckNickNameResponse
-import com.arabyte.arabyteapi.domain.user.dto.DeleteUserResponse
-import com.arabyte.arabyteapi.domain.user.dto.OnboardingRequest
-import com.arabyte.arabyteapi.domain.user.dto.OnboardingResponse
+import com.arabyte.arabyteapi.domain.user.dto.*
 import com.arabyte.arabyteapi.domain.user.entity.User
 import com.arabyte.arabyteapi.domain.user.entity.UserJobInterest
 import com.arabyte.arabyteapi.domain.user.repository.UserRepository
@@ -66,6 +63,15 @@ class UserService(
 
         return OnboardingResponse(
             userId = saveUser(user).id
+        )
+    }
+
+    fun updateNickName(user: User, newNickname: String): UpdateNickNameResponse {
+        user.nickname = newNickname
+        val savedUser = userRepository.save(user);
+
+        return UpdateNickNameResponse(
+            userId = savedUser.id
         )
     }
 }
