@@ -15,8 +15,6 @@ import org.springframework.data.domain.Page
 import org.springframework.data.domain.PageRequest
 import org.springframework.data.domain.Pageable
 import org.springframework.stereotype.Service
-import java.time.Duration
-import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 
 @Service
@@ -60,32 +58,8 @@ class ArticleService(
         val likedArticleIds = articleLikeService.findLikedArticleIds(user.id, articleIds)
 
         return articles.map { article ->
-            val commentCount = article.comments.size
-            val uploadAt = getPreviewUploadTime(article.createdAt)
-
-            ArticlePreviewResponse(
-                articleId = article.id,
-                title = article.title,
-                text = article.text,
-                likeCount = article.likeCount,
-                commentCount = commentCount,
-                uploadAt = uploadAt,
-                thumbnailImage = article.images.firstOrNull()?.url,
-                articleKind = article.articleKindId,
-                isLiked = likedArticleIds.contains(article.id),
-            )
-        }
-    }
-
-    fun getPreviewUploadTime(createAt: LocalDateTime?): String {
-        val now = LocalDateTime.now()
-        val duration = Duration.between(createAt, now)
-
-        return when {
-            duration.toMinutes() < 1 -> "방금 전"
-            duration.toHours() < 1 -> "${duration.toMinutes()}분 전"
-            duration.toHours() < 24 -> "${duration.toHours()}시간 전"
-            else -> "${duration.toDays()}일 전"
+            val isLiked = likedArticleIds.contains(article.id)
+            ArticlePreviewResponse.of(article, isLiked)
         }
     }
 
@@ -100,7 +74,7 @@ class ArticleService(
             CommentResponse(
                 commentId = comment.id,
                 text = comment.text,
-                // 이러면 모든 익명 유저의 닉네임이 "익명"이 되버림
+                // TODO - 이러면 모든 익명 유저의 닉네임이 "익명"이 되버림
                 nickname = if (comment.isAnonymous) "익명" else comment.user.nickname,
                 createdAt = comment.createdAt?.format(DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm"))
                     ?: "날짜없음",
