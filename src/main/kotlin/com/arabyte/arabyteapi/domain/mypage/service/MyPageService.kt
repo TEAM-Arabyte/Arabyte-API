@@ -5,14 +5,12 @@ import com.arabyte.arabyteapi.domain.article.service.ArticleLikeService
 import com.arabyte.arabyteapi.domain.article.service.ArticleService
 import com.arabyte.arabyteapi.domain.location.service.LocationService
 import com.arabyte.arabyteapi.domain.mypage.dto.MyPageResponse
-import com.arabyte.arabyteapi.domain.mypage.dto.UpdateBasicInfoResponse
-import com.arabyte.arabyteapi.domain.mypage.dto.UpdateSubInfoResponse
+import com.arabyte.arabyteapi.domain.mypage.dto.UpdateBasicInfoRequest
+import com.arabyte.arabyteapi.domain.mypage.dto.UpdateSubInfoRequest
+import com.arabyte.arabyteapi.domain.mypage.enums.MyPageArticleType
 import com.arabyte.arabyteapi.domain.user.entity.User
 import com.arabyte.arabyteapi.domain.user.entity.UserJobInterest
-import com.arabyte.arabyteapi.domain.user.repository.UserRepository
 import com.arabyte.arabyteapi.domain.user.service.UserService
-import com.arabyte.arabyteapi.global.enums.CustomError
-import com.arabyte.arabyteapi.global.exception.CustomException
 import org.springframework.data.domain.Page
 import org.springframework.stereotype.Service
 
@@ -20,59 +18,44 @@ import org.springframework.stereotype.Service
 class MyPageService(
     private val articleLikeService: ArticleLikeService,
     private val articleService: ArticleService,
-    private val userRepository: UserRepository,
     private val locationService: LocationService,
     private val userService: UserService
 ) {
-    fun getMyPageArticles(type: String, user: User, page: Int, size: Int): Page<ArticlePreviewResponse> {
+    fun getMyPageArticles(type: MyPageArticleType, user: User, page: Int, size: Int): Page<ArticlePreviewResponse> {
         val articles = when (type) {
-            "my" -> articleService.getMyArticles(user, page, size)
-            "like" -> articleLikeService.getLikedArticles(user, page, size)
-            else -> throw CustomException(CustomError.INVALID_URL)
+            MyPageArticleType.MY -> articleService.getMyArticles(user, page, size)
+            MyPageArticleType.LIKE -> articleLikeService.getLikedArticles(user, page, size)
         }
 
         val articleIds = articles.map { it.id }.toList()
         val likedArticleIds = articleLikeService.findLikedArticleIds(user.id, articleIds)
 
         return articles.map { article ->
-            val commentCount = article.comments.size
-            val uploadAt = articleService.getPreviewUploadTime(article.createdAt)
+            val isLiked = likedArticleIds.contains(article.id)
 
-            ArticlePreviewResponse(
-                articleId = article.id,
-                title = article.title,
-                text = article.text,
-                likeCount = article.likeCount,
-                commentCount = commentCount,
-                uploadAt = uploadAt,
-                thumbnailImage = article.images.firstOrNull()?.url,
-                articleKind = article.articleKindId,
-                isLiked = likedArticleIds.contains(article.id),
-            )
+            ArticlePreviewResponse.of(article, isLiked)
         }
     }
 
     fun updateNickName(user: User, newNickname: String): MyPageResponse {
         user.nickname = newNickname
 
-        return MyPageResponse(
-            userId = userService.saveUser(user).id
-        )
+        val savedUser = userService.saveUser(user)
+        return MyPageResponse.of(savedUser)
     }
 
-    fun updateBasicInfo(user: User, request: UpdateBasicInfoResponse): MyPageResponse {
+    fun updateBasicInfo(user: User, request: UpdateBasicInfoRequest): MyPageResponse {
         val location = locationService.findById(request.locationId)
 
         user.location = location
         user.ageRange = request.ageRange
         user.gender = request.gender
 
-        return MyPageResponse(
-            userId = userService.saveUser(user).id
-        )
+        val savedUser = userService.saveUser(user)
+        return MyPageResponse.of(savedUser)
     }
 
-    fun updateSubInfo(user: User, request: UpdateSubInfoResponse): MyPageResponse {
+    fun updateSubInfo(user: User, request: UpdateSubInfoRequest): MyPageResponse {
         user.experienceYears = request.experienceYears
         user.experienceMonths = request.experienceMonths
 
@@ -94,9 +77,7 @@ class MyPageService(
                 user.jobInterests = interestEntity
             }
         }
-
-        return MyPageResponse(
-            userId = userService.saveUser(user).id
-        )
+        val savedUser = userService.saveUser(user)
+        return MyPageResponse.of(savedUser)
     }
 }

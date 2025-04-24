@@ -2,8 +2,9 @@ package com.arabyte.arabyteapi.domain.mypage.controller
 
 import com.arabyte.arabyteapi.domain.article.dto.ArticlePreviewResponse
 import com.arabyte.arabyteapi.domain.mypage.dto.MyPageResponse
-import com.arabyte.arabyteapi.domain.mypage.dto.UpdateBasicInfoResponse
-import com.arabyte.arabyteapi.domain.mypage.dto.UpdateSubInfoResponse
+import com.arabyte.arabyteapi.domain.mypage.dto.UpdateBasicInfoRequest
+import com.arabyte.arabyteapi.domain.mypage.dto.UpdateSubInfoRequest
+import com.arabyte.arabyteapi.domain.mypage.enums.MyPageArticleType
 import com.arabyte.arabyteapi.domain.mypage.service.MyPageService
 import com.arabyte.arabyteapi.domain.user.entity.User
 import com.arabyte.arabyteapi.global.annotation.RequestUser
@@ -18,11 +19,11 @@ class MyPageController(
 ) {
     @Operation(
         summary = "마이페이지 게시물 조회",
-        description = "/articles/my로 요청하면 내가 쓴 게시물, /article/like로 요청하면 내가 좋아요를 누른 게시물을 반환합니다."
+        description = "?type=MY로 요청하면 내가 쓴 게시물, ?type=LIKE로 요청하면 내가 좋아요를 누른 게시물을 반환합니다."
     )
-    @GetMapping("/articles/{type}")
+    @GetMapping("/articles")
     fun getMyArticles(
-        @PathVariable type: String,
+        @RequestParam type: MyPageArticleType,
         @RequestUser user: User,
         @RequestParam page: Int,
         @RequestParam size: Int
@@ -31,7 +32,7 @@ class MyPageController(
     }
 
     @Operation(summary = "닉네임 수정", description = "마이페이지에서 닉네임을 수정합니다.")
-    @PatchMapping("/nickname/update")
+    @PatchMapping("/nickname")
     fun updateNickName(
         @RequestUser user: User,
         @RequestParam newNickname: String
@@ -46,7 +47,7 @@ class MyPageController(
     @PatchMapping("/basic-info")
     fun updateBasicInfo(
         @RequestUser user: User,
-        @RequestBody request: UpdateBasicInfoResponse
+        @RequestBody request: UpdateBasicInfoRequest
     ): MyPageResponse {
         return myPageService.updateBasicInfo(user, request)
     }
@@ -58,7 +59,7 @@ class MyPageController(
     @PatchMapping("/sub-info")
     fun updateSubInfo(
         @RequestUser user: User,
-        @RequestBody request: UpdateSubInfoResponse
+        @RequestBody request: UpdateSubInfoRequest
     ): MyPageResponse {
         return myPageService.updateSubInfo(user, request)
     }
