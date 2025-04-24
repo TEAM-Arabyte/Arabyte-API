@@ -44,21 +44,15 @@ class AuthService(
                 phoneNumber = kakaoUser.kakaoAccount.phoneNumber
             )
             val savedUser = userService.saveUser(user)
+            val accessToken = jwtProvider.generateAccessToken(user.id.toString())
+            val refreshToken = jwtProvider.generateRefreshToken(user.id.toString())
 
-            return AuthorizeResponse(
-                userId = savedUser.id,
-                accessToken = jwtProvider.generateAccessToken(user.id.toString()),
-                refreshToken = jwtProvider.generateRefreshToken(user.id.toString()),
-                isRegistered = false
-            )
+            return AuthorizeResponse.of(savedUser, accessToken, refreshToken, false)
         }
+        val accessToken = jwtProvider.generateAccessToken(user.id.toString())
+        val refreshToken = jwtProvider.generateRefreshToken(user.id.toString())
 
-        return AuthorizeResponse(
-            userId = user.id,
-            accessToken = jwtProvider.generateAccessToken(user.id.toString()),
-            refreshToken = jwtProvider.generateRefreshToken(user.id.toString()),
-            isRegistered = true
-        )
+        return AuthorizeResponse.of(user, accessToken, refreshToken, true)
     }
 
     @Transactional
@@ -72,10 +66,7 @@ class AuthService(
 
         val savedUser = userService.saveUser(user)
 
-        return RegisterResponse(
-            isRegistered = true,
-            userId = savedUser.id
-        )
+        return RegisterResponse.of(true, savedUser)
     }
 
     private fun getUserIdByToken(body: ReissueAccessTokenRequest): String {
@@ -89,6 +80,6 @@ class AuthService(
         val userId = getUserIdByToken(request)
         val accessToken = jwtProvider.generateAccessToken(userId.toString())
 
-        return ReissueAccessTokenResponse(accessToken = accessToken)
+        return ReissueAccessTokenResponse.of(accessToken = accessToken)
     }
 }
