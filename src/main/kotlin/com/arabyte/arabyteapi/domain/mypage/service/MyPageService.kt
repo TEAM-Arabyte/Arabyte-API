@@ -88,8 +88,8 @@ class MyPageService(
                 val interestEntity = UserJobInterest(
                     user = user,
                     category1 = interests.getOrNull(0),
-                    category2 = interests.getOrNull(0),
-                    category3 = interests.getOrNull(0),
+                    category2 = interests.getOrNull(1),
+                    category3 = interests.getOrNull(2),
                 )
                 user.jobInterests = interestEntity
             }
