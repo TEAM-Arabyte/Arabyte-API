@@ -34,11 +34,8 @@ class CommentService(
             isAnonymous = request.isAnonymous
         )
 
-        val saved = commentRepository.save(comment)
-        return CreateCommentResponse(
-            commentId = saved.id,
-            message = "댓글이 성공적으로 등록되었습니다."
-        )
+        val savedComment = commentRepository.save(comment)
+        return CreateCommentResponse.of(savedComment)
     }
 
     fun updateComment(
@@ -56,12 +53,8 @@ class CommentService(
         comment.text = request.text
         comment.isAnonymous = request.isAnonymous
 
-        commentRepository.save(comment)
-
-        return UpdateCommentResponse(
-            commentId = commentId,
-            message = "${commentId}번 댓글이 수정되었습니다."
-        )
+        val savedComment = commentRepository.save(comment)
+        return UpdateCommentResponse.of(savedComment)
     }
 
     fun deleteComment(user: User, commentId: Long): DeleteCommentResponse {
@@ -76,7 +69,6 @@ class CommentService(
 
         return DeleteCommentResponse(
             commentId = comment.id,
-            message = "${commentId}번 댓글이 삭제되었습니다."
         )
     }
 }
