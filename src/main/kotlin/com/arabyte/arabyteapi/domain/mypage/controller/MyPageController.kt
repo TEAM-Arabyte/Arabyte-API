@@ -44,7 +44,7 @@ class MyPageController(
         description = "사용자의 기본 정보(거주지, 나이, 성별)을 수정합니다."
     )
     @PatchMapping("/basic-info")
-    fun upDateBasicInfo(
+    fun updateBasicInfo(
         @RequestUser user: User,
         @RequestBody request: UpdateBasicInfoResponse
     ): MyPageResponse {
@@ -56,7 +56,7 @@ class MyPageController(
         description = "사용자의 부가 정보(알바 경력, 관심 직종)을 수정합니다."
     )
     @PatchMapping("/sub-info")
-    fun upDateSubInfo(
+    fun updateSubInfo(
         @RequestUser user: User,
         @RequestBody request: UpdateSubInfoResponse
     ): MyPageResponse {
