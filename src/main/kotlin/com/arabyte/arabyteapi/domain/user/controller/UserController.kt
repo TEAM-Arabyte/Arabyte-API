@@ -1,6 +1,9 @@
 package com.arabyte.arabyteapi.domain.user.controller
 
-import com.arabyte.arabyteapi.domain.user.dto.*
+import com.arabyte.arabyteapi.domain.user.dto.CheckNickNameResponse
+import com.arabyte.arabyteapi.domain.user.dto.DeleteUserResponse
+import com.arabyte.arabyteapi.domain.user.dto.OnboardingRequest
+import com.arabyte.arabyteapi.domain.user.dto.OnboardingResponse
 import com.arabyte.arabyteapi.domain.user.entity.User
 import com.arabyte.arabyteapi.domain.user.service.UserService
 import com.arabyte.arabyteapi.global.annotation.RequestUser
@@ -36,14 +39,5 @@ class UserController(
         @RequestParam nickname: String
     ): CheckNickNameResponse {
         return userService.checkNickNameDuplicate(nickname, user.id)
-    }
-
-    @Operation(summary = "닉네임 수정", description = "마이페이지에서 닉네임을 수정합니다.")
-    @PatchMapping("/nickname/update")
-    fun updateNickName(
-        @RequestUser user: User,
-        @RequestParam newNickname: String
-    ): UpdateNickNameResponse {
-        return userService.updateNickName(user, newNickname)
     }
 }
