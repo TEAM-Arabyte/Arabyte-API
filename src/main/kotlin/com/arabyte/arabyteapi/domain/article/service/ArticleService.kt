@@ -146,12 +146,8 @@ class ArticleService(
             article.images.add(ArticleImage(url = imageUrl, article = article))
         }
 
-        articleRepository.save(article)
-
-        return UpdateArticleResponse(
-            articleId = article.id,
-            message = "${article.id}번 게시물이 수정되었습니다"
-        )
+        val savedArticle = articleRepository.save(article)
+        return UpdateArticleResponse.of(savedArticle)
     }
 
     fun deleteArticle(user: User, articleId: Long): DeleteArticleResponse {
@@ -163,10 +159,7 @@ class ArticleService(
 
         articleRepository.delete(article)
 
-        return DeleteArticleResponse(
-            articleId = article.id,
-            message = "${article.id}번 게시물이 삭제되었습니다."
-        )
+        return DeleteArticleResponse.of(article)
     }
 
     fun getArticles(articleId: Long): Article {
