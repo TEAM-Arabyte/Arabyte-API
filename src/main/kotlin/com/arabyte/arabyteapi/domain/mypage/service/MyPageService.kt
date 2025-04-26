@@ -59,24 +59,28 @@ class MyPageService(
         user.experienceYears = request.experienceYears
         user.experienceMonths = request.experienceMonths
 
-        if (request.jobInterests.isNotEmpty()) {
-            val interests = request.jobInterests
-            val userJobInterests = user.jobInterests
-
-            if (userJobInterests != null) {
-                userJobInterests.category1 = interests.getOrNull(0)
-                userJobInterests.category2 = interests.getOrNull(1)
-                userJobInterests.category3 = interests.getOrNull(2)
-            } else {
-                val interestEntity = UserJobInterest(
-                    user = user,
-                    category1 = interests.getOrNull(0),
-                    category2 = interests.getOrNull(1),
-                    category3 = interests.getOrNull(2),
-                )
-                user.jobInterests = interestEntity
-            }
+        if (request.jobInterests.isEmpty()) {
+            val savedUser = userService.saveUser(user)
+            return MyPageResponse.of(savedUser)
         }
+
+        val interests = request.jobInterests
+        val userJobInterests = user.jobInterests
+
+        if (userJobInterests != null) {
+            userJobInterests.category1 = interests.getOrNull(0)
+            userJobInterests.category2 = interests.getOrNull(1)
+            userJobInterests.category3 = interests.getOrNull(2)
+        } else {
+            val interestEntity = UserJobInterest(
+                user = user,
+                category1 = interests.getOrNull(0),
+                category2 = interests.getOrNull(1),
+                category3 = interests.getOrNull(2),
+            )
+            user.jobInterests = interestEntity
+        }
+
         val savedUser = userService.saveUser(user)
         return MyPageResponse.of(savedUser)
     }

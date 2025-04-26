@@ -19,12 +19,12 @@ class MyPageController(
 ) {
     @Operation(
         summary = "마이페이지 게시물 조회",
-        description = "?type=MY로 요청하면 내가 쓴 게시물, ?type=LIKE로 요청하면 내가 좋아요를 누른 게시물을 반환합니다."
+        description = "MY로 요청하면 내가 쓴 게시물, LIKE로 요청하면 내가 좋아요를 누른 게시물을 반환합니다."
     )
     @GetMapping("/articles")
     fun getMyArticles(
-        @RequestParam type: MyPageArticleType,
         @RequestUser user: User,
+        @RequestParam type: MyPageArticleType,
         @RequestParam page: Int,
         @RequestParam size: Int
     ): Page<ArticlePreviewResponse> {

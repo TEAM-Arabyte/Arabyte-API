@@ -47,12 +47,12 @@ class AuthService(
             val accessToken = jwtProvider.generateAccessToken(user.id.toString())
             val refreshToken = jwtProvider.generateRefreshToken(user.id.toString())
 
-            return AuthorizeResponse.of(savedUser, accessToken, refreshToken, false)
+            return AuthorizeResponse(savedUser.id, accessToken, refreshToken, false)
         }
         val accessToken = jwtProvider.generateAccessToken(user.id.toString())
         val refreshToken = jwtProvider.generateRefreshToken(user.id.toString())
 
-        return AuthorizeResponse.of(user, accessToken, refreshToken, true)
+        return AuthorizeResponse(user.id, accessToken, refreshToken, true)
     }
 
     @Transactional
@@ -66,7 +66,7 @@ class AuthService(
 
         val savedUser = userService.saveUser(user)
 
-        return RegisterResponse.of(true, savedUser)
+        return RegisterResponse(true, savedUser.id)
     }
 
     private fun getUserIdByToken(body: ReissueAccessTokenRequest): String {
@@ -80,6 +80,6 @@ class AuthService(
         val userId = getUserIdByToken(request)
         val accessToken = jwtProvider.generateAccessToken(userId.toString())
 
-        return ReissueAccessTokenResponse.of(accessToken = accessToken)
+        return ReissueAccessTokenResponse(accessToken)
     }
 }
