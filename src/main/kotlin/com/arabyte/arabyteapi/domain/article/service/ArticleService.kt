@@ -2,6 +2,7 @@ package com.arabyte.arabyteapi.domain.article.service
 
 import com.arabyte.arabyteapi.domain.article.dto.*
 import com.arabyte.arabyteapi.domain.article.entity.Article
+import com.arabyte.arabyteapi.domain.article.entity.ArticleImage
 import com.arabyte.arabyteapi.domain.article.enums.ArticleKind
 import com.arabyte.arabyteapi.domain.article.repository.ArticleRepository
 import com.arabyte.arabyteapi.domain.comment.dto.CommentResponse
@@ -11,10 +12,9 @@ import com.arabyte.arabyteapi.global.enums.CustomError
 import com.arabyte.arabyteapi.global.exception.CustomException
 import jakarta.transaction.Transactional
 import org.springframework.data.domain.Page
+import org.springframework.data.domain.PageRequest
 import org.springframework.data.domain.Pageable
 import org.springframework.stereotype.Service
-import java.time.Duration
-import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 
 @Service
@@ -36,6 +36,10 @@ class ArticleService(
             )
         )
 
+        request.articleImages?.forEach { imageUrl ->
+            article.images.add(ArticleImage(url = imageUrl, article = article))
+        }
+
         return CreateArticleResponse(article.id, article.title)
     }
 
@@ -54,37 +58,13 @@ class ArticleService(
         val likedArticleIds = articleLikeService.findLikedArticleIds(user.id, articleIds)
 
         return articles.map { article ->
-            val commentCount = article.comments.size
-            val uploadAt = getPreviewUploadTime(article.createdAt)
-
-            ArticlePreviewResponse(
-                title = article.title,
-                text = article.text,
-                likeCount = article.likeCount,
-                commentCount = commentCount,
-                uploadAt = uploadAt,
-                // TODO
-                thumbnailImage = "이미지",
-                articleKind = article.articleKindId,
-                isLiked = likedArticleIds.contains(article.id)
-            )
-        }
-    }
-
-    private fun getPreviewUploadTime(createAt: LocalDateTime?): String {
-        val now = LocalDateTime.now()
-        val duration = Duration.between(createAt, now)
-
-        return when {
-            duration.toMinutes() < 1 -> "방금 전"
-            duration.toHours() < 1 -> "${duration.toMinutes()}분 전"
-            duration.toHours() < 24 -> "${duration.toHours()}시간 전"
-            else -> "${duration.toDays()}일 전"
+            val isLiked = likedArticleIds.contains(article.id)
+            ArticlePreviewResponse.of(article, isLiked)
         }
     }
 
     fun getArticleDetail(user: User, articleId: Long): ArticleResponse {
-        val article = getArticle(articleId)
+        val article = getArticles(articleId)
 
         val articleUser = article.user
         val isLiked = articleLikeService.isArticleLikedByUser(user.id, article.id)
@@ -94,7 +74,7 @@ class ArticleService(
             CommentResponse(
                 commentId = comment.id,
                 text = comment.text,
-                // 이러면 모든 익명 유저의 닉네임이 "익명"이 되버림
+                // TODO - 이러면 모든 익명 유저의 닉네임이 "익명"이 되버림
                 nickname = if (comment.isAnonymous) "익명" else comment.user.nickname,
                 createdAt = comment.createdAt?.format(DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm"))
                     ?: "날짜없음",
@@ -124,7 +104,7 @@ class ArticleService(
         articleId: Long,
         request: UpdateArticleRequest
     ): UpdateArticleResponse {
-        val article = getArticle(articleId)
+        val article = getArticles(articleId)
 
         if (article.user.id != user.id) {
             throw CustomException(CustomError.ARTICLE_FORBIDDEN)
@@ -135,16 +115,17 @@ class ArticleService(
         article.isAnonymous = request.isAnonymous
         article.articleKindId = request.articleKind
 
-        articleRepository.save(article)
+        article.images.clear()
+        request.articleImages?.forEach { imageUrl ->
+            article.images.add(ArticleImage(url = imageUrl, article = article))
+        }
 
-        return UpdateArticleResponse(
-            articleId = article.id,
-            message = "${article.id}번 게시물이 수정되었습니다"
-        )
+        val savedArticle = articleRepository.save(article)
+        return UpdateArticleResponse.of(savedArticle)
     }
 
     fun deleteArticle(user: User, articleId: Long): DeleteArticleResponse {
-        val article = getArticle(articleId)
+        val article = getArticles(articleId)
 
         if (article.user.id != user.id) {
             throw CustomException(CustomError.ARTICLE_FORBIDDEN)
@@ -152,19 +133,20 @@ class ArticleService(
 
         articleRepository.delete(article)
 
-        return DeleteArticleResponse(
-            articleId = article.id,
-            message = "${article.id}번 게시물이 삭제되었습니다."
-        )
+        return DeleteArticleResponse.of(article)
     }
 
-    fun getArticle(articleId: Long): Article {
+    fun getArticles(articleId: Long): Article {
         return articleRepository.findById(articleId)
             .orElseThrow { CustomException(CustomError.ARTICLE_NOT_FOUND) }
     }
 
+    fun getMyArticles(user: User, page: Int, size: Int): Page<Article> {
+        return articleRepository.findAllByUserOrderByCreatedAtDesc(user, PageRequest.of(page, size))
+    }
+
     fun toggleLike(user: User, request: ArticleLikeRequest): ArticleLikeResponse {
-        val article = getArticle(request.articleId)
+        val article = getArticles(request.articleId)
         return articleLikeService.toggleLike(user, article)
     }
 }

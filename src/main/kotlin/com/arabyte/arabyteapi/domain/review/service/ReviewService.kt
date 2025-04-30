@@ -4,6 +4,7 @@ import com.arabyte.arabyteapi.domain.company.Company
 import com.arabyte.arabyteapi.domain.location.service.LocationService
 import com.arabyte.arabyteapi.domain.review.dto.CreateReviewRequest
 import com.arabyte.arabyteapi.domain.review.dto.GetReviewsResponse
+import com.arabyte.arabyteapi.domain.review.dto.ReviewResponse
 import com.arabyte.arabyteapi.domain.review.dto.UpdateReviewRequest
 import com.arabyte.arabyteapi.domain.review.entity.Review
 import com.arabyte.arabyteapi.domain.review.repository.ReviewRepository
@@ -25,13 +26,15 @@ class ReviewService(
             .map { GetReviewsResponse.of(it) }
     }
 
-    fun getReview(reviewId: Long): Review {
-        return reviewRepository.findById(reviewId).orElseThrow {
+    fun getReview(reviewId: Long): ReviewResponse {
+        val review = reviewRepository.findById(reviewId).orElseThrow {
             CustomException(CustomError.REVIEW_NOT_FOUND)
         }
+
+        return ReviewResponse.of(review)
     }
 
-    fun createReview(user: User, body: CreateReviewRequest): Review {
+    fun createReview(user: User, body: CreateReviewRequest): ReviewResponse {
         // todo company 구현 후 수정
         val company = Company()
         val location = locationService.findById(body.locationId)
@@ -50,10 +53,10 @@ class ReviewService(
             difficulty = body.difficulty,
             company = company,
         )
-        return reviewRepository.save(review)
+        return ReviewResponse.of(reviewRepository.save(review))
     }
 
-    fun updateReview(user: User, reviewId: Long, body: UpdateReviewRequest): Review {
+    fun updateReview(user: User, reviewId: Long, body: UpdateReviewRequest): ReviewResponse {
         val review = reviewRepository.findById(reviewId).orElseThrow {
             CustomException(CustomError.REVIEW_NOT_FOUND)
         }
@@ -72,11 +75,11 @@ class ReviewService(
             review.difficulty = difficulty
         }
 
-        return reviewRepository.save(review)
+        return ReviewResponse.of(reviewRepository.save(review))
     }
 
     @Transactional
-    fun deleteReview(user: User, reviewId: Long): Review {
+    fun deleteReview(user: User, reviewId: Long): ReviewResponse {
         val review = reviewRepository.findById(reviewId).orElseThrow {
             CustomException(CustomError.REVIEW_NOT_FOUND)
         }
@@ -86,6 +89,6 @@ class ReviewService(
 
         reviewRepository.delete(review)
 
-        return review
+        return ReviewResponse.of(review)
     }
 }

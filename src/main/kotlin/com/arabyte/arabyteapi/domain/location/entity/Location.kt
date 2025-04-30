@@ -13,4 +13,8 @@ class Location(
     var dong: String,
     val dongCode: String,
     val depth: Int,
-) : BaseEntity()
+) : BaseEntity() {
+    override fun toString(): String {
+        return "$sido $gu $dong"
+    }
+}

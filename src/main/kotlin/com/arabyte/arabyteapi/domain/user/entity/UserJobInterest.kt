@@ -14,13 +14,13 @@ class UserJobInterest(
 
     @Enumerated(EnumType.ORDINAL)
     @Column(name = "category_1")
-    val category1: Category?,
+    var category1: Category?,
 
     @Enumerated(EnumType.ORDINAL)
     @Column(name = "category_2")
-    val category2: Category?,
+    var category2: Category?,
 
     @Enumerated(EnumType.ORDINAL)
     @Column(name = "category_3")
-    val category3: Category?
+    var category3: Category?
 ) : BaseEntity()

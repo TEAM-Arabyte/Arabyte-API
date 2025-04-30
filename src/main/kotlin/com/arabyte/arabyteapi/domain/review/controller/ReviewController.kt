@@ -2,8 +2,8 @@ package com.arabyte.arabyteapi.domain.review.controller
 
 import com.arabyte.arabyteapi.domain.review.dto.CreateReviewRequest
 import com.arabyte.arabyteapi.domain.review.dto.GetReviewsResponse
+import com.arabyte.arabyteapi.domain.review.dto.ReviewResponse
 import com.arabyte.arabyteapi.domain.review.dto.UpdateReviewRequest
-import com.arabyte.arabyteapi.domain.review.entity.Review
 import com.arabyte.arabyteapi.domain.review.service.ReviewService
 import com.arabyte.arabyteapi.domain.user.entity.User
 import com.arabyte.arabyteapi.global.annotation.RequestUser
@@ -29,7 +29,7 @@ class ReviewController(
     @GetMapping("/{reviewId}")
     fun getReview(
         @PathVariable reviewId: Long
-    ): Review {
+    ): ReviewResponse {
         return reviewService.getReview(reviewId)
     }
 
@@ -38,7 +38,7 @@ class ReviewController(
     fun createReview(
         @RequestUser user: User,
         @RequestBody body: CreateReviewRequest
-    ): Review {
+    ): ReviewResponse {
         return reviewService.createReview(user, body)
     }
 
@@ -48,7 +48,7 @@ class ReviewController(
         @RequestUser user: User,
         @PathVariable reviewId: Long,
         @RequestBody body: UpdateReviewRequest
-    ): Review {
+    ): ReviewResponse {
         return reviewService.updateReview(user = user, reviewId = reviewId, body = body)
     }
 
@@ -57,7 +57,7 @@ class ReviewController(
     fun deleteReview(
         @RequestUser user: User,
         @PathVariable reviewId: Long
-    ): Review {
+    ): ReviewResponse {
         return reviewService.deleteReview(user = user, reviewId = reviewId)
     }
 }

@@ -6,5 +6,6 @@ data class UpdateArticleRequest(
     val title: String,
     val text: String,
     val isAnonymous: Boolean,
-    val articleKind: ArticleKind
+    val articleKind: ArticleKind,
+    val articleImages: List<String>?
 )

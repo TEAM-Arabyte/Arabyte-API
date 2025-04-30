@@ -8,5 +8,5 @@ data class CreateArticleRequest(
     val likeCount: Int,
     var isAnonymous: Boolean,
     val articleKind: ArticleKind,
-    val articleImage: String?
+    val articleImages: List<String>?
 )

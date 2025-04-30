@@ -24,11 +24,6 @@ class UserService(
         return userRepository.save(newUser)
     }
 
-    fun getUserByUserId(userId: Long): User {
-        return userRepository.findById(userId)
-            .orElseThrow { CustomException(CustomError.USER_NOT_FOUND) }
-    }
-
     @Transactional
     fun deleteUserById(userId: Long): DeleteUserResponse {
         val user = userRepository.findById(userId)
@@ -36,21 +31,13 @@ class UserService(
 
         userRepository.delete(user)
 
-        return DeleteUserResponse(
-            userId = user.id
-        )
+        return DeleteUserResponse.of(user.id)
     }
 
-    private fun isNicknameExists(nickname: String): Boolean {
-        return userRepository.existsByNickname(nickname)
-    }
+    fun checkNickNameDuplicate(nickname: String, userId: Long): CheckNickNameResponse {
+        val isDuplicate = userRepository.existsByNicknameAndIdNot(nickname, userId)
 
-    fun checkNickNameDuplicate(nickname: String): CheckNickNameResponse {
-        val isDuplicate = isNicknameExists(nickname)
-
-        return CheckNickNameResponse(
-            isDuplicate = isDuplicate,
-        )
+        return CheckNickNameResponse.of(isDuplicate)
     }
 
     fun updateOnboarding(user: User, request: OnboardingRequest): OnboardingResponse {
@@ -59,6 +46,7 @@ class UserService(
 
         if (request.jobInterests.isNotEmpty()) {
             val interests = request.jobInterests
+
             val interestEntity = UserJobInterest(
                 user = user,
                 category1 = interests.getOrNull(0),
@@ -67,9 +55,8 @@ class UserService(
             )
             user.jobInterests = interestEntity
         }
+        val savedUser = saveUser(user)
 
-        return OnboardingResponse(
-            userId = saveUser(user).id
-        )
+        return OnboardingResponse.of(savedUser)
     }
 }
