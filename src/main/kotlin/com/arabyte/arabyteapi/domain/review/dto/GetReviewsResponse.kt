@@ -1,6 +1,5 @@
 package com.arabyte.arabyteapi.domain.review.dto
 
-import com.arabyte.arabyteapi.domain.location.entity.Location
 import com.arabyte.arabyteapi.domain.review.entity.Review
 
 class GetReviewsResponse(
@@ -8,7 +7,7 @@ class GetReviewsResponse(
     val isCertified: Boolean,
     val star: Int,
     val text: String,
-    val location: Location,
+    val location: String,
     val category: String
 ) {
     companion object {
@@ -18,7 +17,7 @@ class GetReviewsResponse(
                 isCertified = review.isCertified,
                 star = review.rating,
                 text = review.text,
-                location = review.location,
+                location = review.location.toString(),
                 category = review.category.name
             )
         }
