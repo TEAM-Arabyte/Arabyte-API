@@ -5,6 +5,7 @@ import com.arabyte.arabyteapi.domain.discord.api.DiscordReportApi
 import com.arabyte.arabyteapi.domain.mypage.api.OcrApi
 import com.fasterxml.jackson.databind.ObjectMapper
 import okhttp3.OkHttpClient
+import org.springframework.beans.factory.annotation.Value
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import retrofit2.Retrofit
@@ -13,7 +14,8 @@ import java.util.concurrent.TimeUnit
 
 @Configuration
 class RetrofitConfiguration(
-    private val objectMapper: ObjectMapper
+    private val objectMapper: ObjectMapper,
+    @Value("\${ocr.server.base-url}") private val baseUrl: String
 ) {
     @Bean("okHttpClient")
     fun okHttpClient(): OkHttpClient {
@@ -53,7 +55,7 @@ class RetrofitConfiguration(
     @Bean
     fun ocrApi(okHttpClient: OkHttpClient): OcrApi {
         return Retrofit.Builder()
-            .baseUrl("http://localhost:8000") // 🔥 Python 서버 주소
+            .baseUrl(baseUrl)
             .client(okHttpClient)
             .addConverterFactory(
                 JacksonConverterFactory.create(objectMapper)
