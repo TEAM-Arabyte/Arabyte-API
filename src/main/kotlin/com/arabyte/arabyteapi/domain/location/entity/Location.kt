@@ -15,6 +15,22 @@ class Location(
     val depth: Int,
 ) : BaseEntity() {
     override fun toString(): String {
-        return "$sido $gu $dong"
+        when (depth) {
+            1 -> {
+                return sido
+            }
+
+            2 -> {
+                return "$sido $gu"
+            }
+
+            3 -> {
+                return "$sido $gu $dong"
+            }
+
+            else -> {
+                return "$sido $gu $dong"
+            }
+        }
     }
 }
