@@ -1,6 +1,7 @@
 package com.arabyte.arabyteapi.global.configuration
 
 import com.arabyte.arabyteapi.domain.auth.api.KakaoUserApi
+import com.arabyte.arabyteapi.domain.mypage.api.OcrApi
 import com.fasterxml.jackson.databind.ObjectMapper
 import okhttp3.OkHttpClient
 import org.springframework.context.annotation.Bean
@@ -34,5 +35,17 @@ class RetrofitConfiguration(
             )
             .build()
             .create(KakaoUserApi::class.java)
+    }
+
+    @Bean
+    fun ocrApi(okHttpClient: OkHttpClient): OcrApi {
+        return Retrofit.Builder()
+            .baseUrl("http://localhost:8000") // 🔥 Python 서버 주소
+            .client(okHttpClient)
+            .addConverterFactory(
+                JacksonConverterFactory.create(objectMapper)
+            )
+            .build()
+            .create(OcrApi::class.java)
     }
 }

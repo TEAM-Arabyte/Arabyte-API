@@ -30,4 +30,8 @@ enum class CustomError(val status: HttpStatus, val message: String) {
     // review
     REVIEW_NOT_FOUND(NOT_FOUND, "리뷰를 찾을 수 없습니다."),
     REVIEW_NOT_AUTHORIZED(FORBIDDEN, "리뷰에 대한 권한이 없습니다."),
+
+    // ocr
+    OCR_REQUEST_FAILED(INTERNAL_SERVER_ERROR, "OCR 서버 요청에 실패했습니다."),
+    OCR_RESPONSE_NULL(INTERNAL_SERVER_ERROR, "OCR 서버 응답 파싱에 실패했습니다.");
 }
