@@ -68,6 +68,10 @@ class MyPageController(
         return myPageService.updateSubInfo(user, request)
     }
 
+    @Operation(
+        summary = "근로계약서 검증",
+        description = "사용자 정보와 근무지를 입력받아 근로계약서와 비교하여 검증결과를 반환합니다."
+    )
     @PostMapping("/contract")
     fun verifyContract(
         @RequestUser user: User,
