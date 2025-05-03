@@ -28,6 +28,9 @@ class Review(
     var overtime: Overtime,
     var difficulty: WorkDifficulty,
     var isCertified: Boolean = false,
+    var badCount: Int = 0,
+    var normalCount: Int = 0,
+    var goodCount: Int = 0,
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     val user: User
