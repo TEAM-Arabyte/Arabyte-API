@@ -2,11 +2,11 @@ package com.arabyte.arabyteapi.domain.review.service
 
 import com.arabyte.arabyteapi.domain.company.Company
 import com.arabyte.arabyteapi.domain.location.service.LocationService
-import com.arabyte.arabyteapi.domain.review.dto.CreateReviewRequest
-import com.arabyte.arabyteapi.domain.review.dto.GetReviewsResponse
-import com.arabyte.arabyteapi.domain.review.dto.ReviewResponse
-import com.arabyte.arabyteapi.domain.review.dto.UpdateReviewRequest
+import com.arabyte.arabyteapi.domain.review.dto.*
 import com.arabyte.arabyteapi.domain.review.entity.Review
+import com.arabyte.arabyteapi.domain.review.entity.ReviewHelpful
+import com.arabyte.arabyteapi.domain.review.enums.Helpful
+import com.arabyte.arabyteapi.domain.review.repository.ReviewHelpfulRepository
 import com.arabyte.arabyteapi.domain.review.repository.ReviewRepository
 import com.arabyte.arabyteapi.domain.user.entity.User
 import com.arabyte.arabyteapi.global.enums.CustomError
@@ -19,6 +19,7 @@ import org.springframework.transaction.annotation.Transactional
 @Service
 class ReviewService(
     private val reviewRepository: ReviewRepository,
+    private val reviewHelpfulRepository: ReviewHelpfulRepository,
     private val locationService: LocationService
 ) {
     fun getLatestReviews(page: Int, size: Int): Page<GetReviewsResponse> {
@@ -90,5 +91,56 @@ class ReviewService(
         reviewRepository.delete(review)
 
         return ReviewResponse.of(review)
+    }
+
+    @Transactional
+    fun reviewHelpful(user: User, reviewId: Long, body: ReviewHelpfulRequest): ReviewResponse {
+        val review = reviewRepository.findById(reviewId).orElseThrow {
+            CustomException(CustomError.REVIEW_NOT_FOUND)
+        }
+        if (review.user == user) {
+            throw CustomException(CustomError.CAN_NOT_ADD_HELPFUL_FOR_SAME_USER)
+        }
+
+        val reviewHelpful = reviewHelpfulRepository.findByReviewAndUser(review, user)
+
+        if (reviewHelpful == null) {
+            val newReviewHelpful =
+                ReviewHelpful(review = review, user = user, helpful = body.helpful)
+            
+            when (newReviewHelpful.helpful) {
+                Helpful.BAD -> review.badCount++
+                Helpful.NORMAL -> review.normalCount++
+                Helpful.GOOD -> review.goodCount++
+            }
+            reviewHelpfulRepository.save(newReviewHelpful)
+            return ReviewResponse.of(reviewRepository.save(review))
+        }
+
+        if (reviewHelpful.helpful == body.helpful) {
+            reviewHelpfulRepository.delete(reviewHelpful)
+            when (reviewHelpful.helpful) {
+                Helpful.BAD -> review.badCount--
+                Helpful.NORMAL -> review.normalCount--
+                Helpful.GOOD -> review.goodCount--
+            }
+        } else {
+            when (reviewHelpful.helpful) {
+                Helpful.BAD -> review.badCount--
+                Helpful.NORMAL -> review.normalCount--
+                Helpful.GOOD -> review.goodCount--
+            }
+
+            when (body.helpful) {
+                Helpful.BAD -> review.badCount++
+                Helpful.NORMAL -> review.normalCount++
+                Helpful.GOOD -> review.goodCount++
+            }
+
+            reviewHelpful.helpful = body.helpful
+            reviewHelpfulRepository.save(reviewHelpful)
+        }
+
+        return ReviewResponse.of(reviewRepository.save(review))
     }
 }

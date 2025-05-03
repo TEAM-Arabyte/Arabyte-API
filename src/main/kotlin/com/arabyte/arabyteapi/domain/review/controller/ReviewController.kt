@@ -1,9 +1,6 @@
 package com.arabyte.arabyteapi.domain.review.controller
 
-import com.arabyte.arabyteapi.domain.review.dto.CreateReviewRequest
-import com.arabyte.arabyteapi.domain.review.dto.GetReviewsResponse
-import com.arabyte.arabyteapi.domain.review.dto.ReviewResponse
-import com.arabyte.arabyteapi.domain.review.dto.UpdateReviewRequest
+import com.arabyte.arabyteapi.domain.review.dto.*
 import com.arabyte.arabyteapi.domain.review.service.ReviewService
 import com.arabyte.arabyteapi.domain.user.entity.User
 import com.arabyte.arabyteapi.global.annotation.RequestUser
@@ -59,5 +56,15 @@ class ReviewController(
         @PathVariable reviewId: Long
     ): ReviewResponse {
         return reviewService.deleteReview(user = user, reviewId = reviewId)
+    }
+
+    @Operation(summary = "리뷰 평가", description = "리뷰를 평가합니다.")
+    @PostMapping("/{reviewId}/helpful")
+    fun reviewHelpful(
+        @RequestUser user: User,
+        @PathVariable reviewId: Long,
+        @RequestBody body: ReviewHelpfulRequest
+    ): ReviewResponse {
+        return reviewService.reviewHelpful(user = user, reviewId = reviewId, body = body)
     }
 }

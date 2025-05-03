@@ -18,6 +18,9 @@ class ReviewResponse(
     var salaryDate: SalaryDate,
     var overtime: Overtime,
     var difficulty: WorkDifficulty,
+    var badCount: Int,
+    var normalCount: Int,
+    var goodCount: Int,
 ) {
     companion object {
         fun of(review: Review): ReviewResponse {
@@ -37,6 +40,9 @@ class ReviewResponse(
                 salaryDate = review.salaryDate,
                 overtime = review.overtime,
                 difficulty = review.difficulty,
+                badCount = review.badCount,
+                normalCount = review.normalCount,
+                goodCount = review.goodCount,
             )
         }
     }
