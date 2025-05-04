@@ -21,7 +21,7 @@ class ContractService(
         val userName = user.username
         
         val originalFilename = file.originalFilename ?: "contract.png"
-        val extension = originalFilename.substringAfterLast('.', "png")
+        val extension = StringUtils.getFilenameExtension(originalFilename)
 
         val tempFile = Files.createTempFile("contract-", ".$extension").toFile()
         file.transferTo(tempFile)
