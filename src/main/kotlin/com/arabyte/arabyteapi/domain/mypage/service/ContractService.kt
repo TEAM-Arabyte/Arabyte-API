@@ -10,6 +10,7 @@ import okhttp3.MultipartBody
 import okhttp3.RequestBody.Companion.asRequestBody
 import okhttp3.RequestBody.Companion.toRequestBody
 import org.springframework.stereotype.Service
+import org.springframework.util.StringUtils
 import org.springframework.web.multipart.MultipartFile
 import java.nio.file.Files
 
@@ -26,7 +27,7 @@ class ContractService(
         val tempFile = Files.createTempFile("contract-", ".$extension").toFile()
         file.transferTo(tempFile)
 
-        val mediaType = when (extension.lowercase()) {
+        val mediaType = when (extension?.lowercase()) {
             "jpg", "jpeg" -> "image/jpeg"
             "png" -> "image/png"
             "bmp" -> "image/bmp"

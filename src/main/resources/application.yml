@@ -29,7 +29,3 @@ springdoc:
   swagger-ui:
     tags-sorter: alpha
     operations-sorter: method
-
-ocr:
-  server:
-    base-url: http://localhost:8000
