@@ -15,7 +15,8 @@ import java.util.concurrent.TimeUnit
 @Configuration
 class RetrofitConfiguration(
     private val objectMapper: ObjectMapper,
-    @Value("\${ocr.server.base-url}") private val baseUrl: String
+    @Value("\${ocr.server.base-url}")
+    private val baseUrl: String
 ) {
     @Bean("okHttpClient")
     fun okHttpClient(): OkHttpClient {
