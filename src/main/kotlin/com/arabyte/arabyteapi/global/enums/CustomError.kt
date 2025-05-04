@@ -30,5 +30,5 @@ enum class CustomError(val status: HttpStatus, val message: String) {
     // review
     REVIEW_NOT_FOUND(NOT_FOUND, "리뷰를 찾을 수 없습니다."),
     REVIEW_NOT_AUTHORIZED(FORBIDDEN, "리뷰에 대한 권한이 없습니다."),
-    CAN_NOT_ADD_HELPFUL_FOR_SAME_USER(CONFLICT, "자신의 리뷰에 대해 추천할 수 없습니다."),
+    CAN_NOT_ADD_HELPFUL_FOR_OWN_REVIEW(CONFLICT, "자신의 리뷰에 대해 추천할 수 없습니다."),
 }

@@ -99,7 +99,7 @@ class ReviewService(
             CustomException(CustomError.REVIEW_NOT_FOUND)
         }
         if (review.user == user) {
-            throw CustomException(CustomError.CAN_NOT_ADD_HELPFUL_FOR_SAME_USER)
+            throw CustomException(CustomError.CAN_NOT_ADD_HELPFUL_FOR_OWN_REVIEW)
         }
 
         val reviewHelpful = reviewHelpfulRepository.findByReviewAndUser(review, user)
@@ -107,7 +107,7 @@ class ReviewService(
         if (reviewHelpful == null) {
             val newReviewHelpful =
                 ReviewHelpful(review = review, user = user, helpful = body.helpful)
-            
+
             when (newReviewHelpful.helpful) {
                 Helpful.BAD -> review.badCount++
                 Helpful.NORMAL -> review.normalCount++
