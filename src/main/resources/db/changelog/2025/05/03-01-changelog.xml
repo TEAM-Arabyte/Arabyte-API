@@ -19,9 +19,9 @@
   </changeSet>
   <changeSet author="ji-inpark" id="1746267114310-4">
     <addColumn tableName="review">
-      <column name="bad_count" type="INT"/>
-      <column name="good_count" type="INT"/>
-      <column name="normal_count" type="INT"/>
+      <column defaultValue="0" name="bad_count" type="INT"/>
+      <column defaultValue="0" name="good_count" type="INT"/>
+      <column defaultValue="0" name="normal_count" type="INT"/>
     </addColumn>
   </changeSet>
   <changeSet author="ji-inpark" id="1746267114310-5">
