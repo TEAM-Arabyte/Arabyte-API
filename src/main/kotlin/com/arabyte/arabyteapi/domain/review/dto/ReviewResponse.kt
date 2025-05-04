@@ -5,6 +5,7 @@ import com.arabyte.arabyteapi.domain.review.enums.*
 
 class ReviewResponse(
     val reviewId: Int,
+    val userId: Long,
     val companyName: String,
     val isCertified: Boolean,
     val star: Int,
@@ -17,11 +18,15 @@ class ReviewResponse(
     var salaryDate: SalaryDate,
     var overtime: Overtime,
     var difficulty: WorkDifficulty,
+    var badCount: Int,
+    var normalCount: Int,
+    var goodCount: Int,
 ) {
     companion object {
         fun of(review: Review): ReviewResponse {
             return ReviewResponse(
                 reviewId = review.id.toInt(),
+                userId = review.user.id,
                 // todo company 구현 후 수정
                 companyName = "회사이름",
                 isCertified = review.isCertified,
@@ -35,6 +40,9 @@ class ReviewResponse(
                 salaryDate = review.salaryDate,
                 overtime = review.overtime,
                 difficulty = review.difficulty,
+                badCount = review.badCount,
+                normalCount = review.normalCount,
+                goodCount = review.goodCount,
             )
         }
     }

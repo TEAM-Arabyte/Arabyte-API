@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  objectQuotingStrategy="QUOTE_ONLY_RESERVED_WORDS"
+  xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+  xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                      http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.29.xsd">
+  <changeSet author="ji-inpark" id="1746267114310-3">
+    <createTable tableName="review_helpful">
+      <column autoIncrement="true" name="id" type="BIGINT">
+        <constraints nullable="false" primaryKey="true" primaryKeyName="pk_reviewhelpful"/>
+      </column>
+      <column name="created_at" type="DATETIME"/>
+      <column name="updated_at" type="DATETIME"/>
+      <column name="review_id" type="BIGINT"/>
+      <column name="user_id" type="BIGINT"/>
+      <column name="helpful" type="SMALLINT"/>
+    </createTable>
+  </changeSet>
+  <changeSet author="ji-inpark" id="1746267114310-4">
+    <addColumn tableName="review">
+      <column name="bad_count" type="INT"/>
+      <column name="good_count" type="INT"/>
+      <column name="normal_count" type="INT"/>
+    </addColumn>
+  </changeSet>
+  <changeSet author="ji-inpark" id="1746267114310-5">
+    <addNotNullConstraint columnName="bad_count" tableName="review"/>
+  </changeSet>
+  <changeSet author="ji-inpark" id="1746267114310-7">
+    <addNotNullConstraint columnName="good_count" tableName="review"/>
+  </changeSet>
+  <changeSet author="ji-inpark" id="1746267114310-9">
+    <addNotNullConstraint columnName="normal_count" tableName="review"/>
+  </changeSet>
+  <changeSet author="ji-inpark" id="1746267114310-10">
+    <addForeignKeyConstraint baseColumnNames="review_id" baseTableName="review_helpful"
+      constraintName="FK_REVIEWHELPFUL_ON_REVIEW" referencedColumnNames="id"
+      referencedTableName="review"/>
+  </changeSet>
+  <changeSet author="ji-inpark" id="1746267114310-11">
+    <addForeignKeyConstraint baseColumnNames="user_id" baseTableName="review_helpful"
+      constraintName="FK_REVIEWHELPFUL_ON_USER" referencedColumnNames="id"
+      referencedTableName="user"/>
+  </changeSet>
+
+</databaseChangeLog>
