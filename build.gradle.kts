@@ -38,8 +38,13 @@ dependencies {
     implementation("com.squareup.retrofit2:converter-jackson:2.9.0")
     implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:2.7.0")
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
+    implementation("io.github.openfeign.querydsl:querydsl-jpa:6.10.1")
 
     developmentOnly("org.springframework.boot:spring-boot-devtools")
+
+    kapt("io.github.openfeign.querydsl:querydsl-apt:6.10.1:jakarta")
+    kapt("jakarta.annotation:jakarta.annotation-api")
+    kapt("jakarta.persistence:jakarta.persistence-api")
 
     runtimeOnly("org.postgresql:postgresql")
 
@@ -58,12 +63,6 @@ kotlin {
     compilerOptions {
         freeCompilerArgs.addAll("-Xjsr305=strict")
     }
-}
-
-allOpen {
-    annotation("jakarta.persistence.Entity")
-    annotation("jakarta.persistence.MappedSuperclass")
-    annotation("jakarta.persistence.Embeddable")
 }
 
 tasks.withType<Test> {

@@ -1,11 +1,13 @@
 package com.arabyte.arabyteapi.domain.review.service
 
-import com.arabyte.arabyteapi.domain.company.Company
+import com.arabyte.arabyteapi.domain.company.service.CompanyService
 import com.arabyte.arabyteapi.domain.location.service.LocationService
 import com.arabyte.arabyteapi.domain.review.dto.*
 import com.arabyte.arabyteapi.domain.review.entity.Review
 import com.arabyte.arabyteapi.domain.review.entity.ReviewHelpful
+import com.arabyte.arabyteapi.domain.review.enums.Category
 import com.arabyte.arabyteapi.domain.review.enums.Helpful
+import com.arabyte.arabyteapi.domain.review.repository.CustomReviewRepository
 import com.arabyte.arabyteapi.domain.review.repository.ReviewHelpfulRepository
 import com.arabyte.arabyteapi.domain.review.repository.ReviewRepository
 import com.arabyte.arabyteapi.domain.user.entity.User
@@ -19,25 +21,27 @@ import org.springframework.transaction.annotation.Transactional
 @Service
 class ReviewService(
     private val reviewRepository: ReviewRepository,
+    private val customReviewRepository: CustomReviewRepository,
     private val reviewHelpfulRepository: ReviewHelpfulRepository,
-    private val locationService: LocationService
+    private val locationService: LocationService,
+    private val companyService: CompanyService,
 ) {
     fun getLatestReviews(page: Int, size: Int): Page<GetReviewsResponse> {
         return reviewRepository.findAllByOrderByCreatedAtDesc(PageRequest.of(page, size))
             .map { GetReviewsResponse.of(it) }
     }
 
-    fun getReview(reviewId: Long): ReviewResponse {
+    fun getReview(user: User, reviewId: Long): ReviewResponse {
         val review = reviewRepository.findById(reviewId).orElseThrow {
             CustomException(CustomError.REVIEW_NOT_FOUND)
         }
+        val reviewHelpful = reviewHelpfulRepository.findByReviewAndUser(review, user)
 
-        return ReviewResponse.of(review)
+        return ReviewResponse.of(review, reviewHelpful)
     }
 
     fun createReview(user: User, body: CreateReviewRequest): ReviewResponse {
-        // todo company 구현 후 수정
-        val company = Company()
+        val company = companyService.findById(body.companyId)
         val location = locationService.findById(body.locationId)
 
         val review = Review(
@@ -142,5 +146,17 @@ class ReviewService(
         }
 
         return ReviewResponse.of(reviewRepository.save(review))
+    }
+
+    fun filterReviews(
+        locationId: Long?,
+        categories: List<Category>?,
+        certified: Boolean?
+    ): List<GetReviewsResponse> {
+        return customReviewRepository.findAllByCondition(
+            locationId = locationId,
+            categories = categories,
+            certified = certified
+        ).map { GetReviewsResponse.of(it) }
     }
 }

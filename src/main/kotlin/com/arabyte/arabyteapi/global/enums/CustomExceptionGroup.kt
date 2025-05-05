@@ -74,4 +74,19 @@ enum class CustomExceptionGroup(
         )
     ),
 
+    // company
+    CREATE_COMPANY(
+        listOf(
+            DUPLICATE_COMPANY
+        )
+    ),
+
+    // review
+    CREATE_REVIEW(
+        listOf(
+            LOCATION_NOT_FOUND,
+            COMPANY_NOT_FOUND
+        )
+    ),
+
 }

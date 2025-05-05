@@ -1,6 +1,6 @@
 package com.arabyte.arabyteapi.domain.review.entity
 
-import com.arabyte.arabyteapi.domain.company.Company
+import com.arabyte.arabyteapi.domain.company.entity.Company
 import com.arabyte.arabyteapi.domain.location.entity.Location
 import com.arabyte.arabyteapi.domain.review.enums.*
 import com.arabyte.arabyteapi.domain.user.entity.User
