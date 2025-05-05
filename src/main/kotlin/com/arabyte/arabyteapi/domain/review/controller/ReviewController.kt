@@ -1,6 +1,7 @@
 package com.arabyte.arabyteapi.domain.review.controller
 
 import com.arabyte.arabyteapi.domain.review.dto.*
+import com.arabyte.arabyteapi.domain.review.enums.Category
 import com.arabyte.arabyteapi.domain.review.service.ReviewService
 import com.arabyte.arabyteapi.domain.user.entity.User
 import com.arabyte.arabyteapi.global.annotation.RequestUser
@@ -22,6 +23,20 @@ class ReviewController(
         @RequestParam size: Int
     ): Page<GetReviewsResponse> {
         return reviewService.getLatestReviews(page, size)
+    }
+
+    @Operation(summary = "리뷰 필터링", description = "리뷰를 필터링하여 조회합니다.")
+    @GetMapping("/filter")
+    fun searchReviews(
+        @RequestParam locationId: Long?,
+        @RequestParam categories: List<Category>?,
+        @RequestParam isCertified: Boolean?,
+    ): List<GetReviewsResponse> {
+        return reviewService.filterReviews(
+            locationId,
+            categories,
+            isCertified
+        )
     }
 
     @Operation(summary = "리뷰 상세 조회", description = "리뷰의 상세 정보를 조회합니다.")

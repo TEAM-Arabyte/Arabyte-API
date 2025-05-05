@@ -5,7 +5,9 @@ import com.arabyte.arabyteapi.domain.location.service.LocationService
 import com.arabyte.arabyteapi.domain.review.dto.*
 import com.arabyte.arabyteapi.domain.review.entity.Review
 import com.arabyte.arabyteapi.domain.review.entity.ReviewHelpful
+import com.arabyte.arabyteapi.domain.review.enums.Category
 import com.arabyte.arabyteapi.domain.review.enums.Helpful
+import com.arabyte.arabyteapi.domain.review.repository.CustomReviewRepository
 import com.arabyte.arabyteapi.domain.review.repository.ReviewHelpfulRepository
 import com.arabyte.arabyteapi.domain.review.repository.ReviewRepository
 import com.arabyte.arabyteapi.domain.user.entity.User
@@ -142,5 +144,17 @@ class ReviewService(
         }
 
         return ReviewResponse.of(reviewRepository.save(review))
+    }
+
+    fun filterReviews(
+        locationId: Long?,
+        categories: List<Category>?,
+        certified: Boolean?
+    ): List<GetReviewsResponse> {
+        return customReviewRepository.findAllByCondition(
+            locationId = locationId,
+            categories = categories,
+            certified = certified
+        ).map { GetReviewsResponse.of(it) }
     }
 }
