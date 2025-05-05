@@ -1,6 +1,7 @@
 package com.arabyte.arabyteapi.domain.mypage.controller
 
 import com.arabyte.arabyteapi.domain.article.dto.ArticlePreviewResponse
+import com.arabyte.arabyteapi.domain.mypage.dto.GetUserInfoResponse
 import com.arabyte.arabyteapi.domain.mypage.dto.MyPageResponse
 import com.arabyte.arabyteapi.domain.mypage.dto.UpdateBasicInfoRequest
 import com.arabyte.arabyteapi.domain.mypage.dto.UpdateSubInfoRequest
@@ -29,6 +30,17 @@ class MyPageController(
         @RequestParam size: Int
     ): Page<ArticlePreviewResponse> {
         return myPageService.getMyPageArticles(type, user, page, size)
+    }
+
+    @Operation(
+        summary = "마이페이지 사용자 정보",
+        description = "마이페이지에서 프로필 수정 전에 필요한 사용자 정보를 반환합니다."
+    )
+    @GetMapping("/info")
+    fun getUserInfo(
+        @RequestUser user: User
+    ): GetUserInfoResponse {
+        return myPageService.getUserInfo(user)
     }
 
     @Operation(summary = "닉네임 수정", description = "마이페이지에서 닉네임을 수정합니다.")

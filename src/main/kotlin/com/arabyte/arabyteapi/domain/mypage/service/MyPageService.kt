@@ -4,12 +4,14 @@ import com.arabyte.arabyteapi.domain.article.dto.ArticlePreviewResponse
 import com.arabyte.arabyteapi.domain.article.service.ArticleLikeService
 import com.arabyte.arabyteapi.domain.article.service.ArticleService
 import com.arabyte.arabyteapi.domain.location.service.LocationService
+import com.arabyte.arabyteapi.domain.mypage.dto.GetUserInfoResponse
 import com.arabyte.arabyteapi.domain.mypage.dto.MyPageResponse
 import com.arabyte.arabyteapi.domain.mypage.dto.UpdateBasicInfoRequest
 import com.arabyte.arabyteapi.domain.mypage.dto.UpdateSubInfoRequest
 import com.arabyte.arabyteapi.domain.mypage.enums.MyPageArticleType
 import com.arabyte.arabyteapi.domain.user.entity.User
 import com.arabyte.arabyteapi.domain.user.entity.UserJobInterest
+import com.arabyte.arabyteapi.domain.user.repository.UserRepository
 import com.arabyte.arabyteapi.domain.user.service.UserService
 import org.springframework.data.domain.Page
 import org.springframework.stereotype.Service
@@ -19,7 +21,8 @@ class MyPageService(
     private val articleLikeService: ArticleLikeService,
     private val articleService: ArticleService,
     private val locationService: LocationService,
-    private val userService: UserService
+    private val userService: UserService,
+    private val userRepository: UserRepository
 ) {
     fun getMyPageArticles(type: MyPageArticleType, user: User, page: Int, size: Int): Page<ArticlePreviewResponse> {
         val articles = when (type) {
@@ -35,6 +38,20 @@ class MyPageService(
 
             ArticlePreviewResponse.of(article, isLiked)
         }
+    }
+
+    fun getUserInfo(user: User): GetUserInfoResponse {
+        // TODO : 주소를 문자열로 만드는 방법이 
+        val location = user.location?.sido + " " + user.location?.gu + " " + user.location?.dong
+
+        return GetUserInfoResponse.of(
+            user.nickname,
+            location,
+            user.gender,
+            user.experienceYears,
+            user.experienceMonths,
+            user.jobInterests
+        )
     }
 
     fun updateNickName(user: User, newNickname: String): MyPageResponse {
