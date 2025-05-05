@@ -11,7 +11,6 @@ import com.arabyte.arabyteapi.domain.mypage.dto.UpdateSubInfoRequest
 import com.arabyte.arabyteapi.domain.mypage.enums.MyPageArticleType
 import com.arabyte.arabyteapi.domain.user.entity.User
 import com.arabyte.arabyteapi.domain.user.entity.UserJobInterest
-import com.arabyte.arabyteapi.domain.user.repository.UserRepository
 import com.arabyte.arabyteapi.domain.user.service.UserService
 import org.springframework.data.domain.Page
 import org.springframework.stereotype.Service
@@ -22,7 +21,6 @@ class MyPageService(
     private val articleService: ArticleService,
     private val locationService: LocationService,
     private val userService: UserService,
-    private val userRepository: UserRepository
 ) {
     fun getMyPageArticles(type: MyPageArticleType, user: User, page: Int, size: Int): Page<ArticlePreviewResponse> {
         val articles = when (type) {
@@ -41,8 +39,7 @@ class MyPageService(
     }
 
     fun getUserInfo(user: User): GetUserInfoResponse {
-        // TODO : 주소를 문자열로 만드는 방법이 
-        val location = user.location?.sido + " " + user.location?.gu + " " + user.location?.dong
+        val location = "${user.location?.sido ?: ""} ${user.location?.gu ?: ""} ${user.location?.dong ?: ""}".trim()
 
         return GetUserInfoResponse.of(
             user.nickname,
