@@ -21,6 +21,7 @@ import org.springframework.transaction.annotation.Transactional
 @Service
 class ReviewService(
     private val reviewRepository: ReviewRepository,
+    private val customReviewRepository: CustomReviewRepository,
     private val reviewHelpfulRepository: ReviewHelpfulRepository,
     private val locationService: LocationService,
     private val companyService: CompanyService,
@@ -30,12 +31,13 @@ class ReviewService(
             .map { GetReviewsResponse.of(it) }
     }
 
-    fun getReview(reviewId: Long): ReviewResponse {
+    fun getReview(user: User, reviewId: Long): ReviewResponse {
         val review = reviewRepository.findById(reviewId).orElseThrow {
             CustomException(CustomError.REVIEW_NOT_FOUND)
         }
+        val reviewHelpful = reviewHelpfulRepository.findByReviewAndUser(review, user)
 
-        return ReviewResponse.of(review)
+        return ReviewResponse.of(review, reviewHelpful)
     }
 
     fun createReview(user: User, body: CreateReviewRequest): ReviewResponse {

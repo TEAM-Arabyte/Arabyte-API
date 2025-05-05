@@ -42,9 +42,10 @@ class ReviewController(
     @Operation(summary = "리뷰 상세 조회", description = "리뷰의 상세 정보를 조회합니다.")
     @GetMapping("/{reviewId}")
     fun getReview(
+        @RequestUser user: User,
         @PathVariable reviewId: Long
     ): ReviewResponse {
-        return reviewService.getReview(reviewId)
+        return reviewService.getReview(user, reviewId)
     }
 
     @Operation(summary = "리뷰 등록", description = "리뷰를 등록합니다.")
