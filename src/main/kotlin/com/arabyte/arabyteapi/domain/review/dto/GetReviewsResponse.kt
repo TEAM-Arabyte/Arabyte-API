@@ -8,7 +8,8 @@ class GetReviewsResponse(
     val star: Int,
     val text: String,
     val location: String,
-    val category: String
+    val category: String,
+    val companyName: String,
 ) {
     companion object {
         fun of(review: Review): GetReviewsResponse {
@@ -18,7 +19,8 @@ class GetReviewsResponse(
                 star = review.rating,
                 text = review.text,
                 location = review.location.toString(),
-                category = review.category.name
+                category = review.category.name,
+                companyName = review.company.name
             )
         }
     }
