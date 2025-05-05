@@ -20,7 +20,7 @@ class MyPageService(
     private val articleLikeService: ArticleLikeService,
     private val articleService: ArticleService,
     private val locationService: LocationService,
-    private val userService: UserService,
+    private val userService: UserService
 ) {
     fun getMyPageArticles(type: MyPageArticleType, user: User, page: Int, size: Int): Page<ArticlePreviewResponse> {
         val articles = when (type) {
