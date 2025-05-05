@@ -1,6 +1,7 @@
 package com.arabyte.arabyteapi.domain.review.dto
 
 import com.arabyte.arabyteapi.domain.review.entity.Review
+import com.arabyte.arabyteapi.domain.review.entity.ReviewHelpful
 import com.arabyte.arabyteapi.domain.review.enums.*
 
 class ReviewResponse(
@@ -21,6 +22,7 @@ class ReviewResponse(
     var badCount: Int,
     var normalCount: Int,
     var goodCount: Int,
+    var helpful: Helpful? = null,
 ) {
     companion object {
         fun of(review: Review): ReviewResponse {
@@ -42,6 +44,29 @@ class ReviewResponse(
                 badCount = review.badCount,
                 normalCount = review.normalCount,
                 goodCount = review.goodCount,
+            )
+        }
+
+        fun of(review: Review, reviewHelpful: ReviewHelpful?): ReviewResponse {
+            return ReviewResponse(
+                reviewId = review.id.toInt(),
+                userId = review.user.id,
+                companyName = review.company.name,
+                isCertified = review.isCertified,
+                star = review.rating,
+                text = review.text,
+                location = review.location.toString(),
+                category = review.category.name,
+                workIntensity = review.workIntensity,
+                workAtmosphere = review.workAtmosphere,
+                salary = review.salary,
+                salaryDate = review.salaryDate,
+                overtime = review.overtime,
+                difficulty = review.difficulty,
+                badCount = review.badCount,
+                normalCount = review.normalCount,
+                goodCount = review.goodCount,
+                helpful = reviewHelpful?.helpful
             )
         }
     }
