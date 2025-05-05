@@ -1,6 +1,6 @@
 package com.arabyte.arabyteapi.domain.review.service
 
-import com.arabyte.arabyteapi.domain.company.Company
+import com.arabyte.arabyteapi.domain.company.service.CompanyService
 import com.arabyte.arabyteapi.domain.location.service.LocationService
 import com.arabyte.arabyteapi.domain.review.dto.*
 import com.arabyte.arabyteapi.domain.review.entity.Review
@@ -20,7 +20,8 @@ import org.springframework.transaction.annotation.Transactional
 class ReviewService(
     private val reviewRepository: ReviewRepository,
     private val reviewHelpfulRepository: ReviewHelpfulRepository,
-    private val locationService: LocationService
+    private val locationService: LocationService,
+    private val companyService: CompanyService,
 ) {
     fun getLatestReviews(page: Int, size: Int): Page<GetReviewsResponse> {
         return reviewRepository.findAllByOrderByCreatedAtDesc(PageRequest.of(page, size))
@@ -36,8 +37,7 @@ class ReviewService(
     }
 
     fun createReview(user: User, body: CreateReviewRequest): ReviewResponse {
-        // todo company 구현 후 수정
-        val company = Company()
+        val company = companyService.findById(body.companyId)
         val location = locationService.findById(body.locationId)
 
         val review = Review(

@@ -4,6 +4,8 @@ import com.arabyte.arabyteapi.domain.review.dto.*
 import com.arabyte.arabyteapi.domain.review.service.ReviewService
 import com.arabyte.arabyteapi.domain.user.entity.User
 import com.arabyte.arabyteapi.global.annotation.RequestUser
+import com.arabyte.arabyteapi.global.annotation.SwaggerCustomException
+import com.arabyte.arabyteapi.global.enums.CustomExceptionGroup
 import io.swagger.v3.oas.annotations.Operation
 import org.springframework.data.domain.Page
 import org.springframework.web.bind.annotation.*
@@ -32,6 +34,7 @@ class ReviewController(
 
     @Operation(summary = "리뷰 등록", description = "리뷰를 등록합니다.")
     @PostMapping
+    @SwaggerCustomException(CustomExceptionGroup.CREATE_REVIEW)
     fun createReview(
         @RequestUser user: User,
         @RequestBody body: CreateReviewRequest
