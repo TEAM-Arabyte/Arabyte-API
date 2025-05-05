@@ -27,8 +27,7 @@ class ReviewResponse(
             return ReviewResponse(
                 reviewId = review.id.toInt(),
                 userId = review.user.id,
-                // todo company 구현 후 수정
-                companyName = "회사이름",
+                companyName = review.company.name,
                 isCertified = review.isCertified,
                 star = review.rating,
                 text = review.text,
