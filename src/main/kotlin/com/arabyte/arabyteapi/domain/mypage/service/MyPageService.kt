@@ -39,11 +39,10 @@ class MyPageService(
     }
 
     fun getUserInfo(user: User): GetUserInfoResponse {
-        val location = "${user.location?.sido ?: ""} ${user.location?.gu ?: ""} ${user.location?.dong ?: ""}".trim()
 
         return GetUserInfoResponse.of(
             user.nickname,
-            location,
+            user.location.toString(),
             user.gender,
             user.experienceYears,
             user.experienceMonths,
