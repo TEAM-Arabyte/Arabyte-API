@@ -11,9 +11,11 @@ class ReportService(
 ) {
     fun createReport(user: User, body: CreateReportRequest) {
         val message = """
-            ${user.nickname} (${user.id}) 님이 ${body.reportType.description} (${body.targetId})을(를) 신고하였습니다.
-            신고 사유: ${body.reason}
-            신고자: ${user.nickname} (${user.id})
+            ${user.nickname} (id: ${user.id}) 님이 ${body.reportType.description} (id: ${body.targetId})을(를) 신고하였습니다.
+            
+            신고 사유: "${body.reason}"
+            
+            신고자: ${user.nickname} (id: ${user.id})
         """.trimIndent()
 
         discordService.sendReport(
