@@ -1,6 +1,7 @@
 package com.arabyte.arabyteapi.global.configuration
 
 import com.arabyte.arabyteapi.domain.auth.api.KakaoUserApi
+import com.arabyte.arabyteapi.domain.discord.api.DiscordReportApi
 import com.fasterxml.jackson.databind.ObjectMapper
 import okhttp3.OkHttpClient
 import org.springframework.context.annotation.Bean
@@ -34,5 +35,17 @@ class RetrofitConfiguration(
             )
             .build()
             .create(KakaoUserApi::class.java)
+    }
+
+    @Bean("discordReportApi")
+    fun discordReportApi(okHttpClient: OkHttpClient): DiscordReportApi {
+        return Retrofit.Builder()
+            .baseUrl("https://discord.com/api/v10")
+            .client(okHttpClient)
+            .addConverterFactory(
+                JacksonConverterFactory.create(objectMapper)
+            )
+            .build()
+            .create(DiscordReportApi::class.java)
     }
 }
