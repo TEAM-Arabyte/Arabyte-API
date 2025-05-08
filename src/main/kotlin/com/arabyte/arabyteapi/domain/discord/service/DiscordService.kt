@@ -7,8 +7,8 @@ import org.springframework.stereotype.Service
 
 @Service
 class DiscordService(
-    @Value("\${discord.webhook-url}")
-    private val webhookUrl: String,
+    @Value("\${discord.report-url}")
+    private val reportUrl: String,
     private val discordReportApi: DiscordReportApi
 ) {
     fun sendReport(message: String) {
@@ -16,6 +16,6 @@ class DiscordService(
             .add("content", message)
             .build()
 
-        discordReportApi.executeWebhook(webhookUrl, body).execute()
+        discordReportApi.executeWebhook(reportUrl, body).execute()
     }
 }

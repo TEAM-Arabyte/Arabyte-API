@@ -40,7 +40,7 @@ class RetrofitConfiguration(
     @Bean("discordReportApi")
     fun discordReportApi(okHttpClient: OkHttpClient): DiscordReportApi {
         return Retrofit.Builder()
-            .baseUrl("https://discord.com/api/v10")
+            .baseUrl("https://discord.com/api/")
             .client(okHttpClient)
             .addConverterFactory(
                 JacksonConverterFactory.create(objectMapper)
