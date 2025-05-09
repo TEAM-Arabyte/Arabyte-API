@@ -2,20 +2,24 @@ package com.arabyte.arabyteapi.domain.mypage.controller
 
 import com.arabyte.arabyteapi.domain.article.dto.ArticlePreviewResponse
 import com.arabyte.arabyteapi.domain.mypage.dto.MyPageResponse
+import com.arabyte.arabyteapi.domain.mypage.dto.OcrVerificationResponse
 import com.arabyte.arabyteapi.domain.mypage.dto.UpdateBasicInfoRequest
 import com.arabyte.arabyteapi.domain.mypage.dto.UpdateSubInfoRequest
 import com.arabyte.arabyteapi.domain.mypage.enums.MyPageArticleType
+import com.arabyte.arabyteapi.domain.mypage.service.ContractService
 import com.arabyte.arabyteapi.domain.mypage.service.MyPageService
 import com.arabyte.arabyteapi.domain.user.entity.User
 import com.arabyte.arabyteapi.global.annotation.RequestUser
 import io.swagger.v3.oas.annotations.Operation
 import org.springframework.data.domain.Page
 import org.springframework.web.bind.annotation.*
+import org.springframework.web.multipart.MultipartFile
 
 @RestController
 @RequestMapping("/mypage")
 class MyPageController(
     private val myPageService: MyPageService,
+    private val contractService: ContractService
 ) {
     @Operation(
         summary = "마이페이지 게시물 조회",
@@ -62,5 +66,18 @@ class MyPageController(
         @RequestBody request: UpdateSubInfoRequest
     ): MyPageResponse {
         return myPageService.updateSubInfo(user, request)
+    }
+
+    @Operation(
+        summary = "근로계약서 검증",
+        description = "사용자 정보와 근무지를 입력받아 근로계약서와 비교하여 검증결과를 반환합니다."
+    )
+    @PostMapping("/contract")
+    fun verifyContract(
+        @RequestUser user: User,
+        @RequestParam companyName: String,
+        @RequestPart file: MultipartFile,
+    ): OcrVerificationResponse {
+        return contractService.verifyContract(user, companyName, file)
     }
 }
