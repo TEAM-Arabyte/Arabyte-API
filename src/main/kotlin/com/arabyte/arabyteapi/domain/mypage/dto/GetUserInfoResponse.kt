@@ -1,6 +1,6 @@
 package com.arabyte.arabyteapi.domain.mypage.dto
 
-import com.arabyte.arabyteapi.domain.user.entity.UserJobInterest
+import com.arabyte.arabyteapi.domain.user.entity.User
 
 data class GetUserInfoResponse(
     val userName: String,
@@ -12,25 +12,20 @@ data class GetUserInfoResponse(
 ) {
     companion object {
         fun of(
-            userName: String,
-            location: String,
-            gender: String,
-            experienceYears: Int?,
-            experienceMonths: Int?,
-            jobInterests: UserJobInterest?
+            user: User
         ): GetUserInfoResponse {
             val interests = listOfNotNull(
-                jobInterests?.category1?.name,
-                jobInterests?.category2?.name,
-                jobInterests?.category3?.name
+                user.jobInterests?.category1?.name,
+                user.jobInterests?.category2?.name,
+                user.jobInterests?.category3?.name
             )
 
             return GetUserInfoResponse(
-                userName = userName,
-                location = location,
-                gender = gender,
-                experienceYears = experienceYears,
-                experienceMonths = experienceMonths,
+                userName = user.nickname,
+                location = user.location.toString(),
+                gender = user.gender,
+                experienceYears = user.experienceYears,
+                experienceMonths = user.experienceMonths,
                 jobInterests = interests
             )
         }

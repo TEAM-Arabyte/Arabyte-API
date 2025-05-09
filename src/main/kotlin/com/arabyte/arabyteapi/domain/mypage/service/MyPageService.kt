@@ -39,15 +39,7 @@ class MyPageService(
     }
 
     fun getUserInfo(user: User): GetUserInfoResponse {
-
-        return GetUserInfoResponse.of(
-            user.nickname,
-            user.location.toString(),
-            user.gender,
-            user.experienceYears,
-            user.experienceMonths,
-            user.jobInterests
-        )
+        return GetUserInfoResponse.of(user)
     }
 
     fun updateNickName(user: User, newNickname: String): MyPageResponse {
