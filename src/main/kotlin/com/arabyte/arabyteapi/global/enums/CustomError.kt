@@ -38,5 +38,5 @@ enum class CustomError(val status: HttpStatus, val message: String) {
 
     // company
     DUPLICATE_COMPANY(CONFLICT, "이미 존재하는 회사입니다."),
-    COMPANY_NOT_FOUND(NOT_FOUND, "회사를 찾을 수 없습니다.");
+    COMPANY_NOT_FOUND(NOT_FOUND, "회사를 찾을 수 없습니다.")
 }
