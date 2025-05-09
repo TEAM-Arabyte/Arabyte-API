@@ -7,4 +7,4 @@ spring:
 
 ocr:
   server:
-    base-url: http://localhost:8000
+    base-url: https://arabyte-ocr.fly.dev

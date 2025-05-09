@@ -4,3 +4,7 @@ spring:
     url: ${DATABASE_URL}
     username: ${DATABASE_USER}
     password: ${DATABASE_PASSWORD}
+
+ocr:
+  server:
+    base-url: https://arabyte-ocr.fly.dev
