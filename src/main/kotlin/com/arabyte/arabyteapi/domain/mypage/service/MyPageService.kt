@@ -4,6 +4,7 @@ import com.arabyte.arabyteapi.domain.article.dto.ArticlePreviewResponse
 import com.arabyte.arabyteapi.domain.article.service.ArticleLikeService
 import com.arabyte.arabyteapi.domain.article.service.ArticleService
 import com.arabyte.arabyteapi.domain.location.service.LocationService
+import com.arabyte.arabyteapi.domain.mypage.dto.GetUserInfoResponse
 import com.arabyte.arabyteapi.domain.mypage.dto.MyPageResponse
 import com.arabyte.arabyteapi.domain.mypage.dto.UpdateBasicInfoRequest
 import com.arabyte.arabyteapi.domain.mypage.dto.UpdateSubInfoRequest
@@ -35,6 +36,10 @@ class MyPageService(
 
             ArticlePreviewResponse.of(article, isLiked)
         }
+    }
+
+    fun getUserInfo(user: User): GetUserInfoResponse {
+        return GetUserInfoResponse.of(user)
     }
 
     fun updateNickName(user: User, newNickname: String): MyPageResponse {
