@@ -5,6 +5,7 @@ import com.arabyte.arabyteapi.domain.user.entity.User
 data class GetUserInfoResponse(
     val userName: String,
     val location: String,
+    val ageRange: String,
     val gender: String,
     val experienceYears: Int? = null,
     val experienceMonths: Int? = null,
@@ -23,6 +24,7 @@ data class GetUserInfoResponse(
             return GetUserInfoResponse(
                 userName = user.nickname,
                 location = user.location.toString(),
+                ageRange = user.ageRange,
                 gender = user.gender,
                 experienceYears = user.experienceYears,
                 experienceMonths = user.experienceMonths,
