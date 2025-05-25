@@ -1,11 +1,7 @@
 package com.arabyte.arabyteapi.domain.mypage.controller
 
 import com.arabyte.arabyteapi.domain.article.dto.ArticlePreviewResponse
-import com.arabyte.arabyteapi.domain.mypage.dto.GetUserInfoResponse
-import com.arabyte.arabyteapi.domain.mypage.dto.MyPageResponse
-import com.arabyte.arabyteapi.domain.mypage.dto.OcrVerificationResponse
-import com.arabyte.arabyteapi.domain.mypage.dto.UpdateBasicInfoRequest
-import com.arabyte.arabyteapi.domain.mypage.dto.UpdateSubInfoRequest
+import com.arabyte.arabyteapi.domain.mypage.dto.*
 import com.arabyte.arabyteapi.domain.mypage.enums.MyPageArticleType
 import com.arabyte.arabyteapi.domain.mypage.service.ContractService
 import com.arabyte.arabyteapi.domain.mypage.service.MyPageService
@@ -14,7 +10,6 @@ import com.arabyte.arabyteapi.global.annotation.RequestUser
 import io.swagger.v3.oas.annotations.Operation
 import org.springframework.data.domain.Page
 import org.springframework.web.bind.annotation.*
-import org.springframework.web.multipart.MultipartFile
 
 @RestController
 @RequestMapping("/mypage")
@@ -88,8 +83,8 @@ class MyPageController(
     fun verifyContract(
         @RequestUser user: User,
         @RequestParam companyName: String,
-        @RequestPart file: MultipartFile,
+        @RequestParam imageUrl: String,
     ): OcrVerificationResponse {
-        return contractService.verifyContract(user, companyName, file)
+        return contractService.verifyContract(user, companyName, imageUrl)
     }
 }
